@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ImagineArt Workflows</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@100..900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --px: 80px; }
+    @media (min-width: 1441px) { :root { --px: 240px; } }
+
+    body {
+      font-family: 'Google Sans Flex', 'Inter', sans-serif;
+      background: #fff;
+      color: #0f0f0f;
+      overflow-x: hidden;
+    }
+    #bg-dots {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+      mix-blend-mode: multiply;
+    }
+    #bg-dots canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ─── Navbar ─────────────────────────────────────── */
+    .navbar {
+      width: 100%;
+      padding: 24px 60px;
+      position: fixed;
+      top: 0; left: 0; right: 0; z-index: 100;
+      transition: padding 0.5s cubic-bezier(0.4,0,0.2,1);
+    }
+    .navbar-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      height: auto;
+      padding: 10px 8px 10px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: 16px;
+      background: transparent;
+      border: 1px solid transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      transition: background 0.5s cubic-bezier(0.4,0,0.2,1), border-color 0.5s cubic-bezier(0.4,0,0.2,1), box-shadow 0.5s cubic-bezier(0.4,0,0.2,1), backdrop-filter 0.5s cubic-bezier(0.4,0,0.2,1);
+    }
+    .navbar.scrolled {
+      padding: 16px 100px;
+    }
+    .navbar.scrolled .navbar-inner {
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: saturate(200%) blur(24px);
+      -webkit-backdrop-filter: saturate(200%) blur(24px);
+      border-color: rgba(255,255,255,0.9);
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.04), 0 4px 6px rgba(0,0,0,0.03), 0 12px 48px rgba(0,0,0,0.1);
+    }
+    .logo { display: flex; align-items: center; text-decoration: none; flex-shrink: 0; }
+    .logo-img { height: 39px; width: auto; display: block; }
+    .nav-links { display: flex; align-items: center; gap: 2px; }
+    .nav-link { display: flex; align-items: center; justify-content: center; padding: 6px 14px; border-radius: 8px; font-size: 14px; font-weight: 500; letter-spacing: 0.14px; color: rgba(15,15,15,0.75); text-decoration: none; white-space: nowrap; transition: color 0.15s, background 0.15s; }
+    .nav-link:hover { color: #0f0f0f; background: rgba(15,15,15,0.05); }
+    .nav-actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 9px; font-size: 13.5px; font-weight: 500; letter-spacing: 0.14px; white-space: nowrap; cursor: pointer; border: none; text-decoration: none; transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease, color 0.15s; }
+    .btn-ghost { background: transparent; color: rgba(15,15,15,0.7); }
+    .btn-ghost:hover { background: rgba(15,15,15,0.06); color: #0f0f0f; }
+    .btn-dark { background: #111; color: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.15); }
+    .btn-dark:hover { background: #222; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+
+    /* ─── Scroll Reveal ─────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.75s cubic-bezier(0.25,0.46,0.45,0.94),
+                  transform 0.75s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .reveal.in-view { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.08s; }
+    .reveal-d2 { transition-delay: 0.16s; }
+    .reveal-d3 { transition-delay: 0.24s; }
+    .reveal-d4 { transition-delay: 0.32s; }
+    .reveal-d5 { transition-delay: 0.40s; }
+
+    /* ─── Hero ───────────────────────────────────────── */
+    .hero { background-color: #0a0a0a; background-image: radial-gradient(circle, rgba(255,255,255,0.2) 1.2px, transparent 1.2px); background-size: 24px 24px; width: 100%; min-height: 130vh; padding: 0; position: relative; overflow: hidden; display: flex; align-items: flex-start; justify-content: center; }
+    .hero > .hero-text { margin-top: calc(50vh - 180px); }
+    .hero::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 55% 50% at 50% 50%, rgba(10,10,10,0.45) 0%, rgba(10,10,10,0.72) 100%); z-index: 1; pointer-events: none; }
+    .hero-text { position: relative; z-index: 2; }
+    .hero-text { width: 100%; max-width: 680px; display: flex; flex-direction: column; gap: 40px; align-items: center; text-align: center; position: relative; z-index: 2; animation: heroFadeUp 0.7s cubic-bezier(0.25,0.46,0.45,0.94) 0.05s both; }
+    .hero-headline { display: flex; flex-direction: column; gap: 24px; width: 100%; }
+    .hero-title { font-size: 60px; font-weight: 400; line-height: 72px; letter-spacing: -0.6px; color: #fff; }
+    .hero-title .hero-bold { font-weight: 700; }
+    .hero-subtitle { font-size: 18px; font-weight: 400; line-height: 28px; letter-spacing: 0.2px; color: rgba(255,255,255,0.55); }
+    .hero-ctas { display: flex; gap: 24px; align-items: center; justify-content: center; }
+    @keyframes heroFadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .btn-hero { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 48px; padding: 12px 20px; border-radius: 18px; font-size: 18px; font-weight: 500; letter-spacing: 0.36px; white-space: nowrap; cursor: pointer; text-decoration: none; transition: opacity 0.15s, transform 0.15s; }
+    .btn-hero:hover { opacity: 0.85; transform: translateY(-1px); }
+    .btn-demo { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.35); color: #fff; }
+    .btn-get-started { background: linear-gradient(135deg, #e3d4e5 0%, #cdaaeb 21%, #b689f0 43%, #a064f6 64%, #8a3ffc 86%); background-size: 200% 200%; color: #fff; border: none; animation: gradientShift 4s ease infinite, heroFadeUp 0.7s cubic-bezier(0.25,0.46,0.45,0.94) 0.35s both; }
+    @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+    /* Hero composition */
+    .hero-comp { position: relative; width: 100%; height: 457px; margin-top: 40px; }
+    .hero-gl {
+      position: absolute; left: 5%; top: 0; width: 145%; height: 340%;
+      pointer-events: none; z-index: 0;
+      background-image: linear-gradient(rgba(0,0,0,0.055) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.055) 1px, transparent 1px);
+      background-size: 44px 44px;
+      -webkit-mask-image: url('https://www.figma.com/api/mcp/asset/b367bff4-08be-4b68-80df-39fde573d1bd');
+      -webkit-mask-size: 78% 59%; -webkit-mask-position: -20% -8%; -webkit-mask-repeat: no-repeat;
+      mask-image: url('https://www.figma.com/api/mcp/asset/b367bff4-08be-4b68-80df-39fde573d1bd');
+      mask-size: 78% 59%; mask-position: -20% -8%; mask-repeat: no-repeat;
+    }
+    .hc { position: absolute; border-radius: 12.869px; overflow: hidden; z-index: 2; transition: transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.3s ease; }
+    .hc img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hc:hover { transform: translateY(-5px) scale(1.03); box-shadow: 0 18px 48px rgba(0,0,0,0.18); }
+    .hc-face   { inset: 14.73% 87.75% 53.21% 0; }
+    .hc-bottle { inset: 23.54% 51.48% 0 25.94%; border-radius: 13.513px; }
+    .hc-locker { inset: 54.32% 82.29% -14.78% 0; }
+    .hc-drink  { inset: 56.66% 30.07% 0.88% 57.32%; }
+    .hc-video {
+      position: absolute; inset: 0 0 21.99% 78.04%;
+      border-radius: 13.432px; overflow: hidden; z-index: 2;
+      display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 2.94%;
+      transition: transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.3s ease;
+    }
+    .hc-video:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 18px 48px rgba(0,0,0,0.18); }
+    .hc-video-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hc-video-ui { position: relative; z-index: 1; padding: 0 2.5%; display: flex; flex-direction: column; gap: 3px; }
+    .hc-video-row { display: flex; align-items: center; justify-content: space-between; }
+    .hc-video-left { display: flex; align-items: center; gap: 2px; }
+    .hc-video-play { width: 16px; height: 16px; flex-shrink: 0; }
+    .hc-video-play img, .hc-video-icon img { width: 100%; height: 100%; object-fit: contain; display: block; filter: brightness(0) invert(1); }
+    .hc-video-time { display: flex; align-items: center; gap: 2px; font-size: 6.5px; font-weight: 500; color: #fff; letter-spacing: 0.13px; font-family: 'Inter', sans-serif; }
+    .hc-video-right { display: flex; align-items: center; gap: 1px; }
+    .hc-video-icon { width: 16px; height: 16px; flex-shrink: 0; }
+    .hc-video-prog-wrap { padding: 0 2px; }
+    .hc-video-prog { position: relative; height: 3.6px; border-radius: 100px; background: rgba(255,255,255,0.3); }
+    .hc-video-fill { position: absolute; left: 0; top: 0; height: 100%; width: 47%; background: #fff; border-radius: 100px; }
+    .hc-video-thumb { position: absolute; left: 47%; top: 50%; transform: translate(-50%,-50%); width: 7px; height: 7px; }
+    .hc-video-thumb img { width: 100%; height: 100%; display: block; }
+    .hc-prompt {
+      position: absolute; left: 57.52%; top: 25.12%; width: 11.36%;
+      background: #fff; border-radius: 19.6px; border: 0.387px solid #ededed;
+      box-shadow: 0 3.1px 6.2px rgba(176,175,175,0.22);
+      z-index: 3; overflow: hidden; padding: 6px; cursor: default;
+      transition: transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.3s ease;
+    }
+    .hc-prompt:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(176,175,175,0.45); }
+    .hc-prompt-hdr { position: absolute; top: -9px; left: 1px; right: 1px; display: flex; align-items: center; gap: 2px; padding: 0 1px; }
+    .hc-prompt-icon { width: 5px; height: 5px; flex-shrink: 0; }
+    .hc-prompt-icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .hc-prompt-lbl { font-size: 4.5px; font-weight: 500; color: #0f0f0f; background: #fff; border-radius: 3px; padding: 0.5px 1.5px; white-space: nowrap; }
+    .hc-prompt-txt { font-size: 4.8px; line-height: 7.5px; color: rgba(15,15,15,0.5); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 10; -webkit-box-orient: vertical; }
+    .hcv { position: absolute; z-index: 1; pointer-events: none; overflow: visible; }
+    .hcv .hcv-i { position: absolute; }
+    .hcv .hcv-i img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: contain; }
+
+    /* ─── Shared Section Wrappers ────────────────────── */
+    .section { padding: 160px 0; width: 100%; }
+    .container { padding: 0 var(--px); }
+    .logos-section, .teams-section, .control-section,
+    .templates-section, .testimonials-section,
+    .faq-section, .cta-section, .footer-section {
+      content-visibility: auto;
+      contain-intrinsic-size: auto 600px;
+    }
+    .marquee-track { will-change: transform; }
+    .section-title { font-size: 48px; font-weight: 500; line-height: 56px; letter-spacing: -0.48px; color: #1f1c1d; }
+    .section-subtitle { font-size: 20px; font-weight: 400; line-height: 28px; letter-spacing: 0.2px; color: #525252; }
+
+    /* ─── Logos Marquee ──────────────────────────────── */
+    .logos-section { padding: 56px 0; background: #fff; }
+    .logos-label { text-align: center; font-size: 14px; font-weight: 500; letter-spacing: 0.28px; color: rgba(15,15,15,0.5); margin-bottom: 24px; }
+    .marquee-wrapper { overflow: hidden; width: 100%; }
+    .marquee-track { display: flex; gap: 48px; align-items: center; width: max-content; animation: marquee 28s linear infinite; mix-blend-mode: luminosity; filter: grayscale(1); opacity: 0.6; }
+    .marquee-track img { height: 64px; width: 96px; object-fit: contain; flex-shrink: 0; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ─── Stay on Brand ──────────────────────────────── */
+    .brand-section {
+      position: relative;
+      height: 500vh;
+    }
+    .brand-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 160px var(--px);
+      overflow: hidden;
+    }
+    .brand-bg-video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; z-index: 0;
+      opacity: 0;
+      transition: opacity 0.7s ease;
+    }
+    .brand-bg-video.active { opacity: 1; }
+    .brand-bg-overlay {
+      position: absolute; inset: 0;
+      background: rgba(23,23,23,0.9); z-index: 1;
+    }
+    .brand-inner { position: relative; z-index: 2; width: 100%; display: flex; gap: 40px; align-items: flex-start; }
+    .brand-left { width: 462px; flex-shrink: 0; display: flex; flex-direction: column; gap: 80px; }
+    .brand-feature { cursor: pointer; }
+    .brand-feature-title { font-size: 36px; font-weight: 500; line-height: 44px; color: #bdbdbd; transition: color 0.4s ease; }
+    .brand-feature.active .brand-feature-title { color: #fff; }
+    .brand-feature-desc { font-size: 16px; font-weight: 400; line-height: 24px; letter-spacing: 0.16px; color: #bdbdbd; margin-top: 16px; display: none; animation: fadeSlideIn 0.4s ease; }
+    .brand-feature.active .brand-feature-desc { display: block; }
+    @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .brand-right {
+      flex: 1; min-width: 0; height: calc(100vh - 160px);
+      background: #f0f0ef;
+      border-radius: 20px; overflow: hidden; position: relative;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+    .brand-right-ui {
+      position: absolute;
+      inset: 44px;
+      overflow: hidden; border-radius: 12px;
+    }
+    .brand-right-ui img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center top;
+      display: block;
+    }
+    .brand-cursor {
+      position: absolute; z-index: 3;
+      display: flex; flex-direction: column; gap: 8px;
+      padding: 12px 0 0 12px;
+    }
+    .brand-cursor-label {
+      display: inline-flex; align-items: center;
+      padding: 7px 10px; border-radius: 999px;
+      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500;
+      color: #fff; letter-spacing: -0.14px; white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.08);
+    }
+    .brand-cursor-arrow {
+      position: absolute; left: 0; top: 0;
+      width: 16px; height: 16px;
+    }
+    .brand-cursor-arrow img { width: 100%; height: 100%; display: block; }
+
+    /* ─── What Teams Produce ─────────────────────────── */
+    .teams-section { background: #fff; padding: 160px 0; }
+    .teams-inner { padding: 0 var(--px); }
+    .teams-section-header { margin-bottom: 64px; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+    .teams-section-header-text h2 { font-size: 48px; font-weight: 500; line-height: 56px; letter-spacing: -0.48px; color: #1f1c1d; }
+    .teams-section-header-text p { font-size: 20px; font-weight: 400; line-height: 32px; letter-spacing: 0.2px; color: #525252; margin-top: 20px; max-width: 640px; }
+    .teams-nav { display: flex; gap: 12px; flex-shrink: 0; }
+    .icon-btn { width: 48px; height: 48px; border-radius: 12px; border: 1px solid rgba(15,15,15,0.15); background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.15s, border-color 0.15s, transform 0.15s; }
+    .icon-btn:hover { background: #f5f5f5; border-color: rgba(15,15,15,0.25); transform: scale(1.08); }
+    .teams-grid { display: flex; gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+    .teams-grid::-webkit-scrollbar { display: none; }
+    .team-card { scroll-snap-align: start; }
+    .team-card { overflow: hidden; flex: 0 0 calc((100% - 53px) / 3.2); min-width: 0; }
+    .team-card-media { width: 100%; height: 480px; overflow: hidden; border-radius: 20px; }
+    .team-card-media video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .team-card-body { padding: 16px 0 0; }
+    .team-card-title { font-size: 22px; font-weight: 500; line-height: 28px; letter-spacing: -0.2px; color: #0f0f0f; }
+    .team-card-desc { font-size: 16px; font-weight: 400; line-height: 26px; color: #6b6b6b; margin-top: 10px; }
+
+    /* ─── Full Control ───────────────────────────────── */
+    .control-section { background: #fff; padding: 160px 0; }
+    .control-inner { }
+    .control-header { text-align: center; margin-bottom: 48px; padding: 0 var(--px); }
+    .control-title { font-size: 48px; font-weight: 500; line-height: 58px; letter-spacing: -0.48px; color: #1f1c1d; }
+    .control-title .purple { color: #6929c4; }
+    .seg-control { display: inline-flex; align-items: center; gap: 4px; padding: 5px; background: #f0f0f0; border-radius: 16px; margin-top: 40px; }
+    .seg-btn { height: 36px; padding: 6px 16px; border-radius: 12px; font-size: 14px; font-weight: 500; letter-spacing: 0.2px; cursor: pointer; border: none; color: rgba(15,15,15,0.45); background: transparent; transition: all 0.2s; }
+    .seg-btn.active { background: #fff; color: #0f0f0f; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+    .control-cards { margin-top: 40px; overflow: visible; padding-bottom: 40px; }
+    .control-track { display: flex; gap: 24px; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); will-change: transform; }
+    .control-card { flex-shrink: 0; width: 86%; border-radius: 20px; border: 1px solid #e8e8e8; overflow: hidden; }
+    .control-card-main { height: 760px; background: #0a0a0a; }
+    .control-card-main video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .control-card-alt { height: 760px; background: #efefef; display: flex; align-items: center; justify-content: center; padding: 40px; box-sizing: border-box; }
+    .control-card-alt img { width: 100%; height: 100%; object-fit: contain; display: block; border-radius: 16px; }
+    .control-footer { text-align: center; margin-top: 40px; font-size: 16px; font-weight: 400; line-height: 26px; letter-spacing: 0.1px; color: #888; padding: 0 var(--px); }
+
+    /* ─── Start From What Works ──────────────────────── */
+    .templates-section { background: #fff; padding: 160px 0; }
+    .templates-header { text-align: center; margin-bottom: 40px; padding: 0 var(--px); }
+    .templates-header h2 { font-size: 48px; font-weight: 500; line-height: 58px; letter-spacing: -0.48px; color: #1f1c1d; }
+    .templates-header p { font-size: 18px; font-weight: 400; line-height: 30px; letter-spacing: 0.1px; color: #6b6b6b; margin-top: 20px; }
+    .filter-tabs { display: flex; gap: 8px; align-items: center; justify-content: center; flex-wrap: wrap; padding: 0 var(--px); margin-bottom: 56px; }
+    .filter-tab { height: 40px; padding: 10px 18px; border-radius: 100px; font-size: 14px; font-weight: 500; letter-spacing: 0.1px; cursor: pointer; border: 1px solid #e8e8e8; background: transparent; color: #6b6b6b; transition: all 0.15s; white-space: nowrap; }
+    .filter-tab.active { background: #0f0f0f; color: #fff; border-color: #0f0f0f; }
+    .filter-tab:hover:not(.active) { background: #f5f5f5; border-color: #d0d0d0; color: #0f0f0f; }
+    .template-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; padding: 0 var(--px); }
+    .template-card { display: flex; flex-direction: column; gap: 8px; }
+    .template-card-img { width: 100%; height: 256px; border-radius: 16px; object-fit: cover; display: block; background: #f0f0f0; }
+    .template-card-video { width: 100%; height: 256px; border-radius: 16px; object-fit: cover; display: block; }
+    .template-card-name { font-size: 14px; font-weight: 500; letter-spacing: 0.42px; color: #0f0f0f; padding: 0 4px; }
+    .app-card { height: 313px; border-radius: 16px; border: 1px solid #ededed; background: linear-gradient(180deg, #f0f0f0, rgba(255,255,255,0.2)); }
+    .templates-cta { text-align: center; margin-top: 48px; }
+    .btn-explore { display: inline-flex; align-items: center; justify-content: center; height: 48px; padding: 12px 16px; border-radius: 14px; font-size: 14px; font-weight: 500; letter-spacing: 0.42px; background: #0f0f0f; color: #fff; cursor: pointer; border: none; text-decoration: none; transition: opacity 0.15s, transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94); }
+    .btn-explore:hover { opacity: 0.8; transform: translateY(-2px); }
+
+    /* ─── One Subscription ───────────────────────────── */
+    .models-section { background: #0f0f0f; padding: 160px 0; position: relative; overflow: hidden; }
+    .models-bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: 0.35; }
+    .models-bg-overlay { position: absolute; inset: 0; background: rgba(15,15,15,0.75); z-index: 1; }
+    .models-inner { position: relative; z-index: 2; }
+    .models-inner { padding: 0 var(--px); display: flex; flex-direction: column; gap: 80px; }
+    .models-header { text-align: center; }
+    .models-header h2 { font-size: 56px; font-weight: 500; line-height: 64px; letter-spacing: -0.56px; color: #fff; }
+    .models-header p { font-size: 18px; font-weight: 400; line-height: 28px; letter-spacing: 0.1px; color: #888; margin-top: 20px; }
+    .models-grid-outer { position: relative; width: 100%; }
+    .models-grid { position: absolute; top: 0; left: 0; width: 1200px; height: 534px; transform-origin: top left; }
+    .mgc { position: absolute; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; box-sizing: border-box; gap: 8px; cursor: default; transition: transform 0.25s ease, opacity 0.5s ease; opacity: 0; transform: translateY(20px); }
+    .mgc-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+    .mgc-bg-custom { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+    .mgc-bg-custom img { position: absolute; max-width: none; }
+    .mgc-logo { position: relative; width: 56px; height: 56px; overflow: hidden; flex-shrink: 0; }
+    .mgc-li { position: absolute; }
+    .mgc-li img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; max-width: none; }
+    .mgc-name { position: relative; color: #fff; font-size: 16px; font-weight: 400; line-height: 24px; letter-spacing: 0.16px; text-align: center; white-space: nowrap; }
+
+    /* ─── Testimonials ───────────────────────────────── */
+    .testimonials-section { background: #fff; padding: 120px 0; }
+    .testimonials-inner { padding: 0 var(--px); }
+    .testimonials-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 64px; }
+    .testimonials-header h2 { font-size: 32px; font-weight: 600; line-height: 40px; letter-spacing: 0.32px; max-width: 459px; }
+    .testimonials-header h2 .muted { color: #525252; font-weight: 600; }
+    .testimonials-cards { display: flex; gap: 24px; overflow-x: auto; scrollbar-width: none; }
+    .testimonials-cards::-webkit-scrollbar { display: none; }
+    .testimonial-card { flex-shrink: 0; background: #fff; border: 1px solid #ededed; border-radius: 16px; box-shadow: 0 0 24px rgba(176,175,175,0.25); display: flex; overflow: hidden; }
+    .testimonial-text-col { width: 520px; padding: 28px 24px; display: flex; flex-direction: column; gap: 32px; justify-content: space-between; flex-shrink: 0; }
+    .testimonial-logo { height: 24px; object-fit: contain; object-position: left; }
+    .testimonial-quote { font-size: 20px; font-weight: 500; line-height: 1.82; color: #3d3d3d; letter-spacing: 0.2px; flex: 1; }
+    .testimonial-author-name { font-size: 16px; font-weight: 500; line-height: 24px; color: #3d3d3d; }
+    .testimonial-author-role { font-size: 14px; font-weight: 400; line-height: 20px; letter-spacing: 0.42px; color: #3d3d3d; }
+    .testimonial-image-col { flex: 1; overflow: hidden; }
+    .testimonial-image-col img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* ─── FAQ ────────────────────────────────────────── */
+    .faq-section { background: #f7fbff; padding: 120px 0; }
+    .faq-inner { padding: 0 var(--px); display: flex; flex-direction: column; gap: 56px; }
+    .faq-inner > * { max-width: 800px; width: 100%; margin-left: auto; margin-right: auto; }
+    .faq-inner h2 { font-size: 40px; font-weight: 500; line-height: 48px; color: #1f1c1d; text-align: center; }
+    .faq-list { display: flex; flex-direction: column; gap: 0; }
+    .faq-item { border-bottom: 1px solid #e0e0e0; padding-bottom: 16px; padding-top: 16px; cursor: pointer; transition: background 0.15s, opacity 0.7s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94); }
+    .faq-item:first-child { border-top: 1px solid #e0e0e0; }
+    .faq-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .faq-question { font-size: 20px; font-weight: 500; line-height: 24px; letter-spacing: 0.2px; color: #3d3d3d; }
+    .faq-chevron { width: 16px; height: 16px; flex-shrink: 0; transition: transform 0.2s; }
+    .faq-chevron.open { transform: rotate(180deg); }
+    .faq-answer { font-size: 18px; font-weight: 400; line-height: 28px; color: #3d3d3d; margin-top: 8px; display: none; }
+    .faq-item.open .faq-answer { display: block; }
+
+    /* ─── CTA Banner ─────────────────────────────────── */
+    .cta-section { padding: 72px var(--px); background: #fff; }
+    .cta-banner {
+      border-radius: 24px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 32px 48px;
+      position: relative;
+      background: linear-gradient(135deg, #fde8e8 0%, #fcd4c8 30%, #f5c4d8 60%, #e8c8f0 100%);
+    }
+    .cta-content { flex: 1; display: flex; flex-direction: column; gap: 24px; position: relative; z-index: 1; }
+    .cta-title { font-size: 40px; font-weight: 500; line-height: 48px; color: #0f0f0f; }
+    .cta-title .purple { color: #6929c4; }
+    .cta-desc { font-size: 18px; font-weight: 400; line-height: 28px; color: #3d3d3d; max-width: 794px; }
+    .btn-cta { display: inline-flex; align-items: center; justify-content: center; height: 48px; padding: 12px 16px; border-radius: 14px; font-size: 14px; font-weight: 500; letter-spacing: 0.42px; background: #0f0f0f; color: #fff; cursor: pointer; border: none; text-decoration: none; transition: opacity 0.15s; width: fit-content; }
+    .btn-cta:hover { opacity: 0.8; }
+    .cta-preview { width: 286px; height: 349px; flex-shrink: 0; border: 1px solid #ebebeb; border-radius: 12px; overflow: hidden; position: relative; background: #f8f8f8; }
+    .cta-preview img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* ─── Footer ─────────────────────────────────────── */
+    .footer-section {
+      background: #ebf0fa;
+      position: relative;
+      overflow: hidden;
+      padding: 240px var(--px) 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 56px;
+      align-items: center;
+    }
+    .footer-deco {
+      position: absolute;
+      left: -69.86px;
+      top: -364.96px;
+      width: 941.863px;
+      height: 1828.292px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .footer-deco-inner {
+      transform: rotate(-43.38deg) scaleY(0.92) skewX(-23.27deg);
+      flex-shrink: 0;
+    }
+    .footer-deco-inner img { width: 573.257px; height: 1527.69px; display: block; max-width: none; }
+    .footer-watermark {
+      opacity: 0.1;
+      padding: 0 20px;
+      width: 100%;
+      box-sizing: border-box;
+      position: relative;
+      z-index: 1;
+      flex-shrink: 0;
+    }
+    .footer-watermark img { width: 100%; display: block; }
+    .footer-sep { height: 1px; background: #ededed; border-radius: 999px; width: 100%; flex-shrink: 0; position: relative; z-index: 1; }
+    .footer-body { display: flex; flex-direction: column; gap: 80px; width: 100%; position: relative; z-index: 1; }
+    .footer-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 0 20px;
+    }
+    .footer-logo-img { height: 40px; width: auto; display: block; flex-shrink: 0; overflow: visible; }
+    .footer-nav { display: flex; gap: 120px; }
+    .footer-nav-col { display: flex; flex-direction: column; gap: 24px; }
+    .footer-nav-heading { font-size: 14px; font-weight: 500; letter-spacing: 0.42px; color: rgba(15,15,15,0.5); line-height: 20px; }
+    .footer-nav-links { display: flex; flex-direction: column; gap: 8px; }
+    .footer-nav-links a { font-size: 14px; font-weight: 400; letter-spacing: 0.42px; color: #0f0f0f; text-decoration: none; line-height: 20px; display: inline-block; transition: color 0.15s, transform 0.2s cubic-bezier(0.25,0.46,0.45,0.94); }
+    .footer-nav-links a:hover { text-decoration: none; color: #6929c4; transform: translateX(4px); }
+    .footer-bottom-wrap { display: flex; flex-direction: column; gap: 24px; }
+    .footer-bottom-separator { height: 1px; background: #ededed; border-radius: 999px; }
+    .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
+    .footer-copy { font-size: 12px; color: #0f0f0f; line-height: 18px; }
+    .footer-copy strong { font-weight: 600; }
+    .footer-social { display: flex; gap: 8px; align-items: center; }
+    .footer-social-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.15s;
+    }
+    .footer-social-btn:hover { background: rgba(15,15,15,0.08); transform: scale(1.15); }
+    .footer-social-btn img { width: 18px; height: 18px; }
+
+    /* ─── Subtle dot pattern on light sections ─────── */
+    .logos-section, .teams-section, .control-section,
+    .templates-section, .testimonials-section, .faq-section,
+    .cta-section, .footer-section {
+      background-image: radial-gradient(circle, rgba(0,0,0,0.09) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    /* ─── Page Grid Background ──────────────────────── */
+    body { position: relative; }
+    #page-grid-bg {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1131px;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .pgl-lines {
+      position: absolute;
+      left: calc(50% - 720px - 84.3px);
+      top: -280px;
+      width: 2011.429px;
+      height: 1737.143px;
+      opacity: 0.07;
+      -webkit-mask-image: url('https://www.figma.com/api/mcp/asset/d14fe2a2-4037-4a2b-9bd1-3cd9c94ac815');
+      -webkit-mask-size: 1440px 1131.429px;
+      -webkit-mask-position: 84.297px 279.999px;
+      -webkit-mask-repeat: no-repeat;
+      mask-image: url('https://www.figma.com/api/mcp/asset/d14fe2a2-4037-4a2b-9bd1-3cd9c94ac815');
+      mask-size: 1440px 1131.429px;
+      mask-position: 84.297px 279.999px;
+      mask-repeat: no-repeat;
+    }
+    .pgl-hori-wrap { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+    .pgl-hori { transform: rotate(-90deg); flex-shrink: 0; width: 2011.429px; height: 1737.143px; position: relative; }
+    .pgl-hori-inner { position: absolute; inset: 0 -2.06% 0 0; }
+    .pgl-hori-inner img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+    .pgl-verti { position: absolute; left: 52.87px; top: 207.14px; width: 1737.143px; height: 1322.857px; }
+    .pgl-verti img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+    .pgl-blocks {
+      position: absolute;
+      left: calc(50% - 720px - 30.66px);
+      top: -52.47px;
+      width: 1462.338px;
+      height: 1109.091px;
+      opacity: 0.4;
+      -webkit-mask-image: url('https://www.figma.com/api/mcp/asset/d14fe2a2-4037-4a2b-9bd1-3cd9c94ac815');
+      -webkit-mask-size: 1440px 1131.429px;
+      -webkit-mask-position: 30.66px 52.468px;
+      -webkit-mask-repeat: no-repeat;
+      mask-image: url('https://www.figma.com/api/mcp/asset/d14fe2a2-4037-4a2b-9bd1-3cd9c94ac815');
+      mask-size: 1440px 1131.429px;
+      mask-position: 30.66px 52.468px;
+      mask-repeat: no-repeat;
+    }
+    .pgl-blocks > div { position: absolute; }
+
+    /* ─── Hover Effects ──────────────────────────────── */
+    .team-card { transition: transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94); }
+    .team-card:hover { transform: translateY(-6px); }
+
+    .template-card { transition: opacity 0.7s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94); }
+    .template-card:hover { transform: translateY(-5px); }
+    .template-card-img,
+    .template-card-video { transition: box-shadow 0.3s ease; }
+    .template-card:hover .template-card-img,
+    .template-card:hover .template-card-video { box-shadow: 0 10px 32px rgba(0,0,0,0.12); }
+
+    .app-card { transition: transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.3s ease; }
+    .app-card:hover { transform: translateY(-5px); box-shadow: 0 10px 32px rgba(0,0,0,0.09); }
+
+
+    .testimonial-card { transition: opacity 0.75s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.3s ease; }
+    .testimonial-card:hover { transform: translateY(-5px); box-shadow: 0 12px 48px rgba(176,175,175,0.55); }
+
+    /* ─── Hero Cards ────────────────────────────────── */
+    .hero-card { position: absolute; border-radius: 16px; background: #1c1c1c; overflow: hidden; z-index: 1; height: auto; }
+    .hcard-tl  { left: 1vw;   top: 5vh;  width: 19vw; aspect-ratio: 4/3; }
+    .hcard-tr  { right: 1vw;  top: 3vh;  width: 19vw; aspect-ratio: 4/3; }
+    .hcard-sl  { left: -5vw;  top: 38vh; width: 20vw; aspect-ratio: 16/9; }
+    .hcard-sr  { right: -5vw; top: 33vh; width: 20vw; aspect-ratio: 16/9; }
+    .hcard-b1  { left: 2vw;   top: 80vh; width: 20vw; aspect-ratio: 16/9; }
+    .hcard-b2  { left: 38vw;  top: 88vh; width: 21vw; aspect-ratio: 16/9; }
+    .hcard-b3  { right: 2vw;  top: 78vh; width: 20vw; aspect-ratio: 16/9; }
+
+    /* ─── Navbar on dark hero ────────────────────────── */
+    .logo-white { display: block; }
+    .logo-dark { display: none; }
+    .navbar.scrolled .logo-white { display: none; }
+    .navbar.scrolled .logo-dark { display: block; }
+    .navbar:not(.scrolled) .nav-link { color: rgba(255,255,255,0.75); }
+    .navbar:not(.scrolled) .nav-link:hover { color: #fff; background: rgba(255,255,255,0.08); }
+    .navbar:not(.scrolled) .btn-ghost { color: rgba(255,255,255,0.75); }
+    .navbar:not(.scrolled) .btn-ghost:hover { color: #fff; background: rgba(255,255,255,0.08); }
+    .navbar:not(.scrolled) .btn-dark { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.25); box-shadow: none; }
+    .navbar:not(.scrolled) .btn-dark:hover { background: rgba(255,255,255,0.18); transform: none; box-shadow: none; }
+
+    /* ─── Additional Reveal Variants ───────────────── */
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-32px);
+      transition: opacity 0.75s cubic-bezier(0.25,0.46,0.45,0.94),
+                  transform 0.75s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .reveal-left.in-view { opacity: 1; transform: translateX(0); }
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(32px);
+      transition: opacity 0.75s cubic-bezier(0.25,0.46,0.45,0.94),
+                  transform 0.75s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .reveal-right.in-view { opacity: 1; transform: translateX(0); }
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.93);
+      transition: opacity 0.75s cubic-bezier(0.25,0.46,0.45,0.94),
+                  transform 0.75s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .reveal-scale.in-view { opacity: 1; transform: scale(1); }
+    .reveal-d6 { transition-delay: 0.48s; }
+    .reveal-d7 { transition-delay: 0.56s; }
+
+    /* ─── Model card entrance ───────────────────────── */
+    .mgc.in-view { opacity: 1; transform: translateY(0); }
+    .mgc.in-view:hover { transform: translateY(-4px) scale(1.02); }
+
+    /* ─── Marquee hover pause ───────────────────────── */
+    .marquee-wrapper:hover .marquee-track { animation-play-state: paused; }
+
+    /* ─── FAQ item hover ────────────────────────────── */
+    .faq-item:hover { background: rgba(15,15,15,0.025); }
+
+    /* ─── CTA preview hover ─────────────────────────── */
+    .cta-preview { transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.35s ease; }
+    .cta-preview:hover { transform: translateY(-8px) rotate(0.8deg); box-shadow: 0 24px 56px rgba(0,0,0,0.14); }
+
+    /* ─── Control card hover ─────────────────────────── */
+    .control-card { cursor: pointer; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.35s ease; }
+    .control-card:hover { transform: translateY(-6px); box-shadow: 0 24px 64px rgba(0,0,0,0.1); }
+
+    /* ─── Brand feature opacity states ─────────────── */
+    .brand-feature { transition: opacity 0.35s ease; }
+    .brand-feature:not(.active) { opacity: 0.6; }
+    .brand-feature:not(.active):hover { opacity: 0.85; }
+    .brand-feature.active { opacity: 1; }
+
+    /* ─── Get started button glow ───────────────────── */
+    .btn-get-started:hover { opacity: 1; transform: translateY(-2px) scale(1.02); box-shadow: 0 8px 32px rgba(138,63,252,0.45), 0 2px 8px rgba(138,63,252,0.2); }
+
+    /* ─── Team card media zoom ───────────────────────── */
+    .team-card-media { overflow: hidden; }
+    .team-card-media video { transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94); }
+    .team-card:hover .team-card-media video { transform: scale(1.04); }
+
+    /* ─── Testimonial image zoom ─────────────────────── */
+    .testimonial-image-col img { transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94); }
+    .testimonial-card:hover .testimonial-image-col img { transform: scale(1.06); }
+
+    /* ─── Parallax will-change ──────────────────────── */
+    .hc, .hc-video, .hc-prompt, .hero-gl, .hcv { will-change: translate; }
+    .btn-hero { will-change: translate; }
+  </style>
+</head>
+<body>
+  <div id="bg-dots"><canvas id="dots-canvas"></canvas></div>
+
+  <!-- ─── Page Grid Background ─────────────────────── -->
+  <div id="page-grid-bg" aria-hidden="true">
+    <div class="pgl-lines">
+      <div class="pgl-hori-wrap">
+        <div class="pgl-hori">
+          <div class="pgl-hori-inner"><img src="https://www.figma.com/api/mcp/asset/a1b99b1a-69f7-45f8-b11c-47b4ef2f8fe0" alt=""/></div>
+        </div>
+      </div>
+      <div class="pgl-verti"><img src="https://www.figma.com/api/mcp/asset/257d7efb-9ccc-41d8-9534-f1e6d881e661" alt=""/></div>
+    </div>
+    <div class="pgl-blocks">
+      <div style="left:914.28px;top:925.97px;width:90.909px;height:90.909px;background:rgba(138,82,217,0.5)"></div>
+      <div style="left:457.15px;top:925.97px;width:90.909px;height:90.909px;background:rgba(138,82,217,0.2)"></div>
+      <div style="left:1280.53px;top:287.01px;width:90.909px;height:89.61px;background:rgba(138,82,217,0.25)"></div>
+      <div style="left:548.05px;top:560.98px;width:90.909px;height:89.61px;background:rgba(138,82,217,0.15)"></div>
+      <div style="left:1188.32px;top:377.92px;width:90.909px;height:89.61px;background:rgba(138,82,217,0.25)"></div>
+      <div style="left:457px;top:287.01px;width:90.909px;height:89.61px;background:rgba(138,82,217,0.15)"></div>
+      <div style="left:1188.32px;top:287.01px;width:90.909px;height:89.61px;background:rgba(138,82,217,0.25)"></div>
+      <div style="left:457px;top:560.98px;width:90.909px;height:89.61px;background:rgba(138,82,217,0.15)"></div>
+      <div style="left:366.23px;top:925.97px;width:90.909px;height:90.909px;background:rgba(138,82,217,0.2)"></div>
+      <div style="left:366.23px;top:1016.88px;width:90.909px;height:92.208px;background:rgba(138,82,217,0.2)"></div>
+      <div style="left:183.13px;top:835.07px;width:90.909px;height:90.909px;background:rgba(138,82,217,0.2)"></div>
+      <div style="left:1097.41px;top:103.9px;width:90.909px;height:90.909px;background:rgba(138,82,217,0.15)"></div>
+      <div style="left:1005.51px;top:12.46px;width:90.909px;height:90.093px;background:rgba(138,82,217,0.15)"></div>
+      <div style="left:1005.51px;top:103.41px;width:90.909px;height:90.685px;background:rgba(138,82,217,0.15)"></div>
+      <div style="left:183.12px;top:193.5px;width:92.208px;height:93.506px;background:rgba(138,82,217,0.2)"></div>
+      <div style="left:90.92px;top:102.59px;width:92.208px;height:90.909px;background:rgba(138,82,217,0.2)"></div>
+      <div style="left:0px;top:103.89px;width:92.208px;height:90.909px;background:rgba(138,82,217,0.2)"></div>
+      <div style="left:90.92px;top:193.5px;width:92.208px;height:93.506px;background:rgba(138,82,217,0.2)"></div>
+      <div style="left:457.15px;top:11.68px;width:92.208px;height:90.909px;background:rgba(138,82,217,0.25)"></div>
+      <div style="left:183.12px;top:376.62px;width:90.909px;height:92.208px;background:rgba(138,82,217,0.2)"></div>
+      <div style="left:1280.53px;top:835.06px;width:90.909px;height:90.909px;background:rgba(138,82,217,0.15)"></div>
+      <div style="left:1371.42px;top:925.97px;width:90.909px;height:90.909px;background:rgba(138,82,217,0.15)"></div>
+    </div>
+  </div>
+
+  <!-- ─── Navbar ─────────────────────────────────────── -->
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="/" class="logo">
+        <svg class="logo-white" width="158" height="39" viewBox="0 0 158 39" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ImagineArt Workflows">
+<path d="M25.9304 11.5692C22.9368 10.8701 19.5513 10.6474 20.371 5.18344L26.4248 6.88008L28.4962 7.38328C28.3938 3.28641 25.0439 0 20.9234 0H7.54167C3.37215 0 0 3.37992 0 7.53914V13.8759C0 16.009 1.14484 16.5968 2.57923 16.9308H2.57032C5.56382 17.6344 8.94933 17.8615 8.12968 23.321L2.07585 21.6244L0.00445461 21.1256C0.0890924 25.2091 3.4256 28.5 7.54167 28.5H20.9679C25.1285 28.5 28.5096 25.1201 28.5096 20.9609V14.6196C28.5096 12.4999 27.3603 11.8987 25.9304 11.5692ZM14.2503 22.8757C12.9229 18.8857 9.76453 15.626 5.62619 14.25C9.76453 12.874 12.9229 9.6232 14.2503 5.6332C15.5823 9.6232 18.7361 12.8784 22.8789 14.2545C18.7361 15.6349 15.5823 18.8857 14.2503 22.8757Z" fill="url(#paint0_linear_22497_22508)"/>
+<path d="M0.00445461 21.1273H0V20.9714C0 21.0249 -9.31323e-09 21.0739 0.00445461 21.1273Z" fill="url(#paint1_linear_22497_22508)"/>
+<path d="M94.8321 5.44097C94.8321 4.34671 95.6909 3.51405 96.7818 3.51405C97.8728 3.51405 98.7315 4.34671 98.7315 5.44097C98.7315 6.53523 97.8728 7.3679 96.7818 7.3679C95.6909 7.3679 94.8321 6.53523 94.8321 5.44097Z" fill="url(#paint2_linear_22497_22508)"/>
+<path d="M98.3224 9.07802H95.2339V21.2033H98.3224V9.07802Z" fill="url(#paint3_linear_22497_22508)"/>
+<path d="M100.648 13.502V21.2061H103.737V14.5042C103.737 10.8677 109.228 10.8677 109.228 14.5042V21.2061H112.317V13.502C112.317 7.23492 100.641 7.23492 100.641 13.502H100.648Z" fill="url(#paint4_linear_22497_22508)"/>
+<path d="M53.7745 10.195C50.6011 7.56068 43.6427 8.66231 43.6427 13.4962V21.2002H46.7313V14.4984C46.7313 10.8619 52.2228 10.8619 52.2228 14.4984V21.2002H55.3114V14.4984C55.3114 10.8619 60.8029 10.8619 60.8029 14.4984V21.2002H63.8915V13.4962C63.8915 8.66231 56.933 7.56068 53.7597 10.195H53.7745Z" fill="url(#paint5_linear_22497_22508)"/>
+<path d="M120.193 8.78523C116.481 8.78523 113.677 11.519 113.677 15.1334C113.677 18.7478 116.485 21.4816 120.241 21.4816C123.101 21.4816 125.441 19.9378 126.425 17.6535H122.994C122.415 18.3278 121.457 18.792 120.311 18.792C118.649 18.792 117.384 17.7714 116.986 16.2056H126.613C126.68 15.8961 126.709 15.5166 126.709 15.185C126.709 11.5227 123.901 8.78892 120.193 8.78892V8.78155V8.78523ZM117.008 13.9434C117.436 12.4438 118.626 11.4675 120.193 11.4675C121.759 11.4675 123.023 12.4659 123.399 13.9434H117.001H117.008Z" fill="url(#paint6_linear_22497_22508)"/>
+<path d="M89.9893 10.449C89.0126 9.40628 87.66 8.7873 86.0199 8.7873C82.666 8.7873 80.1229 11.4032 80.1229 14.8297C80.1229 18.2561 82.6659 20.872 86.0493 20.872C87.6673 20.872 89.0199 20.2531 89.9966 19.2325V20.0394C89.9966 22.0621 88.7841 23.2743 86.8786 23.2743C85.6439 23.2743 84.5751 22.7584 84.1218 21.9258H80.8711C81.4497 24.4201 83.8159 26.0007 86.8528 26.0007C90.5863 26.0007 93.0852 23.5764 93.0852 19.892V9.07469H89.9966V10.4563V10.449H89.9893ZM86.6648 17.9835C84.7373 17.9835 83.3109 16.6313 83.3109 14.8223C83.3109 13.0133 84.7373 11.6832 86.6648 11.6832C88.5924 11.6832 89.9966 13.0354 89.9966 14.8223C89.9966 16.6092 88.5482 17.9835 86.6648 17.9835Z" fill="url(#paint7_linear_22497_22508)"/>
+<path d="M157.322 12.0507V9.07376H154.576V5.44834H151.487V9.07376H148.76C145.841 9.07376 142.926 10.6396 142.926 13.7713V21.2064H146.014V14.7735C146.014 12.9534 147.389 12.0544 148.76 12.0544H151.487V16.6415C151.487 19.7732 154.406 21.339 157.322 21.339V18.3731C155.947 18.3731 154.576 17.4631 154.576 15.643V12.0544H157.322V12.0434V12.0507Z" fill="url(#paint8_linear_22497_22508)"/>
+<path d="M75.3869 9.07475V10.5006C75.3869 10.5006 75.3648 10.4711 75.3537 10.4601C71.8561 6.66517 65.5205 9.889 65.5131 15.1319C65.5131 20.3747 71.8524 23.5912 75.3537 19.8036C75.3648 19.7926 75.3758 19.7742 75.3869 19.7631V21.189H78.4754V9.07475H75.3869ZM72.033 18.481C70.1275 18.481 68.7012 17.033 68.7012 15.1282C68.7012 13.2234 70.1275 11.7754 72.033 11.7754C73.9384 11.7754 75.3869 13.2234 75.3869 15.1282C75.3869 17.033 73.9605 18.481 72.033 18.481Z" fill="url(#paint9_linear_22497_22508)"/>
+<path d="M41.7078 6.40685H38.6192V21.1996H41.7078V6.40685Z" fill="url(#paint10_linear_22497_22508)"/>
+<path d="M132.466 5.2411H136.236L142.369 21.2018H138.875L137.74 18.1032H130.866L129.757 21.2018H126.311L132.466 5.2411ZM136.653 15.1631L134.316 8.75599L131.957 15.1631H136.656H136.653Z" fill="url(#paint11_linear_22497_22508)"/>
+<path d="M94.0311 36L91.7031 27.408H93.1551L94.6191 33.144L94.7751 33.876H94.8171L95.0031 33.144L96.7491 27.408H98.0691L99.7671 33.144L99.9531 33.87H99.9891L100.157 33.144L101.609 27.408H103.007L100.703 36H99.3651L97.5771 30.03L97.3971 29.37H97.3611L97.1751 30.024L95.3451 36H94.0311ZM107.111 36.204C106.095 36.204 105.269 35.886 104.633 35.25C104.001 34.614 103.685 33.812 103.685 32.844C103.685 31.864 104.005 31.056 104.645 30.42C105.285 29.784 106.107 29.466 107.111 29.466C108.119 29.466 108.943 29.788 109.583 30.432C110.223 31.076 110.543 31.88 110.543 32.844C110.543 33.804 110.227 34.604 109.595 35.244C108.963 35.884 108.135 36.204 107.111 36.204ZM107.111 34.986C107.699 34.986 108.183 34.788 108.563 34.392C108.943 33.992 109.133 33.476 109.133 32.844C109.133 32.212 108.943 31.696 108.563 31.296C108.187 30.892 107.703 30.69 107.111 30.69C106.519 30.69 106.033 30.89 105.653 31.29C105.277 31.69 105.089 32.208 105.089 32.844C105.089 33.48 105.277 33.996 105.653 34.392C106.033 34.788 106.519 34.986 107.111 34.986ZM112.282 36V29.676H113.596V30.798L113.452 30.654H113.638C113.766 30.306 113.992 30.022 114.316 29.802C114.644 29.578 114.998 29.466 115.378 29.466C115.51 29.466 115.644 29.48 115.78 29.508C115.916 29.532 116.042 29.568 116.158 29.616C116.274 29.664 116.332 29.688 116.332 29.688L116.128 30.972C116.128 30.972 116.072 30.95 115.96 30.906C115.848 30.858 115.728 30.82 115.6 30.792C115.476 30.764 115.36 30.75 115.252 30.75C114.808 30.75 114.434 30.918 114.13 31.254C113.826 31.59 113.674 32.062 113.674 32.67V36H112.282ZM118.65 34.524V32.82L121.692 29.676H123.432L118.65 34.524ZM117.786 36V27.21H119.178V36H117.786ZM122.07 36L119.802 32.598L120.744 31.608L123.714 36H122.07ZM125.53 36V29.244C125.53 28.628 125.738 28.136 126.154 27.768C126.57 27.396 127.106 27.21 127.762 27.21H130.414V28.32H127.984C127.672 28.32 127.416 28.41 127.216 28.59C127.016 28.77 126.916 29.028 126.916 29.364V36H125.53ZM124.378 30.834V29.676H126.226V30.834H124.378ZM126.202 30.834V29.676H128.476V30.834H126.202ZM129.718 36V27.21H131.11V36H129.718ZM136.266 36.204C135.25 36.204 134.424 35.886 133.788 35.25C133.156 34.614 132.84 33.812 132.84 32.844C132.84 31.864 133.16 31.056 133.8 30.42C134.44 29.784 135.262 29.466 136.266 29.466C137.274 29.466 138.098 29.788 138.738 30.432C139.378 31.076 139.698 31.88 139.698 32.844C139.698 33.804 139.382 34.604 138.75 35.244C138.118 35.884 137.29 36.204 136.266 36.204ZM136.266 34.986C136.854 34.986 137.338 34.788 137.718 34.392C138.098 33.992 138.288 33.476 138.288 32.844C138.288 32.212 138.098 31.696 137.718 31.296C137.342 30.892 136.858 30.69 136.266 30.69C135.674 30.69 135.188 30.89 134.808 31.29C134.432 31.69 134.244 32.208 134.244 32.844C134.244 33.48 134.432 33.996 134.808 34.392C135.188 34.788 135.674 34.986 136.266 34.986ZM142.516 36L140.494 29.676H141.88L143.02 33.648L143.224 34.38H143.266L143.482 33.66L144.7 29.676H145.948L147.172 33.648L147.388 34.38H147.43L147.628 33.648L148.78 29.676H150.094L148.072 36H146.806L145.516 31.986L145.306 31.26H145.264L145.054 31.986L143.794 36H142.516ZM153.497 36.21C153.057 36.21 152.675 36.154 152.351 36.042C152.031 35.93 151.749 35.772 151.505 35.568C151.265 35.364 151.081 35.154 150.953 34.938C150.825 34.722 150.761 34.614 150.761 34.614L151.751 34.008C151.751 34.008 151.803 34.09 151.907 34.254C152.011 34.414 152.139 34.56 152.291 34.692C152.447 34.824 152.627 34.926 152.831 34.998C153.035 35.066 153.269 35.1 153.533 35.1C153.901 35.1 154.195 35.028 154.415 34.884C154.635 34.736 154.745 34.534 154.745 34.278C154.745 34.034 154.641 33.844 154.433 33.708C154.229 33.568 153.841 33.43 153.269 33.294C152.441 33.094 151.861 32.84 151.529 32.532C151.201 32.22 151.037 31.81 151.037 31.302C151.037 30.758 151.265 30.316 151.721 29.976C152.177 29.636 152.753 29.466 153.449 29.466C153.805 29.466 154.121 29.504 154.397 29.58C154.677 29.656 154.929 29.77 155.153 29.922C155.377 30.074 155.555 30.234 155.687 30.402C155.819 30.566 155.885 30.648 155.885 30.648L154.937 31.296C154.937 31.296 154.887 31.24 154.787 31.128C154.687 31.012 154.571 30.912 154.439 30.828C154.307 30.74 154.159 30.676 153.995 30.636C153.835 30.596 153.653 30.576 153.449 30.576C153.109 30.576 152.837 30.644 152.633 30.78C152.429 30.912 152.327 31.076 152.327 31.272C152.327 31.452 152.405 31.61 152.561 31.746C152.721 31.878 153.165 32.04 153.893 32.232C154.669 32.428 155.223 32.682 155.555 32.994C155.891 33.302 156.059 33.704 156.059 34.2C156.059 34.804 155.819 35.29 155.339 35.658C154.859 36.026 154.245 36.21 153.497 36.21Z" fill="white"/>
+<defs>
+<linearGradient id="paint0_linear_22497_22508" x1="4.92187" y1="12.0003" x2="157.322" y2="12.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="white"/>
+</linearGradient>
+<linearGradient id="paint1_linear_22497_22508" x1="4.92187" y1="12.0003" x2="157.322" y2="12.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="white"/>
+</linearGradient>
+<linearGradient id="paint2_linear_22497_22508" x1="4.92187" y1="12.0003" x2="157.322" y2="12.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="white"/>
+</linearGradient>
+<linearGradient id="paint3_linear_22497_22508" x1="4.92187" y1="12.0003" x2="157.322" y2="12.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="white"/>
+</linearGradient>
+<linearGradient id="paint4_linear_22497_22508" x1="4.92187" y1="12.0003" x2="157.322" y2="12.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="white"/>
+</linearGradient>
+<linearGradient id="paint5_linear_22497_22508" x1="4.92187" y1="12.0003" x2="157.322" y2="12.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="white"/>
+</linearGradient>
+<linearGradient id="paint6_linear_22497_22508" x1="4.92187" y1="12.0003" x2="157.322" y2="12.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="white"/>
+</linearGradient>
+<linearGradient id="paint7_linear_22497_22508" x1="4.92187" y1="12.0003" x2="157.322" y2="12.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="white"/>
+</linearGradient>
+<linearGradient id="paint8_linear_22497_22508" x1="4.92187" y1="12.0003" x2="157.322" y2="12.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="white"/>
+</linearGradient>
+<linearGradient id="paint9_linear_22497_22508" x1="4.92187" y1="12.0003" x2="157.322" y2="12.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="white"/>
+</linearGradient>
+<linearGradient id="paint10_linear_22497_22508" x1="4.92187" y1="12.0003" x2="157.322" y2="12.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="white"/>
+</linearGradient>
+<linearGradient id="paint11_linear_22497_22508" x1="4.92187" y1="12.0003" x2="157.322" y2="12.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="white"/>
+</linearGradient>
+</defs>
+</svg>
+        <svg class="logo-dark" width="158" height="39" viewBox="0 0 158 39" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ImagineArt Workflows">
+<path d="M25.9304 11.5692C22.9368 10.8701 19.5513 10.6474 20.371 5.18344L26.4248 6.88008L28.4962 7.38328C28.3938 3.28641 25.0439 0 20.9234 0H7.54167C3.37215 0 0 3.37992 0 7.53914V13.8759C0 16.009 1.14484 16.5968 2.57923 16.9308H2.57032C5.56382 17.6344 8.94933 17.8615 8.12968 23.321L2.07585 21.6244L0.00445461 21.1256C0.0890924 25.2091 3.4256 28.5 7.54167 28.5H20.9679C25.1285 28.5 28.5096 25.1201 28.5096 20.9609V14.6196C28.5096 12.4999 27.3603 11.8987 25.9304 11.5692ZM14.2503 22.8757C12.9229 18.8857 9.76453 15.626 5.62619 14.25C9.76453 12.874 12.9229 9.6232 14.2503 5.6332C15.5823 9.6232 18.7361 12.8784 22.8789 14.2545C18.7361 15.6349 15.5823 18.8857 14.2503 22.8757Z" fill="url(#paint0_linear_22103_14289)"/>
+<path d="M0.00445461 21.1273H0V20.9714C0 21.0249 -9.31323e-09 21.0739 0.00445461 21.1273Z" fill="url(#paint1_linear_22103_14289)"/>
+<path d="M94.8321 5.44097C94.8321 4.34671 95.6909 3.51405 96.7818 3.51405C97.8728 3.51405 98.7315 4.34671 98.7315 5.44097C98.7315 6.53523 97.8728 7.3679 96.7818 7.3679C95.6909 7.3679 94.8321 6.53523 94.8321 5.44097Z" fill="url(#paint2_linear_22103_14289)"/>
+<path d="M98.3224 9.07802H95.2339V21.2033H98.3224V9.07802Z" fill="url(#paint3_linear_22103_14289)"/>
+<path d="M100.648 13.502V21.2061H103.737V14.5042C103.737 10.8677 109.228 10.8677 109.228 14.5042V21.2061H112.317V13.502C112.317 7.23492 100.641 7.23492 100.641 13.502H100.648Z" fill="url(#paint4_linear_22103_14289)"/>
+<path d="M53.7745 10.195C50.6011 7.56068 43.6427 8.66231 43.6427 13.4962V21.2002H46.7313V14.4984C46.7313 10.8619 52.2228 10.8619 52.2228 14.4984V21.2002H55.3114V14.4984C55.3114 10.8619 60.8029 10.8619 60.8029 14.4984V21.2002H63.8915V13.4962C63.8915 8.66231 56.933 7.56068 53.7597 10.195H53.7745Z" fill="url(#paint5_linear_22103_14289)"/>
+<path d="M120.193 8.78523C116.481 8.78523 113.677 11.519 113.677 15.1334C113.677 18.7478 116.485 21.4816 120.241 21.4816C123.101 21.4816 125.441 19.9378 126.425 17.6535H122.994C122.415 18.3278 121.457 18.792 120.311 18.792C118.649 18.792 117.384 17.7714 116.986 16.2056H126.613C126.68 15.8961 126.709 15.5166 126.709 15.185C126.709 11.5227 123.901 8.78892 120.193 8.78892V8.78155V8.78523ZM117.008 13.9434C117.436 12.4438 118.626 11.4675 120.193 11.4675C121.759 11.4675 123.023 12.4659 123.399 13.9434H117.001H117.008Z" fill="url(#paint6_linear_22103_14289)"/>
+<path d="M89.9893 10.449C89.0126 9.40628 87.66 8.7873 86.0199 8.7873C82.666 8.7873 80.1229 11.4032 80.1229 14.8297C80.1229 18.2561 82.6659 20.872 86.0493 20.872C87.6673 20.872 89.0199 20.2531 89.9966 19.2325V20.0394C89.9966 22.0621 88.7841 23.2743 86.8786 23.2743C85.6439 23.2743 84.5751 22.7584 84.1218 21.9258H80.8711C81.4497 24.4201 83.8159 26.0007 86.8528 26.0007C90.5863 26.0007 93.0852 23.5764 93.0852 19.892V9.07469H89.9966V10.4563V10.449H89.9893ZM86.6648 17.9835C84.7373 17.9835 83.3109 16.6313 83.3109 14.8223C83.3109 13.0133 84.7373 11.6832 86.6648 11.6832C88.5924 11.6832 89.9966 13.0354 89.9966 14.8223C89.9966 16.6092 88.5482 17.9835 86.6648 17.9835Z" fill="url(#paint7_linear_22103_14289)"/>
+<path d="M157.322 12.0507V9.07376H154.576V5.44834H151.487V9.07376H148.76C145.841 9.07376 142.926 10.6396 142.926 13.7713V21.2064H146.014V14.7735C146.014 12.9534 147.389 12.0544 148.76 12.0544H151.487V16.6415C151.487 19.7732 154.406 21.339 157.322 21.339V18.3731C155.947 18.3731 154.576 17.4631 154.576 15.643V12.0544H157.322V12.0434V12.0507Z" fill="url(#paint8_linear_22103_14289)"/>
+<path d="M75.3869 9.07475V10.5006C75.3869 10.5006 75.3648 10.4711 75.3537 10.4601C71.8561 6.66517 65.5205 9.889 65.5131 15.1319C65.5131 20.3747 71.8524 23.5912 75.3537 19.8036C75.3648 19.7926 75.3758 19.7742 75.3869 19.7631V21.189H78.4754V9.07475H75.3869ZM72.033 18.481C70.1275 18.481 68.7012 17.033 68.7012 15.1282C68.7012 13.2234 70.1275 11.7754 72.033 11.7754C73.9384 11.7754 75.3869 13.2234 75.3869 15.1282C75.3869 17.033 73.9605 18.481 72.033 18.481Z" fill="url(#paint9_linear_22103_14289)"/>
+<path d="M41.7078 6.40685H38.6192V21.1996H41.7078V6.40685Z" fill="url(#paint10_linear_22103_14289)"/>
+<path d="M132.466 5.2411H136.236L142.369 21.2018H138.875L137.74 18.1032H130.866L129.757 21.2018H126.311L132.466 5.2411ZM136.653 15.1631L134.316 8.75599L131.957 15.1631H136.656H136.653Z" fill="url(#paint11_linear_22103_14289)"/>
+<path d="M94.0311 36L91.7031 27.408H93.1551L94.6191 33.144L94.7751 33.876H94.8171L95.0031 33.144L96.7491 27.408H98.0691L99.7671 33.144L99.9531 33.87H99.9891L100.157 33.144L101.609 27.408H103.007L100.703 36H99.3651L97.5771 30.03L97.3971 29.37H97.3611L97.1751 30.024L95.3451 36H94.0311ZM107.111 36.204C106.095 36.204 105.269 35.886 104.633 35.25C104.001 34.614 103.685 33.812 103.685 32.844C103.685 31.864 104.005 31.056 104.645 30.42C105.285 29.784 106.107 29.466 107.111 29.466C108.119 29.466 108.943 29.788 109.583 30.432C110.223 31.076 110.543 31.88 110.543 32.844C110.543 33.804 110.227 34.604 109.595 35.244C108.963 35.884 108.135 36.204 107.111 36.204ZM107.111 34.986C107.699 34.986 108.183 34.788 108.563 34.392C108.943 33.992 109.133 33.476 109.133 32.844C109.133 32.212 108.943 31.696 108.563 31.296C108.187 30.892 107.703 30.69 107.111 30.69C106.519 30.69 106.033 30.89 105.653 31.29C105.277 31.69 105.089 32.208 105.089 32.844C105.089 33.48 105.277 33.996 105.653 34.392C106.033 34.788 106.519 34.986 107.111 34.986ZM112.282 36V29.676H113.596V30.798L113.452 30.654H113.638C113.766 30.306 113.992 30.022 114.316 29.802C114.644 29.578 114.998 29.466 115.378 29.466C115.51 29.466 115.644 29.48 115.78 29.508C115.916 29.532 116.042 29.568 116.158 29.616C116.274 29.664 116.332 29.688 116.332 29.688L116.128 30.972C116.128 30.972 116.072 30.95 115.96 30.906C115.848 30.858 115.728 30.82 115.6 30.792C115.476 30.764 115.36 30.75 115.252 30.75C114.808 30.75 114.434 30.918 114.13 31.254C113.826 31.59 113.674 32.062 113.674 32.67V36H112.282ZM118.65 34.524V32.82L121.692 29.676H123.432L118.65 34.524ZM117.786 36V27.21H119.178V36H117.786ZM122.07 36L119.802 32.598L120.744 31.608L123.714 36H122.07ZM125.53 36V29.244C125.53 28.628 125.738 28.136 126.154 27.768C126.57 27.396 127.106 27.21 127.762 27.21H130.414V28.32H127.984C127.672 28.32 127.416 28.41 127.216 28.59C127.016 28.77 126.916 29.028 126.916 29.364V36H125.53ZM124.378 30.834V29.676H126.226V30.834H124.378ZM126.202 30.834V29.676H128.476V30.834H126.202ZM129.718 36V27.21H131.11V36H129.718ZM136.266 36.204C135.25 36.204 134.424 35.886 133.788 35.25C133.156 34.614 132.84 33.812 132.84 32.844C132.84 31.864 133.16 31.056 133.8 30.42C134.44 29.784 135.262 29.466 136.266 29.466C137.274 29.466 138.098 29.788 138.738 30.432C139.378 31.076 139.698 31.88 139.698 32.844C139.698 33.804 139.382 34.604 138.75 35.244C138.118 35.884 137.29 36.204 136.266 36.204ZM136.266 34.986C136.854 34.986 137.338 34.788 137.718 34.392C138.098 33.992 138.288 33.476 138.288 32.844C138.288 32.212 138.098 31.696 137.718 31.296C137.342 30.892 136.858 30.69 136.266 30.69C135.674 30.69 135.188 30.89 134.808 31.29C134.432 31.69 134.244 32.208 134.244 32.844C134.244 33.48 134.432 33.996 134.808 34.392C135.188 34.788 135.674 34.986 136.266 34.986ZM142.516 36L140.494 29.676H141.88L143.02 33.648L143.224 34.38H143.266L143.482 33.66L144.7 29.676H145.948L147.172 33.648L147.388 34.38H147.43L147.628 33.648L148.78 29.676H150.094L148.072 36H146.806L145.516 31.986L145.306 31.26H145.264L145.054 31.986L143.794 36H142.516ZM153.497 36.21C153.057 36.21 152.675 36.154 152.351 36.042C152.031 35.93 151.749 35.772 151.505 35.568C151.265 35.364 151.081 35.154 150.953 34.938C150.825 34.722 150.761 34.614 150.761 34.614L151.751 34.008C151.751 34.008 151.803 34.09 151.907 34.254C152.011 34.414 152.139 34.56 152.291 34.692C152.447 34.824 152.627 34.926 152.831 34.998C153.035 35.066 153.269 35.1 153.533 35.1C153.901 35.1 154.195 35.028 154.415 34.884C154.635 34.736 154.745 34.534 154.745 34.278C154.745 34.034 154.641 33.844 154.433 33.708C154.229 33.568 153.841 33.43 153.269 33.294C152.441 33.094 151.861 32.84 151.529 32.532C151.201 32.22 151.037 31.81 151.037 31.302C151.037 30.758 151.265 30.316 151.721 29.976C152.177 29.636 152.753 29.466 153.449 29.466C153.805 29.466 154.121 29.504 154.397 29.58C154.677 29.656 154.929 29.77 155.153 29.922C155.377 30.074 155.555 30.234 155.687 30.402C155.819 30.566 155.885 30.648 155.885 30.648L154.937 31.296C154.937 31.296 154.887 31.24 154.787 31.128C154.687 31.012 154.571 30.912 154.439 30.828C154.307 30.74 154.159 30.676 153.995 30.636C153.835 30.596 153.653 30.576 153.449 30.576C153.109 30.576 152.837 30.644 152.633 30.78C152.429 30.912 152.327 31.076 152.327 31.272C152.327 31.452 152.405 31.61 152.561 31.746C152.721 31.878 153.165 32.04 153.893 32.232C154.669 32.428 155.223 32.682 155.555 32.994C155.891 33.302 156.059 33.704 156.059 34.2C156.059 34.804 155.819 35.29 155.339 35.658C154.859 36.026 154.245 36.21 153.497 36.21Z" fill="#525252"/>
+<defs>
+<linearGradient id="paint0_linear_22103_14289" x1="4.92187" y1="12.0003" x2="157.322" y2="12.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="#0E171F"/>
+<stop offset="1" stop-color="#123154"/>
+</linearGradient>
+<linearGradient id="paint1_linear_22103_14289" x1="4.92187" y1="12.0003" x2="157.322" y2="12.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="#0E171F"/>
+<stop offset="1" stop-color="#123154"/>
+</linearGradient>
+<linearGradient id="paint2_linear_22103_14289" x1="4.92187" y1="12.0003" x2="157.322" y2="12.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="#0E171F"/>
+<stop offset="1" stop-color="#123154"/>
+</linearGradient>
+<linearGradient id="paint3_linear_22103_14289" x1="4.92187" y1="12.0003" x2="157.322" y2="12.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="#0E171F"/>
+<stop offset="1" stop-color="#123154"/>
+</linearGradient>
+<linearGradient id="paint4_linear_22103_14289" x1="4.92187" y1="12.0003" x2="157.322" y2="12.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="#0E171F"/>
+<stop offset="1" stop-color="#123154"/>
+</linearGradient>
+<linearGradient id="paint5_linear_22103_14289" x1="4.92187" y1="12.0003" x2="157.322" y2="12.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="#0E171F"/>
+<stop offset="1" stop-color="#123154"/>
+</linearGradient>
+<linearGradient id="paint6_linear_22103_14289" x1="4.92187" y1="12.0003" x2="157.322" y2="12.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="#0E171F"/>
+<stop offset="1" stop-color="#123154"/>
+</linearGradient>
+<linearGradient id="paint7_linear_22103_14289" x1="4.92187" y1="12.0003" x2="157.322" y2="12.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="#0E171F"/>
+<stop offset="1" stop-color="#123154"/>
+</linearGradient>
+<linearGradient id="paint8_linear_22103_14289" x1="4.92187" y1="12.0003" x2="157.322" y2="12.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="#0E171F"/>
+<stop offset="1" stop-color="#123154"/>
+</linearGradient>
+<linearGradient id="paint9_linear_22103_14289" x1="4.92187" y1="12.0003" x2="157.322" y2="12.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="#0E171F"/>
+<stop offset="1" stop-color="#123154"/>
+</linearGradient>
+<linearGradient id="paint10_linear_22103_14289" x1="4.92187" y1="12.0003" x2="157.322" y2="12.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="#0E171F"/>
+<stop offset="1" stop-color="#123154"/>
+</linearGradient>
+<linearGradient id="paint11_linear_22103_14289" x1="4.92187" y1="12.0003" x2="157.322" y2="12.0003" gradientUnits="userSpaceOnUse">
+<stop stop-color="#0E171F"/>
+<stop offset="1" stop-color="#123154"/>
+</linearGradient>
+</defs>
+</svg>
+      </a>
+      <nav class="nav-links">
+        <a href="#" class="nav-link">Platform</a>
+        <a href="#" class="nav-link">Pricing</a>
+        <a href="#" class="nav-link">Resources</a>
+        <a href="#" class="nav-link">APIs</a>
+        <a href="#" class="nav-link">Community</a>
+        <a href="#" class="nav-link">Help</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="#" class="btn btn-ghost">Sign in</a>
+        <a href="#" class="btn btn-dark">Try it free</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── Hero ──────────────────────────────────────── -->
+  <section class="hero">
+    <!-- Surrounding video cards (videos to be added) -->
+    <div class="hero-card hcard-tl"><video autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;display:block;"><source src="./hcard-tl.mp4" type="video/mp4"></video></div>
+    <div class="hero-card hcard-tr"><video autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;display:block;"><source src="./hcard-tr.mp4" type="video/mp4"></video></div>
+    <div class="hero-card hcard-sl"><video autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;display:block;"><source src="./hcard-sl.mp4" type="video/mp4"></video></div>
+    <div class="hero-card hcard-sr"><video autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;display:block;"><source src="./hcard-sr.mp4" type="video/mp4"></video></div>
+    <div class="hero-card hcard-b1"><video autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;display:block;"><source src="./hcard-b1.mp4" type="video/mp4"></video></div>
+    <div class="hero-card hcard-b2"><video autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;display:block;"><source src="./hcard-b2.mp4" type="video/mp4"></video></div>
+    <div class="hero-card hcard-b3"><video autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;display:block;"><source src="./hcard-b3.mp4" type="video/mp4"></video></div>
+
+    <div class="hero-text">
+      <div class="hero-headline">
+        <h1 class="hero-title">Design smarter<br>with <span class="hero-bold">Workflows</span></h1>
+        <p class="hero-subtitle">Build automated content production — on brand, across platforms, without the manual work.</p>
+      </div>
+      <div class="hero-ctas">
+        <a href="#" class="btn-hero btn-demo">Book a demo</a>
+        <a href="#" class="btn-hero btn-get-started">
+          Get started
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M16 10l-4.5-4.5M16 10l-4.5 4.5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Logo Marquee ──────────────────────────────── -->
+  <section class="logos-section">
+    <p class="logos-label reveal">Trusted by professionals and creators from leading brands and companies</p>
+    <div class="marquee-wrapper">
+      <div class="marquee-track">
+        <img src="https://www.figma.com/api/mcp/asset/8ec44f76-50d4-4ec1-903e-4b875d1e4b34" alt="Salesforce" loading="lazy" decoding="async" />
+        <img src="https://www.figma.com/api/mcp/asset/51a910a5-06bb-4127-bd63-ffe5e77f7e0a" alt="Spotify" loading="lazy" decoding="async" />
+        <img src="https://www.figma.com/api/mcp/asset/fd34ca2a-1a76-45bf-870c-f21d606e8c4c" alt="Uber" loading="lazy" decoding="async" />
+        <img src="https://www.figma.com/api/mcp/asset/857d3e0a-5825-4403-99dd-9308b755c066" alt="Airbnb" loading="lazy" decoding="async" />
+        <img src="https://www.figma.com/api/mcp/asset/5355deee-6593-4848-96ad-35bd9809ad7f" alt="Samsung" loading="lazy" decoding="async" />
+        <img src="https://www.figma.com/api/mcp/asset/04f84864-ac2e-412e-bd22-269a1bc5c30f" alt="Adobe" loading="lazy" decoding="async" />
+        <img src="https://www.figma.com/api/mcp/asset/b98549cf-34a4-410b-ba61-08ab31a1389c" alt="Tesla" loading="lazy" decoding="async" />
+        <img src="https://www.figma.com/api/mcp/asset/9244531a-2b57-4ef6-9f1a-bd787208c4f0" alt="Brand" loading="lazy" decoding="async" />
+        <img src="https://www.figma.com/api/mcp/asset/50e405ee-fb43-4d9d-abcc-1ea3b0ce3d74" alt="Amazon" loading="lazy" decoding="async" />
+        <img src="https://www.figma.com/api/mcp/asset/19eb43b5-d6eb-4ded-82c6-bc77ca801375" alt="Apple" loading="lazy" decoding="async" />
+        <img src="https://www.figma.com/api/mcp/asset/5a30187a-d413-4f5a-a8b4-59981faa084b" alt="Netflix" loading="lazy" decoding="async" />
+        <img src="https://www.figma.com/api/mcp/asset/6a1c0baa-d81b-4907-a9da-84cc663db251" alt="LinkedIn" loading="lazy" decoding="async" />
+        <!-- duplicate for seamless loop -->
+        <img src="https://www.figma.com/api/mcp/asset/8ec44f76-50d4-4ec1-903e-4b875d1e4b34" alt="" loading="lazy" decoding="async" />
+        <img src="https://www.figma.com/api/mcp/asset/51a910a5-06bb-4127-bd63-ffe5e77f7e0a" alt="" loading="lazy" decoding="async" />
+        <img src="https://www.figma.com/api/mcp/asset/fd34ca2a-1a76-45bf-870c-f21d606e8c4c" alt="" loading="lazy" decoding="async" />
+        <img src="https://www.figma.com/api/mcp/asset/857d3e0a-5825-4403-99dd-9308b755c066" alt="" loading="lazy" decoding="async" />
+        <img src="https://www.figma.com/api/mcp/asset/5355deee-6593-4848-96ad-35bd9809ad7f" alt="" loading="lazy" decoding="async" />
+        <img src="https://www.figma.com/api/mcp/asset/04f84864-ac2e-412e-bd22-269a1bc5c30f" alt="" loading="lazy" decoding="async" />
+        <img src="https://www.figma.com/api/mcp/asset/b98549cf-34a4-410b-ba61-08ab31a1389c" alt="" loading="lazy" decoding="async" />
+        <img src="https://www.figma.com/api/mcp/asset/9244531a-2b57-4ef6-9f1a-bd787208c4f0" alt="" loading="lazy" decoding="async" />
+        <img src="https://www.figma.com/api/mcp/asset/50e405ee-fb43-4d9d-abcc-1ea3b0ce3d74" alt="" loading="lazy" decoding="async" />
+        <img src="https://www.figma.com/api/mcp/asset/19eb43b5-d6eb-4ded-82c6-bc77ca801375" alt="" loading="lazy" decoding="async" />
+        <img src="https://www.figma.com/api/mcp/asset/5a30187a-d413-4f5a-a8b4-59981faa084b" alt="" loading="lazy" decoding="async" />
+        <img src="https://www.figma.com/api/mcp/asset/6a1c0baa-d81b-4907-a9da-84cc663db251" alt="" loading="lazy" decoding="async" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Full Control ──────────────────────────────── -->
+  <section class="control-section">
+    <div class="control-inner">
+      <div class="control-header">
+        <h2 class="control-title reveal"><span class="purple">Full control.</span> Or let the system handle it.</h2>
+        <div class="seg-control">
+          <button class="seg-btn active">Workflow Mode</button>
+          <button class="seg-btn">Canvas Editor</button>
+        </div>
+      </div>
+      <div class="control-cards">
+        <div class="control-track">
+          <div class="control-card control-card-main">
+            <video autoplay loop muted playsinline><source src="./workflow.mp4" type="video/mp4"></video>
+          </div>
+          <div class="control-card control-card-alt">
+            <img src="https://www.figma.com/api/mcp/asset/ad2f03b3-e77d-4b66-9bf6-cdc5be0ef432" alt="Canvas Editor UI" loading="lazy" decoding="async" />
+          </div>
+        </div>
+      </div>
+      <p class="control-footer">All three modes use the same pipeline. Switch between them anytime.</p>
+    </div>
+  </section>
+
+
+
+  <!-- ─── Stay on Brand ─────────────────────────────── -->
+  <section class="brand-section" id="brand-section">
+    <div class="brand-sticky">
+      <video class="brand-bg-video active" data-index="0" autoplay muted loop playsinline><source src="./hcard-tl.mp4" type="video/mp4"></video>
+      <video class="brand-bg-video" data-index="1" muted loop playsinline><source src="./hcard-tr.mp4" type="video/mp4"></video>
+      <video class="brand-bg-video" data-index="2" muted loop playsinline><source src="./hcard-sl.mp4" type="video/mp4"></video>
+      <video class="brand-bg-video" data-index="3" muted loop playsinline><source src="./hcard-sr.mp4" type="video/mp4"></video>
+      <video class="brand-bg-video" data-index="4" muted loop playsinline><source src="./hcard-b1.mp4" type="video/mp4"></video>
+      <video class="brand-bg-video" data-index="5" muted loop playsinline><source src="./hcard-b2.mp4" type="video/mp4"></video>
+      <div class="brand-bg-overlay"></div>
+      <div class="brand-inner">
+        <div class="brand-left">
+          <div class="brand-feature active" data-index="0">
+            <p class="brand-feature-title">Stay on brand</p>
+            <p class="brand-feature-desc">Brand kit enforces your colors, fonts, logo, tone. It ensures consistency across every touchpoint. This builds recognition and trust with your audience.</p>
+          </div>
+          <div class="brand-feature" data-index="1">
+            <p class="brand-feature-title">Repeat campaigns</p>
+            <p class="brand-feature-desc" style="display:none">Build once. Reuse across launches, seasons, markets.</p>
+          </div>
+          <div class="brand-feature" data-index="2">
+            <p class="brand-feature-title">Scale production</p>
+            <p class="brand-feature-desc" style="display:none">Hundreds of assets from a single run.</p>
+          </div>
+          <div class="brand-feature" data-index="3">
+            <p class="brand-feature-title">Adapt formats</p>
+            <p class="brand-feature-desc" style="display:none">One asset becomes every size and ratio automatically.</p>
+          </div>
+          <div class="brand-feature" data-index="4">
+            <p class="brand-feature-title">Test variants</p>
+            <p class="brand-feature-desc" style="display:none">Generate variations. Compare side by side. Ship what works.</p>
+          </div>
+          <div class="brand-feature" data-index="5">
+            <p class="brand-feature-title">Distribute directly</p>
+            <p class="brand-feature-desc" style="display:none">Outputs land in Meta, Google Drive, Slack, Shopify.</p>
+          </div>
+        </div>
+        <div class="brand-right">
+          <div class="brand-right-ui">
+            <img src="https://www.figma.com/api/mcp/asset/eb119786-f4eb-4d16-aa03-e9e6f1df0905" alt="" loading="lazy" decoding="async"/>
+          </div>
+          <!-- Robin cursor -->
+          <div class="brand-cursor" style="left:51.5%;top:47.5%">
+            <div class="brand-cursor-label" style="background:#5cd86f">Robin</div>
+            <div class="brand-cursor-arrow"><img src="https://www.figma.com/api/mcp/asset/fcd97e06-8c66-4fad-87b6-ebb1a6e3c38b" alt=""/></div>
+          </div>
+          <!-- Brie cursor -->
+          <div class="brand-cursor" style="left:34%;top:55.3%">
+            <div class="brand-cursor-label" style="background:#5c7dd8">Brie</div>
+            <div class="brand-cursor-arrow"><img src="https://www.figma.com/api/mcp/asset/878c4efd-be51-4868-85bc-c728a3169260" alt=""/></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── What Teams Produce ────────────────────────── -->
+  <section class="teams-section">
+    <div class="teams-inner">
+      <div class="teams-section-header">
+        <div class="teams-section-header-text">
+          <h2 class="reveal">What teams produce.</h2>
+          <p class="reveal reveal-d1">Built for designers, sellers, and businesses bringing brands, products, and ideas to life.</p>
+        </div>
+        <div class="teams-nav">
+          <button class="icon-btn" id="teams-prev" aria-label="Previous">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 13L7 9L11 5" stroke="#0f0f0f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="icon-btn" id="teams-next" aria-label="Next">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7 5L11 9L7 13" stroke="#0f0f0f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="teams-grid">
+        <div class="team-card reveal">
+          <div class="team-card-media">
+            <video autoplay loop muted playsinline><source src="videos/team-1.mp4" type="video/mp4" /></video>
+          </div>
+          <div class="team-card-body">
+            <p class="team-card-title">Performance marketing</p>
+            <p class="team-card-desc">One product photo. Twenty ad variants. Sized for every platform.</p>
+          </div>
+        </div>
+        <div class="team-card reveal reveal-d1">
+          <div class="team-card-media">
+            <video autoplay loop muted playsinline><source src="videos/team-2.mp4" type="video/mp4" /></video>
+          </div>
+          <div class="team-card-body">
+            <p class="team-card-title">Content production</p>
+            <p class="team-card-desc">One brief becomes a week of posts. Same visual system, zero rework.</p>
+          </div>
+        </div>
+        <div class="team-card reveal reveal-d2">
+          <div class="team-card-media">
+            <video autoplay loop muted playsinline><source src="videos/team-3.mp4" type="video/mp4" /></video>
+          </div>
+          <div class="team-card-body">
+            <p class="team-card-title">Multi-market campaigns</p>
+            <p class="team-card-desc">One campaign across languages and regions. Swap copy, not concepts.</p>
+          </div>
+        </div>
+        <div class="team-card reveal reveal-d3">
+          <div class="team-card-media">
+            <video autoplay loop muted playsinline><source src="videos/team-4.mp4" type="video/mp4" /></video>
+          </div>
+          <div class="team-card-body">
+            <p class="team-card-title">Branding Kit</p>
+            <p class="team-card-desc">Full brand identity in a repeatable workflow. Consistent across every output.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Start From What Works ─────────────────────── -->
+  <section class="templates-section">
+    <div class="templates-header">
+      <h2 class="reveal">Start from what works.</h2>
+      <p class="reveal reveal-d1">Browse pipelines built by other teams. Use them directly or adapt to your brand. Build something useful — earn credits when others run it.</p>
+    </div>
+    <div class="filter-tabs">
+      <button class="filter-tab active">All</button>
+      <button class="filter-tab">Discover</button>
+      <button class="filter-tab">Most popular</button>
+      <button class="filter-tab">Trending now</button>
+      <button class="filter-tab">Ads</button>
+      <button class="filter-tab">Songs</button>
+    </div>
+    <div class="template-grid">
+      <div class="template-card reveal">
+        <video class="template-card-video" autoplay loop muted playsinline><source src="videos/template-1.mp4" type="video/mp4" /></video>
+        <span class="template-card-name">Jewelry Brand</span>
+      </div>
+      <div class="template-card reveal reveal-d1">
+        <video class="template-card-video" autoplay loop muted playsinline><source src="videos/template-2.mp4" type="video/mp4" /></video>
+        <span class="template-card-name">L'heure Noire Perfume</span>
+      </div>
+      <div class="template-card reveal reveal-d2">
+        <video class="template-card-video" autoplay loop muted playsinline><source src="videos/template-3.mp4" type="video/mp4" /></video>
+        <span class="template-card-name">Perfume ad</span>
+      </div>
+      <div class="template-card reveal reveal-d3">
+        <video class="template-card-video" autoplay loop muted playsinline><source src="videos/template-4.mp4" type="video/mp4" /></video>
+        <span class="template-card-name">Jewelry show</span>
+      </div>
+      <div class="template-card reveal reveal-d1">
+        <video class="template-card-video" autoplay loop muted playsinline><source src="videos/template-5.mp4" type="video/mp4" /></video>
+        <span class="template-card-name">Interior Design</span>
+      </div>
+      <div class="template-card reveal reveal-d2">
+        <video class="template-card-video" autoplay loop muted playsinline><source src="videos/template-6.mp4" type="video/mp4" /></video>
+        <span class="template-card-name">Furniture Village</span>
+      </div>
+      <div class="template-card reveal reveal-d3">
+        <img class="template-card-img" src="https://www.figma.com/api/mcp/asset/fda11365-ada0-41ac-8234-d214d224c428" alt="Sell my wine" loading="lazy" decoding="async" />
+        <span class="template-card-name">Sell my wine</span>
+      </div>
+      <div class="template-card reveal reveal-d4">
+        <img class="template-card-img" src="https://www.figma.com/api/mcp/asset/50040d81-4885-4098-9929-2dd9b6f540c0" alt="Fashion Show" loading="lazy" decoding="async" />
+        <span class="template-card-name">Fashion Show</span>
+      </div>
+    </div>
+    <div class="templates-cta">
+      <a href="#" class="btn-explore reveal reveal-d1">Explore More</a>
+    </div>
+  </section>
+
+  <!-- ─── One Subscription ──────────────────────────── -->
+  <section class="models-section">
+    <video class="models-bg-video" autoplay muted loop playsinline><source src="./hcard-b3.mp4" type="video/mp4"></video>
+    <div class="models-bg-overlay"></div>
+    <div class="models-inner">
+      <div class="models-header">
+        <h2 class="reveal">One Subscription</h2>
+        <p class="reveal reveal-d1">Best AI Models Integrated Within ImagineArt</p>
+      </div>
+      <div class="models-grid-outer" id="models-grid-outer">
+        <div class="models-grid" id="models-grid">
+          <!-- ChatGPT -->
+          <div class="mgc" style="left:0;top:13.2px;width:121.659px;height:110px;">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/576d4c7d-f014-48c5-acfa-5e869ae1e24b" alt="">
+            <div class="mgc-logo"><div class="mgc-li" style="inset:12.5%"><img src="https://www.figma.com/api/mcp/asset/9a62219e-b62e-4974-8a54-cd229f02906e" alt=""></div></div>
+            <span class="mgc-name">Chatgpt</span>
+          </div>
+          <!-- Flux -->
+          <div class="mgc" style="left:153.73px;top:13.2px;width:121.659px;height:110px;">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/576d4c7d-f014-48c5-acfa-5e869ae1e24b" alt="">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/6996bc77-5db4-484c-b6e6-c1f0cd58ab6e" alt="">
+            <div class="mgc-logo"><div class="mgc-li" style="inset:18.75% 12.5%"><img src="https://www.figma.com/api/mcp/asset/fedab07d-4918-4f4e-99e3-a1e861326575" alt=""></div></div>
+            <span class="mgc-name">Flux</span>
+          </div>
+          <!-- Runway -->
+          <div class="mgc" style="left:0;top:143.2px;width:121.659px;height:110px;">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/576d4c7d-f014-48c5-acfa-5e869ae1e24b" alt="">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/49a270cf-9bc9-4060-9722-9695edccac79" alt="">
+            <div class="mgc-logo"><div class="mgc-li" style="inset:12.5%"><img src="https://www.figma.com/api/mcp/asset/16636fb7-06c2-4846-936c-e90209362704" alt=""></div></div>
+            <span class="mgc-name">Runway</span>
+          </div>
+          <!-- Chatly -->
+          <div class="mgc" style="left:153.73px;top:143.2px;width:121.659px;height:110px;">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/576d4c7d-f014-48c5-acfa-5e869ae1e24b" alt="">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/a8f89591-f495-476a-87df-f439c8d1ebba" alt="">
+            <div class="mgc-logo"><div class="mgc-li" style="inset:12.5% 14.58%"><img src="https://www.figma.com/api/mcp/asset/5d6b1e78-58b1-4cf3-8cc6-5ce404f38b35" alt=""></div></div>
+            <span class="mgc-name">Chatly</span>
+          </div>
+          <!-- Recraft (tall) -->
+          <div class="mgc" style="left:310.78px;top:143.2px;width:121.659px;height:250px;">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/576d4c7d-f014-48c5-acfa-5e869ae1e24b" alt="">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/89ec0e7a-6bf3-495b-b4e2-3dacd48836a3" alt="">
+            <div class="mgc-logo">
+              <div class="mgc-li" style="inset:12.5%;mask-image:url('https://www.figma.com/api/mcp/asset/a2fd58dd-6c21-45dc-8a39-f6f4c7b4f346');mask-size:contain;mask-repeat:no-repeat;mask-position:center;">
+                <img src="https://www.figma.com/api/mcp/asset/6c3e2669-76e5-4f7e-8c91-da13b581399b" alt="">
+              </div>
+            </div>
+            <span class="mgc-name">Recraft</span>
+          </div>
+          <!-- Gemini -->
+          <div class="mgc" style="left:0;top:283.2px;width:121.659px;height:110px;">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/576d4c7d-f014-48c5-acfa-5e869ae1e24b" alt="">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/d76d45dd-de44-40f9-b3bc-674caab2392f" alt="">
+            <div class="mgc-logo"><div class="mgc-li" style="inset:12.5%"><img src="https://www.figma.com/api/mcp/asset/77c1737a-30b8-4f06-8f8e-dafe33c06957" alt=""></div></div>
+            <span class="mgc-name">Gemini</span>
+          </div>
+          <!-- Hailuo -->
+          <div class="mgc" style="left:153.73px;top:283.2px;width:121.659px;height:110px;">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/576d4c7d-f014-48c5-acfa-5e869ae1e24b" alt="">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/7b50082f-8e59-4f64-9017-266964d203a2" alt="">
+            <div class="mgc-logo"><div class="mgc-li" style="inset:12.5%"><img src="https://www.figma.com/api/mcp/asset/c8101e7f-2d01-4d90-bb62-02d496364eda" alt=""></div></div>
+            <span class="mgc-name">Hailuo</span>
+          </div>
+          <!-- Nano banana -->
+          <div class="mgc" style="left:467.83px;top:283.2px;width:121.659px;height:110px;">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/576d4c7d-f014-48c5-acfa-5e869ae1e24b" alt="">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/2994d437-5d81-4a71-8a51-9c0e7590cbcf" alt="">
+            <div class="mgc-logo"><div class="mgc-li" style="inset:16.67%"><img src="https://www.figma.com/api/mcp/asset/d54af99c-552d-49b9-856e-b2cd52536edd" alt=""></div></div>
+            <span class="mgc-name">Nano banana</span>
+          </div>
+          <!-- Grok -->
+          <div class="mgc" style="left:619.35px;top:283.2px;width:121.659px;height:110px;">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/576d4c7d-f014-48c5-acfa-5e869ae1e24b" alt="">
+            <div class="mgc-bg-custom"><img style="height:171.72%;left:0;top:-21.72%;width:100%;" src="https://www.figma.com/api/mcp/asset/6f194ec6-651d-4cb8-aa9f-54c3ef7cb532" alt=""></div>
+            <div class="mgc-logo"><div class="mgc-li" style="inset:12.5%"><img src="https://www.figma.com/api/mcp/asset/ae44d4b9-1f27-49f4-bc4f-ffec09d749f2" alt=""></div></div>
+            <span class="mgc-name">Grok</span>
+          </div>
+          <!-- Kling (tall) -->
+          <div class="mgc" style="left:776.41px;top:283.6px;width:112.811px;height:250px;">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/576d4c7d-f014-48c5-acfa-5e869ae1e24b" alt="">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/2742f48d-7d53-4916-8f93-e02e98066c8c" alt="">
+            <div class="mgc-logo"><div class="mgc-li" style="inset:14.58% 12.5%"><img src="https://www.figma.com/api/mcp/asset/fd14200d-3e80-4aea-8a44-978bc496dadd" alt=""></div></div>
+            <span class="mgc-name">Kling</span>
+          </div>
+          <!-- Claude -->
+          <div class="mgc" style="left:926.82px;top:283.6px;width:121.659px;height:110px;">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/576d4c7d-f014-48c5-acfa-5e869ae1e24b" alt="">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/428e4431-e806-4085-907b-92fff69f4d93" alt="">
+            <div class="mgc-logo"><div class="mgc-li" style="inset:12.5%"><img src="https://www.figma.com/api/mcp/asset/85d4cd4e-faff-450e-bbcc-2fda18cb4ce7" alt=""></div></div>
+            <span class="mgc-name">Claude</span>
+          </div>
+          <!-- Reve -->
+          <div class="mgc" style="left:1078.34px;top:283.6px;width:121.659px;height:110px;">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/576d4c7d-f014-48c5-acfa-5e869ae1e24b" alt="">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/c1144b6f-e82e-4743-8919-28ea8715a527" alt="">
+            <div class="mgc-logo"><div class="mgc-li" style="inset:18.75% 12.5%"><img src="https://www.figma.com/api/mcp/asset/e46d0dcb-3ef0-4713-a74a-b244f9a15816" alt=""></div></div>
+            <span class="mgc-name">Reve</span>
+          </div>
+          <!-- Imaginart (large) -->
+          <div class="mgc" style="left:928px;top:0;width:272px;height:246px;">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/576d4c7d-f014-48c5-acfa-5e869ae1e24b" alt="">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/2994d437-5d81-4a71-8a51-9c0e7590cbcf" alt="">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/00521ae4-b166-47ac-b9e7-9768eb64fe76" alt="">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/a4b2c9db-c854-4150-93c9-13b86ce4b9db" alt="">
+            <div class="mgc-logo"><div class="mgc-li" style="inset:12.5%"><img src="https://www.figma.com/api/mcp/asset/c19e53a1-5725-4295-81ca-aea5a4ff3b08" alt=""></div></div>
+            <span class="mgc-name">Imaginart</span>
+          </div>
+          <!-- Ideogram (wide) -->
+          <div class="mgc" style="left:0;top:423.2px;width:275.392px;height:110px;">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/576d4c7d-f014-48c5-acfa-5e869ae1e24b" alt="">
+            <div class="mgc-bg-custom"><img style="height:101.48%;left:-2.78%;top:-0.75%;width:102.78%;" src="https://www.figma.com/api/mcp/asset/50756896-96a3-4193-bc46-28a9b10d8498" alt=""></div>
+            <div class="mgc-logo"><div class="mgc-li" style="inset:12.5%"><img src="https://www.figma.com/api/mcp/asset/d4458e12-d5a0-462b-9a3b-f46d7e4a8dac" alt=""></div></div>
+            <span class="mgc-name">Ideogram</span>
+          </div>
+          <!-- Moonvalley -->
+          <div class="mgc" style="left:310.78px;top:423.2px;width:121.659px;height:110px;">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/576d4c7d-f014-48c5-acfa-5e869ae1e24b" alt="">
+            <div class="mgc-bg-custom"><img style="height:171.72%;left:0;top:-33.84%;width:100%;" src="https://www.figma.com/api/mcp/asset/f81b22ab-0a10-44d3-993b-1a62dd29b372" alt=""></div>
+            <div class="mgc-logo"><div class="mgc-li" style="inset:37.5% 12.5%"><div style="position:absolute;inset:-2.24% -0.87% -2.18% -0.71%;"><img src="https://www.figma.com/api/mcp/asset/2cf5f304-340a-436e-ab24-83325fa0c233" alt="" style="position:absolute;inset:0;width:100%;height:100%;display:block;max-width:none;"></div></div></div>
+            <span class="mgc-name">Moonvalley</span>
+          </div>
+          <!-- Dreamina (wide) -->
+          <div class="mgc" style="left:467.83px;top:423.2px;width:273.18px;height:110px;">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/576d4c7d-f014-48c5-acfa-5e869ae1e24b" alt="">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/80286906-68fb-43ff-83a3-60aeac2898af" alt="">
+            <div class="mgc-logo"><div class="mgc-li" style="inset:12.5% 14.58%"><img src="https://www.figma.com/api/mcp/asset/81b268e3-c45d-400f-8fbf-51220c3c9da4" alt=""></div></div>
+            <span class="mgc-name">Dreamina</span>
+          </div>
+          <!-- Sora -->
+          <div class="mgc" style="left:926.82px;top:423.6px;width:121.659px;height:110px;">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/576d4c7d-f014-48c5-acfa-5e869ae1e24b" alt="">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/29a364bf-7109-4222-b618-6db832bc30eb" alt="">
+            <div class="mgc-logo"><div class="mgc-li" style="inset:12.5%"><img src="https://www.figma.com/api/mcp/asset/5829c9f5-839a-42f1-ade3-5d70b37274fb" alt=""></div></div>
+            <span class="mgc-name">Sora</span>
+          </div>
+          <!-- Freepik -->
+          <div class="mgc" style="left:1078.34px;top:423.6px;width:121.659px;height:110px;">
+            <img class="mgc-bg" src="https://www.figma.com/api/mcp/asset/576d4c7d-f014-48c5-acfa-5e869ae1e24b" alt="">
+            <div class="mgc-bg-custom"><img style="height:105.18%;left:-85.18%;top:-1.08%;width:242.23%;" src="https://www.figma.com/api/mcp/asset/f0db7f41-c1fe-44ee-a3b8-45aa09b9c3a0" alt=""></div>
+            <div class="mgc-logo">
+              <div class="mgc-li" style="inset:12.5%"><img src="https://www.figma.com/api/mcp/asset/d1134e55-19e4-4532-bb80-b18a225e3330" alt=""></div>
+              <div class="mgc-li" style="inset:29.19%"><img src="https://www.figma.com/api/mcp/asset/ce384cf5-98bd-46bd-bee1-f9e30b84617b" alt=""></div>
+            </div>
+            <span class="mgc-name">Freepik</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Testimonials ──────────────────────────────── -->
+  <section class="testimonials-section">
+    <div class="testimonials-inner">
+      <div class="testimonials-header">
+        <h2 class="reveal"><span class="muted">Trusted by Industry </span>Innovators &amp; Enterprises.</h2>
+        <div class="teams-nav reveal reveal-d1">
+          <button class="icon-btn">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M13 16L8 11L13 6" stroke="#0f0f0f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="icon-btn">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M9 6L14 11L9 16" stroke="#0f0f0f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="testimonials-cards">
+        <div class="testimonial-card reveal reveal-scale">
+          <div class="testimonial-text-col">
+            <svg width="130" height="24" viewBox="0 0 130 24" fill="none"><text y="18" font-family="Inter" font-weight="700" font-size="16" fill="#0f0f0f">smarters</text></svg>
+            <p class="testimonial-quote">"ImagineArt allowed us to deliver true personalization at an enterprise scale without compromising speed or reliability. The engagement and opt-in rates exceeded every benchmark we've seen in large-scale CPG campaigns."</p>
+            <div>
+              <p class="testimonial-author-name">Samir Ramos</p>
+              <p class="testimonial-author-role">Co-founder at MLTI</p>
+            </div>
+          </div>
+          <div class="testimonial-image-col" style="width:400px; height:404px; padding:16px;">
+            <img src="https://www.figma.com/api/mcp/asset/69f86fb4-f490-41f5-b7b8-13077c7b8ed0" alt="" loading="lazy" decoding="async" style="border-radius:12px; width:100%; height:100%; object-fit:cover;" />
+          </div>
+        </div>
+        <div class="testimonial-card reveal reveal-scale reveal-d2">
+          <div class="testimonial-text-col">
+            <svg width="130" height="24" viewBox="0 0 130 24" fill="none"><text y="18" font-family="Inter" font-weight="700" font-size="16" fill="#0f0f0f">smarters</text></svg>
+            <p class="testimonial-quote">"This is incredible! I can save much more time editing photos with Imagine AI."</p>
+            <div>
+              <p class="testimonial-author-name">Emilie Clark</p>
+              <p class="testimonial-author-role">Co-founder at MLTI</p>
+            </div>
+          </div>
+          <div class="testimonial-image-col" style="width:400px; height:404px; padding:16px;">
+            <img src="https://www.figma.com/api/mcp/asset/69f86fb4-f490-41f5-b7b8-13077c7b8ed0" alt="" loading="lazy" decoding="async" style="border-radius:12px; width:100%; height:100%; object-fit:cover;" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FAQ ───────────────────────────────────────── -->
+  <section class="faq-section">
+    <div class="faq-inner">
+      <h2 class="reveal">Frequently asked questions</h2>
+      <div class="faq-list">
+        <div class="faq-item open reveal" onclick="toggleFaq(this)">
+          <div class="faq-row">
+            <span class="faq-question">Do I need technical knowledge to use workflows?</span>
+            <svg class="faq-chevron open" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 6L8 11L13 6" stroke="#3d3d3d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <p class="faq-answer">Bring your ideas to life through motion with AI videos</p>
+        </div>
+        <div class="faq-item reveal reveal-d1" onclick="toggleFaq(this)">
+          <div class="faq-row">
+            <span class="faq-question">Can I reuse or duplicate a workflow?</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 6L8 11L13 6" stroke="#3d3d3d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <p class="faq-answer">Yes — duplicate any workflow from your library and customize it for a new campaign or brand.</p>
+        </div>
+        <div class="faq-item reveal reveal-d2" onclick="toggleFaq(this)">
+          <div class="faq-row">
+            <span class="faq-question">Can I change models inside a workflow?</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 6L8 11L13 6" stroke="#3d3d3d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <p class="faq-answer">Absolutely. Each node in a workflow can use a different model. Swap them at any time without rebuilding your pipeline.</p>
+        </div>
+        <div class="faq-item reveal reveal-d3" onclick="toggleFaq(this)">
+          <div class="faq-row">
+            <span class="faq-question">Can I use workflows for both images and video?</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 6L8 11L13 6" stroke="#3d3d3d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <p class="faq-answer">Yes. Workflows support image generation, video generation, upscaling, style transfer, and more — all in one pipeline.</p>
+        </div>
+        <div class="faq-item reveal reveal-d4" onclick="toggleFaq(this)">
+          <div class="faq-row">
+            <span class="faq-question">Can I change models inside a workflow?</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 6L8 11L13 6" stroke="#3d3d3d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <p class="faq-answer">Yes — each step is modular, so you can swap models, adjust parameters, or add branches at any point.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CTA Banner ────────────────────────────────── -->
+  <section class="cta-section">
+    <div class="cta-banner">
+      <div class="cta-content">
+        <h2 class="cta-title reveal">Start with <span class="purple">Workflows</span></h2>
+        <p class="cta-desc reveal reveal-d1">Connect every step yourself. Choose models, set parameters, branch outputs. Full node-level control for teams that want precision.</p>
+        <a href="#" class="btn-cta">Get Started</a>
+      </div>
+      <div class="cta-preview reveal-right reveal-d2">
+        <img src="https://www.figma.com/api/mcp/asset/a8a97c09-9e45-4af5-9ed4-81d24f6d83a5" alt="Workflow preview" loading="lazy" decoding="async" />
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Navbar scroll effect
+    const navbar = document.querySelector('.navbar');
+    const onScroll = () => navbar.classList.toggle('scrolled', window.scrollY > 24);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // Scroll reveal
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          revealObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -48px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // Teams carousel
+    (() => {
+      const grid = document.querySelector('.teams-grid');
+      const prev = document.getElementById('teams-prev');
+      const next = document.getElementById('teams-next');
+      if (!grid || !prev || !next) return;
+      const scrollBy = () => grid.querySelector('.team-card').offsetWidth + 24;
+      prev.addEventListener('click', () => grid.scrollBy({ left: -scrollBy(), behavior: 'smooth' }));
+      next.addEventListener('click', () => grid.scrollBy({ left: scrollBy(), behavior: 'smooth' }));
+    })();
+
+    // FAQ toggle
+    function toggleFaq(item) {
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => {
+        i.classList.remove('open');
+        i.querySelector('.faq-chevron').classList.remove('open');
+      });
+      if (!wasOpen) {
+        item.classList.add('open');
+        item.querySelector('.faq-chevron').classList.add('open');
+      }
+    }
+
+
+    // Brand section — scroll-driven sticky feature activation
+    const brandSection = document.getElementById('brand-section');
+    const brandFeatures = document.querySelectorAll('.brand-feature');
+    const brandVideos = document.querySelectorAll('.brand-bg-video');
+    let currentBrandIndex = 0;
+
+    function activateBrandFeature(index) {
+      if (index === currentBrandIndex && document.querySelector('.brand-feature.active')) return;
+      currentBrandIndex = index;
+      brandFeatures.forEach((f, i) => {
+        const isActive = i === index;
+        f.classList.toggle('active', isActive);
+        const desc = f.querySelector('.brand-feature-desc');
+        desc.style.display = isActive ? 'block' : 'none';
+      });
+      brandVideos.forEach((v, i) => {
+        const isActive = i === index;
+        v.classList.toggle('active', isActive);
+        if (isActive) { v.play(); }
+        else { v.pause(); }
+      });
+    }
+
+    brandFeatures.forEach((f, i) => {
+      f.addEventListener('click', () => activateBrandFeature(i));
+    });
+
+    window.addEventListener('scroll', () => {
+      const rect = brandSection.getBoundingClientRect();
+      const scrolled = -rect.top;
+      const scrollRange = brandSection.offsetHeight - window.innerHeight;
+      if (scrolled < 0 || scrolled > scrollRange) return;
+      const index = Math.min(
+        Math.floor((scrolled / scrollRange) * brandFeatures.length),
+        brandFeatures.length - 1
+      );
+      activateBrandFeature(index);
+    }, { passive: true });
+
+    // Filter tabs
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+      });
+    });
+
+    // Segmented control — centered peek carousel
+    const segBtns = document.querySelectorAll('.seg-btn');
+    const controlTrack = document.querySelector('.control-track');
+    const controlCardEls = document.querySelectorAll('.control-card');
+
+    function slideToControlCard(index) {
+      const containerWidth = controlTrack.parentElement.offsetWidth;
+      const cardWidth = controlCardEls[0].offsetWidth;
+      const gap = 24;
+      const centerOffset = (containerWidth - cardWidth) / 2;
+      const cardOffset = index * (cardWidth + gap);
+      controlTrack.style.transform = `translateX(${centerOffset - cardOffset}px)`;
+    }
+
+    segBtns.forEach((btn, i) => {
+      btn.addEventListener('click', () => {
+        segBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeControlIndex = i;
+        slideToControlCard(i);
+      });
+    });
+
+    let activeControlIndex = 0;
+    slideToControlCard(0);
+    window.addEventListener('resize', () => slideToControlCard(activeControlIndex), { passive: true });
+
+    // Scale model grid to fit container
+    const modelsGridOuter = document.getElementById('models-grid-outer');
+    const modelsGrid = document.getElementById('models-grid');
+    function scaleModelsGrid() {
+      if (!modelsGridOuter || !modelsGrid) return;
+      const scale = modelsGridOuter.offsetWidth / 1200;
+      modelsGrid.style.transform = 'scale(' + scale + ')';
+      modelsGridOuter.style.height = (534 * scale) + 'px';
+    }
+    window.addEventListener('resize', scaleModelsGrid, { passive: true });
+    scaleModelsGrid();
+
+    // Extend scroll reveal to handle all reveal variants
+    document.querySelectorAll('.reveal-left, .reveal-right, .reveal-scale')
+      .forEach(el => revealObserver.observe(el));
+
+    // Model cards — staggered entrance when section scrolls into view
+    (function() {
+      const section = document.querySelector('.models-section');
+      const cards = document.querySelectorAll('.mgc');
+      if (!section || !cards.length) return;
+      const obs = new IntersectionObserver(entries => {
+        if (!entries[0].isIntersecting) return;
+        cards.forEach((c, i) => setTimeout(() => c.classList.add('in-view'), i * 45));
+        obs.disconnect();
+      }, { threshold: 0.08 });
+      obs.observe(section);
+    })();
+
+    // Hero parallax — lerp-smoothed, per-card depth + rotation + fade
+    (function() {
+      const heroEl = document.querySelector('.hero');
+      if (!heroEl) return;
+      const configs = [
+        { cls: 'hcard-tl', speed: 0.16, rot:  -1.4 },
+        { cls: 'hcard-tr', speed: 0.11, rot:   1.2 },
+        { cls: 'hcard-sl', speed: 0.07, rot:  -0.7 },
+        { cls: 'hcard-sr', speed: 0.06, rot:   0.9 },
+        { cls: 'hcard-b1', speed: 0.23, rot:  -1.1 },
+        { cls: 'hcard-b2', speed: 0.18, rot:   0.6 },
+        { cls: 'hcard-b3', speed: 0.21, rot:   1.5 },
+      ];
+      const cards = configs.map(c => ({ ...c, el: document.querySelector('.' + c.cls) })).filter(c => c.el);
+      let smoothY = 0, rafId = null;
+      function tick() {
+        const rawY = window.scrollY;
+        const diff = rawY - smoothY;
+        smoothY += diff * 0.09;
+        const heroH = heroEl.offsetHeight;
+        const progress = Math.min(smoothY / heroH, 1);
+        cards.forEach(({ el, speed, rot }) => {
+          const ty = -(smoothY * speed);
+          const rz = smoothY * rot * 0.007;
+          const op = 1 - progress * 0.35;
+          el.style.transform = `translateY(${ty}px) rotate(${rz}deg)`;
+          el.style.opacity = Math.max(op, 0.45);
+        });
+        if (Math.abs(diff) > 0.3) { rafId = requestAnimationFrame(tick); }
+        else { rafId = null; }
+      }
+      window.addEventListener('scroll', () => { if (!rafId) rafId = requestAnimationFrame(tick); }, { passive: true });
+    })();
+
+    // Magnetic hero CTA buttons
+    (function() {
+      document.querySelectorAll('.btn-hero').forEach(btn => {
+        btn.addEventListener('mouseenter', () => {
+          btn.style.transition = 'opacity 0.15s, transform 0.2s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.2s';
+        });
+        btn.addEventListener('mousemove', e => {
+          const r = btn.getBoundingClientRect();
+          const dx = ((e.clientX - r.left) / r.width - 0.5) * 14;
+          const dy = ((e.clientY - r.top) / r.height - 0.5) * 7;
+          btn.style.translate = dx + 'px ' + dy + 'px';
+        });
+        btn.addEventListener('mouseleave', () => {
+          btn.style.transition = 'opacity 0.15s, transform 0.2s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.2s, translate 0.4s cubic-bezier(0.34,1.56,0.64,1)';
+          btn.style.translate = '0 0';
+          setTimeout(() => { btn.style.translate = ''; btn.style.transition = ''; }, 420);
+        });
+      });
+    })();
+  </script>
+
+  <!-- Footer -->
+  <footer class="footer-section">
+    <div class="footer-deco">
+      <div class="footer-deco-inner">
+        <img src="https://www.figma.com/api/mcp/asset/6ef7ef24-71b7-46d8-98fa-4074842435cc" alt="">
+      </div>
+    </div>
+    <div class="footer-watermark reveal">
+      <img src="https://www.figma.com/api/mcp/asset/aaf0b6b7-a29e-44c9-a7a0-c4c98790a3cb" alt="" style="aspect-ratio: 1392.85/264;">
+    </div>
+    <div class="footer-sep"></div>
+    <div class="footer-body">
+      <div class="footer-top">
+        <svg class="footer-logo-img" width="160" height="40" viewBox="0 0 158 39" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ImagineArt Workflows">
+          <path d="M25.9304 11.5692C22.9368 10.8701 19.5513 10.6474 20.371 5.18344L26.4248 6.88008L28.4962 7.38328C28.3938 3.28641 25.0439 0 20.9234 0H7.54167C3.37215 0 0 3.37992 0 7.53914V13.8759C0 16.009 1.14484 16.5968 2.57923 16.9308H2.57032C5.56382 17.6344 8.94933 17.8615 8.12968 23.321L2.07585 21.6244L0.00445461 21.1256C0.0890924 25.2091 3.4256 28.5 7.54167 28.5H20.9679C25.1285 28.5 28.5096 25.1201 28.5096 20.9609V14.6196C28.5096 12.4999 27.3603 11.8987 25.9304 11.5692ZM14.2503 22.8757C12.9229 18.8857 9.76453 15.626 5.62619 14.25C9.76453 12.874 12.9229 9.6232 14.2503 5.6332C15.5823 9.6232 18.7361 12.8784 22.8789 14.2545C18.7361 15.6349 15.5823 18.8857 14.2503 22.8757Z" fill="#0f0f0f"/><path d="M94.8321 5.44097C94.8321 4.34671 95.6909 3.51405 96.7818 3.51405C97.8728 3.51405 98.7315 4.34671 98.7315 5.44097C98.7315 6.53523 97.8728 7.3679 96.7818 7.3679C95.6909 7.3679 94.8321 6.53523 94.8321 5.44097Z" fill="#0f0f0f"/><path d="M98.3224 9.07802H95.2339V21.2033H98.3224V9.07802Z" fill="#0f0f0f"/><path d="M100.648 13.502V21.2061H103.737V14.5042C103.737 10.8677 109.228 10.8677 109.228 14.5042V21.2061H112.317V13.502C112.317 7.23492 100.641 7.23492 100.641 13.502H100.648Z" fill="#0f0f0f"/><path d="M53.7745 10.195C50.6011 7.56068 43.6427 8.66231 43.6427 13.4962V21.2002H46.7313V14.4984C46.7313 10.8619 52.2228 10.8619 52.2228 14.4984V21.2002H55.3114V14.4984C55.3114 10.8619 60.8029 10.8619 60.8029 14.4984V21.2002H63.8915V13.4962C63.8915 8.66231 56.933 7.56068 53.7597 10.195H53.7745Z" fill="#0f0f0f"/><path d="M120.193 8.78523C116.481 8.78523 113.677 11.519 113.677 15.1334C113.677 18.7478 116.485 21.4816 120.241 21.4816C123.101 21.4816 125.441 19.9378 126.425 17.6535H122.994C122.415 18.3278 121.457 18.792 120.311 18.792C118.649 18.792 117.384 17.7714 116.986 16.2056H126.613C126.68 15.8961 126.709 15.5166 126.709 15.185C126.709 11.5227 123.901 8.78892 120.193 8.78892V8.78523ZM117.008 13.9434C117.436 12.4438 118.626 11.4675 120.193 11.4675C121.759 11.4675 123.023 12.4659 123.399 13.9434H117.001H117.008Z" fill="#0f0f0f"/><path d="M89.9893 10.449C89.0126 9.40628 87.66 8.7873 86.0199 8.7873C82.666 8.7873 80.1229 11.4032 80.1229 14.8297C80.1229 18.2561 82.6659 20.872 86.0493 20.872C87.6673 20.872 89.0199 20.2531 89.9966 19.2325V20.0394C89.9966 22.0621 88.7841 23.2743 86.8786 23.2743C85.6439 23.2743 84.5751 22.7584 84.1218 21.9258H80.8711C81.4497 24.4201 83.8159 26.0007 86.8528 26.0007C90.5863 26.0007 93.0852 23.5764 93.0852 19.892V9.07469H89.9966V10.449H89.9893ZM86.6648 17.9835C84.7373 17.9835 83.3109 16.6313 83.3109 14.8223C83.3109 13.0133 84.7373 11.6832 86.6648 11.6832C88.5924 11.6832 89.9966 13.0354 89.9966 14.8223C89.9966 16.6092 88.5482 17.9835 86.6648 17.9835Z" fill="#0f0f0f"/><path d="M157.322 12.0507V9.07376H154.576V5.44834H151.487V9.07376H148.76C145.841 9.07376 142.926 10.6396 142.926 13.7713V21.2064H146.014V14.7735C146.014 12.9534 147.389 12.0544 148.76 12.0544H151.487V16.6415C151.487 19.7732 154.406 21.339 157.322 21.339V18.3731C155.947 18.3731 154.576 17.4631 154.576 15.643V12.0544H157.322V12.0507Z" fill="#0f0f0f"/><path d="M75.3869 9.07475V10.5006C71.8561 6.66517 65.5205 9.889 65.5131 15.1319C65.5131 20.3747 71.8524 23.5912 75.3537 19.8036C75.3648 19.7926 75.3758 19.7742 75.3869 19.7631V21.189H78.4754V9.07475H75.3869ZM72.033 18.481C70.1275 18.481 68.7012 17.033 68.7012 15.1282C68.7012 13.2234 70.1275 11.7754 72.033 11.7754C73.9384 11.7754 75.3869 13.2234 75.3869 15.1282C75.3869 17.033 73.9605 18.481 72.033 18.481Z" fill="#0f0f0f"/><path d="M41.7078 6.40685H38.6192V21.1996H41.7078V6.40685Z" fill="#0f0f0f"/><path d="M132.466 5.2411H136.236L142.369 21.2018H138.875L137.74 18.1032H130.866L129.757 21.2018H126.311L132.466 5.2411ZM136.653 15.1631L134.316 8.75599L131.957 15.1631H136.653Z" fill="#0f0f0f"/>
+          <path d="M94.0311 36L91.7031 27.408H93.1551L94.6191 33.144L94.7751 33.876H94.8171L95.0031 33.144L96.7491 27.408H98.0691L99.7671 33.144L99.9531 33.87H99.9891L100.157 33.144L101.609 27.408H103.007L100.703 36H99.3651L97.5771 30.03L97.3971 29.37H97.3611L97.1751 30.024L95.3451 36H94.0311ZM107.111 36.204C106.095 36.204 105.269 35.886 104.633 35.25C104.001 34.614 103.685 33.812 103.685 32.844C103.685 31.864 104.005 31.056 104.645 30.42C105.285 29.784 106.107 29.466 107.111 29.466C108.119 29.466 108.943 29.788 109.583 30.432C110.223 31.076 110.543 31.88 110.543 32.844C110.543 33.804 110.227 34.604 109.595 35.244C108.963 35.884 108.135 36.204 107.111 36.204ZM107.111 34.986C107.699 34.986 108.183 34.788 108.563 34.392C108.943 33.992 109.133 33.476 109.133 32.844C109.133 32.212 108.943 31.696 108.563 31.296C108.187 30.892 107.703 30.69 107.111 30.69C106.519 30.69 106.033 30.89 105.653 31.29C105.277 31.69 105.089 32.208 105.089 32.844C105.089 33.48 105.277 33.996 105.653 34.392C106.033 34.788 106.519 34.986 107.111 34.986ZM112.282 36V29.676H113.596V30.798L113.638 30.75C113.766 30.306 113.992 30.022 114.316 29.802C114.644 29.578 114.998 29.466 115.378 29.466C115.51 29.466 115.644 29.48 115.78 29.508C115.916 29.532 116.042 29.568 116.158 29.616L116.128 30.972C116.072 30.95 115.96 30.906 115.848 30.858C115.728 30.82 115.6 30.792C115.476 30.764 115.36 30.75 115.252 30.75C114.808 30.75 114.434 30.918 114.13 31.254C113.826 31.59 113.674 32.062 113.674 32.67V36H112.282ZM129.718 36V27.21H131.11V36H129.718ZM136.266 36.204C135.25 36.204 134.424 35.886 133.788 35.25C133.156 34.614 132.84 33.812 132.84 32.844C132.84 31.864 133.16 31.056 133.8 30.42C134.44 29.784 135.262 29.466 136.266 29.466C137.274 29.466 138.098 29.788 138.738 30.432C139.378 31.076 139.698 31.88 139.698 32.844C139.698 33.804 139.382 34.604 138.75 35.244C138.118 35.884 137.29 36.204 136.266 36.204ZM136.266 34.986C136.854 34.986 137.338 34.788 137.718 34.392C138.098 33.992 138.288 33.476 138.288 32.844C138.288 32.212 138.098 31.696 137.718 31.296C137.342 30.892 136.858 30.69 136.266 30.69C135.674 30.69 135.188 30.89 134.808 31.29C134.432 31.69 134.244 32.208 134.244 32.844C134.244 33.48 134.432 33.996 134.808 34.392C135.188 34.788 135.674 34.986 136.266 34.986ZM153.497 36.21C153.057 36.21 152.675 36.154 152.351 36.042C152.031 35.93 151.749 35.772 151.505 35.568C151.265 35.364 151.081 35.154 150.953 34.938L151.751 34.008C151.803 34.09 151.907 34.254 152.011 34.414C152.139 34.56 152.291 34.692C152.447 34.824 152.627 34.926 152.831 34.998C153.035 35.066 153.269 35.1 153.533 35.1C153.901 35.1 154.195 35.028 154.415 34.884C154.635 34.736 154.745 34.534 154.745 34.278C154.745 34.034 154.641 33.844 154.433 33.708C154.229 33.568 153.841 33.43 153.269 33.294C152.441 33.094 151.861 32.84 151.529 32.532C151.201 32.22 151.037 31.81 151.037 31.302C151.037 30.758 151.265 30.316 151.721 29.976C152.177 29.636 152.753 29.466 153.449 29.466C153.805 29.466 154.121 29.504 154.397 29.58C154.677 29.656 154.929 29.77 155.153 29.922C155.377 30.074 155.555 30.234 155.687 30.402L154.937 31.296C154.887 31.24 154.787 31.128 154.687 31.012C154.571 30.912 154.439 30.828C154.307 30.74 154.159 30.676 153.995 30.636C153.835 30.596 153.653 30.576 153.449 30.576C153.109 30.576 152.837 30.644 152.633 30.78C152.429 30.912 152.327 31.076 152.327 31.272C152.327 31.452 152.405 31.61 152.561 31.746C152.721 31.878 153.165 32.04 153.893 32.232C154.669 32.428 155.223 32.682 155.555 32.994C155.891 33.302 156.059 33.704 156.059 34.2C156.059 34.804 155.819 35.29 155.339 35.658C154.859 36.026 154.245 36.21 153.497 36.21Z" fill="#525252"/>
+        </svg>
+        <nav class="footer-nav">
+          <div class="footer-nav-col">
+            <span class="footer-nav-heading">Explore</span>
+            <div class="footer-nav-links">
+              <a href="#">Image AI</a>
+              <a href="#">Video AI</a>
+              <a href="#">Music AI</a>
+              <a href="#">Voice AI</a>
+              <a href="#">Teams</a>
+              <a href="#">See all features</a>
+            </div>
+          </div>
+          <div class="footer-nav-col">
+            <span class="footer-nav-heading">Company</span>
+            <div class="footer-nav-links">
+              <a href="#">About Us</a>
+              <a href="#">Trust Center</a>
+              <a href="#">Blogs</a>
+              <a href="#">Media Kit</a>
+              <a href="#">Careers</a>
+              <a href="#">Contact Sales</a>
+            </div>
+          </div>
+          <div class="footer-nav-col">
+            <span class="footer-nav-heading">Legal</span>
+            <div class="footer-nav-links">
+              <a href="#">Privacy Policy</a>
+              <a href="#">Terms of Service</a>
+              <a href="#">Security</a>
+              <a href="#">Licensing</a>
+              <a href="#">Ethics Guidelines</a>
+              <a href="#">Content Policy</a>
+            </div>
+          </div>
+        </nav>
+      </div>
+
+      <div class="footer-bottom-wrap">
+        <div class="footer-bottom-separator"></div>
+        <div class="footer-bottom">
+          <p class="footer-copy">© 2025 <strong>Vyro AI</strong>. All rights reserved.</p>
+          <div class="footer-social">
+            <div class="footer-social-btn"><img loading="lazy" src="https://www.figma.com/api/mcp/asset/6dd24d85-b93e-4fc1-b512-c6e80823e4f3" alt="Facebook"></div>
+            <div class="footer-social-btn"><img loading="lazy" src="https://www.figma.com/api/mcp/asset/467fc8e9-cbed-4ae1-9fac-927e12381f09" alt="Instagram"></div>
+            <div class="footer-social-btn"><img loading="lazy" src="https://www.figma.com/api/mcp/asset/4ec94f37-f000-4518-b00c-133889fe345f" alt="X"></div>
+            <div class="footer-social-btn"><img loading="lazy" src="https://www.figma.com/api/mcp/asset/25f1aa23-1d41-47c5-a1dc-c3fe9d1c60ab" alt="Reddit"></div>
+            <div class="footer-social-btn"><img loading="lazy" src="https://www.figma.com/api/mcp/asset/365013ac-3bbb-48f6-af66-0e28b819445f" alt="Discord"></div>
+            <div class="footer-social-btn"><img loading="lazy" src="https://www.figma.com/api/mcp/asset/3077619c-3109-4411-88f3-51b3885cafac" alt="YouTube"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      const canvas = document.getElementById('dots-canvas');
+      const ctx = canvas.getContext('2d');
+      let dots = [];
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = document.documentElement.scrollHeight;
+      }
+
+      function randomBetween(a, b) { return a + Math.random() * (b - a); }
+
+      function generate() {
+        resize();
+        dots = [];
+        const count = Math.floor((canvas.width * canvas.height) / 14000);
+        for (let i = 0; i < count; i++) {
+          dots.push({
+            x: randomBetween(0, canvas.width),
+            y: randomBetween(0, canvas.height),
+            r: randomBetween(1.2, 3.2),
+            a: randomBetween(0.04, 0.18)
+          });
+        }
+        draw();
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (const d of dots) {
+          ctx.beginPath();
+          ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(15,15,15,${d.a})`;
+          ctx.fill();
+        }
+      }
+
+      generate();
+      window.addEventListener('resize', generate);
+    })();
+  </script>
+</body>
+</html>
+
