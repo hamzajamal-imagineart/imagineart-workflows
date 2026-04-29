@@ -1,0 +1,2074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Architecture Generator — ImagineArt</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --px: 40px; --accent: #6929c4; --accent-l: #a78bfa; --dark: #0b0b0b; --radius: 20px; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: #fff; color: #0f0f0f; overflow-x: hidden; }
+
+    /* ─── Navbar ─────────────────────────────────────────── */
+    .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 16px 0; transition: padding 0.3s ease; }
+    .navbar.scrolled { padding: 10px 0; }
+    .navbar-inner { max-width: 1240px; margin: 0 auto; padding: 12px 40px; display: flex; align-items: center; justify-content: space-between; gap: 32px; border-radius: 16px; border: 1px solid transparent; transition: all 0.3s ease; overflow: visible; }
+    .navbar.scrolled .navbar-inner { background: rgba(255,255,255,0.82); backdrop-filter: saturate(200%) blur(24px); -webkit-backdrop-filter: saturate(200%) blur(24px); border-color: rgba(255,255,255,0.9); box-shadow: 0 0 0 1px rgba(0,0,0,0.04), 0 4px 6px rgba(0,0,0,0.03), 0 12px 48px rgba(0,0,0,0.1); }
+    .logo { display: flex; align-items: center; text-decoration: none; flex-shrink: 0; overflow: visible; line-height: 0; }
+    .logo-white { display: block; } .logo-dark { display: none; }
+    .navbar.scrolled .logo-white { display: none; } .navbar.scrolled .logo-dark { display: block; }
+    .nav-links { display: flex; align-items: center; gap: 2px; }
+    .nav-link { display: flex; align-items: center; justify-content: center; padding: 6px 14px; border-radius: 8px; font-size: 14px; font-weight: 500; letter-spacing: 0.14px; color: rgba(15,15,15,0.75); text-decoration: none; white-space: nowrap; transition: color 0.15s, background 0.15s; }
+    .nav-link:hover { color: #0f0f0f; background: rgba(15,15,15,0.05); }
+    .navbar:not(.scrolled) .nav-link { color: rgba(255,255,255,0.75); }
+    .navbar:not(.scrolled) .nav-link:hover { color: #fff; background: rgba(255,255,255,0.08); }
+    .navbar.scrolled .nav-link { color: rgba(15,15,15,0.75); }
+    .navbar.scrolled .nav-link:hover { color: #0f0f0f; background: rgba(15,15,15,0.05); }
+    .nav-dropdown { position: relative; }
+    .nav-dropdown-trigger { cursor: pointer; border: none; background: none; font-family: inherit; gap: 5px; }
+    .nav-dropdown-trigger svg { transition: transform 0.2s ease; flex-shrink: 0; }
+    .nav-dropdown:hover .nav-dropdown-trigger svg { transform: rotate(180deg); }
+    .nav-dropdown-menu { position: absolute; top: calc(100% + 10px); left: 50%; transform: translateX(-50%) translateY(-6px); background: #fff; border: 1px solid rgba(0,0,0,0.08); border-radius: 14px; box-shadow: 0 8px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06); padding: 6px; min-width: 200px; opacity: 0; pointer-events: none; transition: opacity 0.18s ease, transform 0.18s ease; z-index: 200; }
+    .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+    .nav-dropdown-item { display: flex; align-items: center; padding: 9px 14px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: #0f0f0f; text-decoration: none; transition: background 0.12s, color 0.12s; white-space: nowrap; }
+    .nav-dropdown-item:hover { background: #f4f0ff; color: #6929c4; }
+    .nav-dropdown-item.current { color: #6929c4; background: #f4f0ff; }
+    .nav-actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 9px; font-size: 13.5px; font-weight: 500; letter-spacing: 0.14px; white-space: nowrap; cursor: pointer; border: none; text-decoration: none; transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease, color 0.15s; font-family: inherit; }
+    .btn-ghost { background: transparent; color: rgba(15,15,15,0.7); }
+    .btn-ghost:hover { background: rgba(15,15,15,0.06); color: #0f0f0f; }
+    .navbar:not(.scrolled) .btn-ghost { color: rgba(255,255,255,0.75); }
+    .navbar:not(.scrolled) .btn-ghost:hover { color: #fff; background: rgba(255,255,255,0.08); }
+    .btn-dark { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.25); }
+    .btn-dark:hover { background: rgba(255,255,255,0.2); }
+    .navbar.scrolled .btn-dark { background: #111; border-color: transparent; box-shadow: 0 1px 2px rgba(0,0,0,0.15); }
+    .navbar.scrolled .btn-dark:hover { background: #222; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+
+    /* ─── Hero (Editorial Split) ────────────────────────────── */
+    .arch-hero {
+      position: relative;
+      height: 100vh;
+      min-height: 700px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+      background: #0b0b0b;
+    }
+    /* Subtle dot grid left side */
+    /* hero dot-grid removed */
+
+    /* Hero line art */
+    /* Full-width lineart at arch-hero level — visible on left dark bg */
+    .hero-lineart-full {
+      position: absolute; inset: 0;
+      z-index: 1; pointer-events: none;
+      opacity: 0.07;
+    }
+    .hero-lineart-full svg { width: 100%; height: 100%; }
+    /* Hero columns sit above the lineart */
+    .hero-slides { position: relative; z-index: 2; }
+
+    /* Left column */
+    .hero-left {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 0 40px 48px max(40px, calc((100vw - 1240px) / 2 + 40px));
+      padding-top: 100px;
+      position: relative; z-index: 3;
+      gap: 0;
+    }
+
+    /* Social proof row */
+    .hero-proof {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 40px;
+    }
+    .hero-avatars-wrap { display: flex; align-items: center; }
+    .hero-avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      border: 2.5px solid #080808; overflow: hidden;
+      margin-left: -10px; background: #222; flex-shrink: 0;
+    }
+    .hero-avatar:first-child { margin-left: 0; }
+    .hero-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero-avatar-count {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      border: 2.5px solid #080808;
+      margin-left: -10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.6);
+      letter-spacing: -0.3px; flex-shrink: 0;
+    }
+    .hero-proof-meta { display: flex; flex-direction: column; gap: 4px; }
+    .hero-proof-stars { display: flex; align-items: center; gap: 3px; }
+    .hero-proof-stars svg { width: 13px; height: 13px; }
+    .hero-proof-text {
+      font-size: 12.5px; font-weight: 500;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: -0.1px;
+    }
+
+    /* Headline */
+    .hero-headline {
+      font-size: clamp(44px, 5.5vw, 86px);
+      font-weight: 700;
+      line-height: 1.0;
+      letter-spacing: -3px;
+      text-transform: none;
+      display: flex; flex-direction: column;
+      margin-bottom: 28px;
+    }
+    .hl-bright { color: #ffffff; }
+    .hl-muted  { color: rgba(255,255,255,0.28); text-shadow: 0 2px 32px rgba(8,8,8,0.9), 0 0 80px rgba(8,8,8,0.7); }
+
+    /* Body */
+    .hero-body {
+      font-size: 16px; line-height: 1.7;
+      color: rgba(255,255,255,0.38);
+      text-transform: none;
+      letter-spacing: -0.1px;
+      max-width: 400px; margin-bottom: 40px;
+      font-weight: 400;
+    }
+
+    /* CTA buttons */
+    .btn-hero { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 48px; padding: 12px 20px; border-radius: 18px; font-size: 18px; font-weight: 500; letter-spacing: 0.36px; white-space: nowrap; cursor: pointer; text-decoration: none; transition: opacity 0.15s, transform 0.15s; }
+    .btn-hero:hover { opacity: 0.85; transform: translateY(-1px); }
+    .btn-demo { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.35); color: #fff; }
+    .btn-get-started { background: #fff; color: #0f0f0f; border: none; }
+    .btn-get-started:hover { background: #f0f0f0; transform: translateY(-1px); }
+    @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    .hero-ctas { display: flex; gap: 16px; align-items: center; }
+    .hero-cta-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      height: 54px; padding: 0 32px;
+      background: #fff; color: #080808;
+      border-radius: 999px;
+      font-size: 15px; font-weight: 600; letter-spacing: -0.2px;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .hero-cta-primary:hover { background: #f0eeff; transform: translateY(-1px); box-shadow: 0 8px 28px rgba(0,0,0,0.3); }
+    .hero-cta-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      height: 54px; padding: 0 28px;
+      color: rgba(255,255,255,0.55);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 999px;
+      font-size: 15px; font-weight: 500; letter-spacing: -0.2px;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .hero-cta-ghost:hover { color: #fff; border-color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.05); }
+
+    /* Right panel */
+    .hero-right {
+      position: relative; z-index: 3;
+      display: flex; align-items: stretch;
+      padding: 28px 36px 28px 16px;
+    }
+    .hero-panel {
+      flex: 1; border-radius: 22px; overflow: hidden; position: relative;
+    }
+    /* Slideshow */
+    .hero-slides { position: absolute; inset: 0; }
+    .hero-slide {
+      position: absolute; inset: 0;
+      opacity: 0;
+      transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .hero-slide.active { opacity: 1; }
+    .hero-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    /* Subtle dark overlay at bottom for badge readability */
+    .hero-panel::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 50%);
+      z-index: 1; pointer-events: none;
+    }
+    /* Slide label — bottom left */
+    .hero-slide-label {
+      position: absolute;
+      bottom: 26px; left: 20px;
+      font-size: 10px; font-weight: 700; letter-spacing: 1.8px;
+      text-transform: uppercase; color: rgba(255,255,255,0.4);
+      z-index: 3; white-space: nowrap;
+      transition: opacity 0.5s;
+    }
+    /* Circular arc loader — bottom right */
+    .hero-loader {
+      position: absolute;
+      bottom: 18px; right: 20px;
+      display: flex; align-items: center; gap: 10px;
+      z-index: 3;
+    }
+    .hero-loader-ring {
+      width: 38px; height: 38px; flex-shrink: 0;
+      transform: rotate(-90deg);
+    }
+    .ring-bg {
+      fill: none;
+      stroke: rgba(255,255,255,0.12);
+      stroke-width: 1;
+    }
+    .ring-arc {
+      fill: none;
+      stroke: rgba(255,255,255,0.85);
+      stroke-width: 1;
+      stroke-linecap: round;
+      stroke-dasharray: 100.53; /* 2π×16 */
+      stroke-dashoffset: 100.53;
+      animation: arcSweep 5s linear infinite;
+    }
+    @keyframes arcSweep {
+      0%   { stroke-dashoffset: 100.53; }
+      100% { stroke-dashoffset: 0; }
+    }
+    .hero-loader-count {
+      font-size: 12px; font-weight: 600; letter-spacing: 0.3px;
+      color: rgba(255,255,255,0.38);
+      line-height: 1;
+    }
+    .hero-loader-count strong { color: rgba(255,255,255,0.9); font-weight: 700; }
+    .hero-panel-badge {
+      position: absolute; left: 20px; top: 50%;
+      transform: translateY(-50%);
+      background: rgba(8,8,8,0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #fff; border-radius: 999px;
+      padding: 10px 18px;
+      font-size: 10px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase;
+      display: flex; align-items: center; gap: 8px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      z-index: 4;
+      white-space: nowrap;
+    }
+    .hero-panel-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 8px rgba(74,222,128,0.9); flex-shrink: 0; animation: pdot 2s infinite; }
+    @keyframes pdot { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    /* Shared CTA styles kept for other sections */
+    .btn-primary-arch {
+      display: inline-flex; align-items: center; gap: 8px; height: 52px; padding: 0 28px;
+      background: #6929c4; color: #fff; border-radius: 14px; font-size: 15px; font-weight: 600;
+      text-decoration: none; transition: all 0.2s; letter-spacing: -0.2px;
+      box-shadow: 0 4px 28px rgba(105,41,196,0.45);
+    }
+    .btn-primary-arch:hover { background: #7c3aed; transform: translateY(-2px); box-shadow: 0 8px 36px rgba(105,41,196,0.6); }
+    .btn-ghost-arch {
+      display: inline-flex; align-items: center; gap: 8px; height: 52px; padding: 0 22px;
+      color: rgba(255,255,255,0.6); font-size: 15px; font-weight: 500; text-decoration: none;
+      transition: all 0.15s; border-radius: 14px; border: 1px solid rgba(255,255,255,0.12);
+    }
+    .btn-ghost-arch:hover { color: #fff; background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.2); }
+
+    /* ─── Marquee ─────────────────────────────────────────── */
+    .arch-marquee { background: var(--dark); padding-bottom: 100px; overflow: hidden; }
+    .mq-row { position: relative; overflow: hidden; }
+    .mq-row + .mq-row { margin-top: 14px; }
+    .mq-fade { position: absolute; top: 0; bottom: 0; z-index: 2; width: 160px; pointer-events: none; }
+    .mq-fade.l { left: 0; background: linear-gradient(to right, var(--dark), transparent); }
+    .mq-fade.r { right: 0; background: linear-gradient(to left, var(--dark), transparent); }
+    .mq-track { display: flex; gap: 14px; width: max-content; }
+    .mq-track.left  { animation: mqLeft  38s linear infinite; }
+    .mq-track.right { animation: mqRight 44s linear infinite; }
+    @keyframes mqLeft  { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    @keyframes mqRight { from{transform:translateX(-50%)} to{transform:translateX(0)} }
+    .mq-item { width: 280px; height: 185px; border-radius: 14px; overflow: hidden; flex-shrink: 0; position: relative; }
+    .mq-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .mq-lbl { position: absolute; bottom: 10px; left: 10px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.4px; color: rgba(255,255,255,0.75); background: rgba(8,8,8,0.65); backdrop-filter: blur(6px); padding: 4px 10px; border-radius: 6px; }
+
+    /* ─── Capabilities (4-card full-bleed grid) ─────────── */
+    .arch-caps { background: #0b0b0b; padding: 120px 0 0; overflow: hidden; }
+    .arch-caps-header {
+      text-align: center;
+      padding: 0 var(--px) 72px;
+      display: flex; flex-direction: column; align-items: center; gap: 18px;
+    }
+    .caps-header-label {
+      font-size: 10px; font-weight: 800; letter-spacing: 2.5px;
+      text-transform: uppercase; color: rgba(255,255,255,0.3);
+    }
+    .caps-header-h2 {
+      font-size: clamp(40px, 5vw, 66px); font-weight: 700;
+      line-height: 1.08; letter-spacing: -1.5px; color: #fff;
+      max-width: 680px;
+    }
+    .caps-header-p {
+      font-size: 16px; color: rgba(255,255,255,0.35);
+      max-width: 480px; line-height: 1.65;
+    }
+    /* Full-bleed 4-card grid */
+    .caps-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+    }
+    .caps-card {
+      position: relative; overflow: hidden;
+      aspect-ratio: 3/4; cursor: pointer;
+    }
+    .caps-card img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.75s cubic-bezier(0.4,0,0.2,1);
+    }
+    .caps-card:hover img { transform: scale(1.06); }
+    .caps-card::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.84) 0%, rgba(0,0,0,0.12) 55%, transparent 100%);
+      transition: background 0.4s;
+    }
+    .caps-card:hover::after {
+      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.25) 65%, rgba(0,0,0,0.08) 100%);
+    }
+    /* Thin vertical divider between cards */
+    .caps-card + .caps-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; bottom: 0; width: 1px;
+      background: rgba(255,255,255,0.08); z-index: 3;
+    }
+    .caps-card-info {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 32px 28px; z-index: 2;
+    }
+    .caps-card-num {
+      font-size: 9px; font-weight: 800; letter-spacing: 2.5px;
+      text-transform: uppercase; color: rgba(255,255,255,0.42);
+      margin-bottom: 9px;
+    }
+    .caps-card-title {
+      font-size: 28px; font-weight: 700; color: #fff;
+      letter-spacing: -0.5px; line-height: 1.15;
+    }
+    .caps-card-desc {
+      font-size: 13px; color: rgba(255,255,255,0.52); line-height: 1.6;
+      margin-top: 10px;
+      max-height: 0; overflow: hidden; opacity: 0;
+      transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.35s 0.05s;
+    }
+    .caps-card:hover .caps-card-desc { max-height: 80px; opacity: 1; }
+
+    /* ─── Common section styles ──────────────────────────── */
+    .section-label { font-size: 11.5px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: var(--accent-l); }
+
+    /* ─── Transformation ─────────────────────────────────── */
+    .arch-transform { background: #fafafa; padding: 140px var(--px); position: relative; overflow: hidden; }
+    .arch-transform-lineart {
+      position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: 0.055;
+    }
+    .arch-transform-lineart svg { width: 100%; height: 100%; }
+    .arch-transform-inner { position: relative; z-index: 1; }
+    .arch-transform-inner { max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; gap: 60px; }
+    .arch-transform-header { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: end; }
+    .arch-transform-header h2 { font-size: clamp(40px, 4vw, 60px); font-weight: 700; line-height: 1.08; letter-spacing: -1.2px; color: #0f0f0f; }
+    .arch-transform-header p { font-size: 17px; line-height: 1.7; color: rgba(0,0,0,0.45); align-self: end; }
+    .arch-transform .section-label { color: #6929c4; }
+    .compare-wrap { position: relative; border-radius: 24px; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.22); user-select: none; cursor: ew-resize; }
+    .compare-wrap.large { aspect-ratio: 16/7; }
+    .compare-wrap.small { aspect-ratio: 4/3; }
+    .compare-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .compare-before, .compare-after { position: absolute; inset: 0; }
+    .compare-before img, .compare-after img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .compare-before img { filter: none; }
+    .compare-after { clip-path: inset(0 50% 0 0); }
+    .compare-lbl { position: absolute; bottom: 20px; font-size: 11.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 6px 13px; border-radius: 8px; }
+    .compare-lbl.left { left: 20px; background: rgba(0,0,0,0.6); color: rgba(255,255,255,0.6); }
+    .compare-lbl.right { right: 20px; background: rgba(105,41,196,0.75); color: #fff; }
+    .compare-handle { position: absolute; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); width: 3px; background: #fff; z-index: 10; }
+    .compare-handle-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 46px; height: 46px; background: #fff; border-radius: 50%; box-shadow: 0 4px 20px rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; }
+
+    /* ─── Feature Bento ──────────────────────────────────── */
+    .arch-features { background: #0b0b0b; padding: 140px var(--px); }
+    .arch-features-inner { max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; gap: 56px; }
+    .arch-features-head { display: flex; flex-direction: column; gap: 16px; max-width: 580px; }
+    .arch-features-head h2 { font-size: clamp(40px, 4vw, 58px); font-weight: 700; line-height: 1.1; letter-spacing: -1px; color: #fff; }
+    .arch-features-head p { font-size: 17px; color: rgba(255,255,255,0.38); line-height: 1.65; }
+
+    .bento { display: grid; grid-template-columns: 1.55fr 1fr; grid-template-rows: 1fr 1fr; gap: 16px; height: 540px; }
+    .bcard { border-radius: 24px; border: 1px solid rgba(255,255,255,0.06); overflow: hidden; position: relative; transition: border-color 0.25s; }
+    .bcard:hover { border-color: rgba(255,255,255,0.11); }
+    .bcard-main { grid-row: 1/3; background: #111; }
+    .bcard-tr { grid-column: 2; background: #111; }
+    .bcard-br { grid-column: 2; background: linear-gradient(135deg, rgba(105,41,196,0.18) 0%, #0f0f0f 100%); }
+
+    /* Main bento card */
+    .bcard-main-bg { position: absolute; inset: 0; }
+    .bcard-main-bg img { width: 100%; height: 100%; object-fit: cover; opacity: 0.22; display: block; }
+    .bcard-main-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,10,0.92) 0%, rgba(10,10,10,0.3) 60%, transparent 100%); }
+    .bcard-main-inner { position: relative; z-index: 2; padding: 40px 44px; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; gap: 24px; }
+    .bcard-tag { display: inline-flex; align-items: center; gap: 7px; background: rgba(105,41,196,0.2); border: 1px solid rgba(105,41,196,0.28); border-radius: 999px; padding: 5px 13px; font-size: 11.5px; font-weight: 600; color: #c084fc; letter-spacing: 0.4px; width: fit-content; }
+    .bcard-main h3 { font-size: 28px; font-weight: 700; line-height: 1.22; letter-spacing: -0.5px; color: #fff; max-width: 360px; }
+    .bcard-main p { font-size: 14.5px; line-height: 1.7; color: rgba(255,255,255,0.42); max-width: 380px; }
+    .sketch-to-render { display: flex; align-items: center; gap: 14px; margin-top: 8px; }
+    .str-side { flex: 1; border-radius: 14px; overflow: hidden; position: relative; aspect-ratio: 3/2; }
+    .str-side img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .str-side.sketch img { filter: grayscale(1) contrast(1.5) brightness(0.85); }
+    .str-lbl { position: absolute; bottom: 8px; left: 8px; font-size: 10px; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase; padding: 3px 8px; border-radius: 5px; color: #fff; }
+    .str-side.sketch .str-lbl { background: rgba(0,0,0,0.65); color: rgba(255,255,255,0.6); }
+    .str-side.render .str-lbl { background: rgba(105,41,196,0.8); }
+    .str-arrow { color: rgba(255,255,255,0.25); font-size: 20px; flex-shrink: 0; }
+
+    /* Top-right bento: styles */
+    .bcard-tr-inner { padding: 34px 34px; height: 100%; display: flex; flex-direction: column; gap: 18px; justify-content: center; }
+    .bcard-small-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.28); }
+    .bcard-big-num { font-size: 60px; font-weight: 800; letter-spacing: -3px; color: #fff; line-height: 1; }
+    .bcard-big-num span { color: var(--accent-l); }
+    .bcard-desc { font-size: 13.5px; color: rgba(255,255,255,0.38); line-height: 1.55; }
+    .style-swatches { display: flex; gap: 8px; flex-wrap: wrap; }
+    .swatch { width: 46px; height: 46px; border-radius: 10px; overflow: hidden; border: 1.5px solid rgba(255,255,255,0.07); }
+    .swatch img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* Bottom-right bento: speed */
+    .bcard-br-inner { padding: 34px 34px; height: 100%; display: flex; flex-direction: column; gap: 16px; justify-content: center; }
+    .speed-num-row { display: flex; align-items: baseline; gap: 6px; }
+    .speed-num { font-size: 62px; font-weight: 800; letter-spacing: -3px; color: #fff; line-height: 1; }
+    .speed-unit { font-size: 26px; font-weight: 700; color: var(--accent-l); }
+    .speed-bar-wrap { height: 5px; background: rgba(255,255,255,0.08); border-radius: 5px; overflow: hidden; }
+    .speed-bar { height: 100%; background: linear-gradient(90deg, #6929c4, #a78bfa, #38bdf8); border-radius: 5px; box-shadow: 0 0 12px rgba(167,139,250,0.5); animation: speedbar 3s ease-in-out infinite alternate; }
+    @keyframes speedbar { from{width:18%} to{width:100%} }
+
+    /* ─── Templates Bento ─────────────────────────────────── */
+    .arch-styles { background: #0b0b0b; padding: 120px 0; }
+    .arch-styles-inner { max-width: 1240px; margin: 0 auto; padding: 0 40px; display: flex; flex-direction: column; gap: 52px; }
+    .arch-styles-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; }
+    .arch-styles-head-left { display: flex; flex-direction: column; gap: 14px; }
+    .arch-styles-head h2 { font-size: clamp(38px,4vw,56px); font-weight: 700; line-height: 1.1; letter-spacing: -1.2px; color: #fff; margin: 0; }
+    .arch-styles-head p { font-size: 16px; color: rgba(255,255,255,0.45); line-height: 1.65; max-width: 320px; text-align: right; margin: 0; }
+
+    /* Bento grid */
+    .styles-bento { display: grid; grid-template-columns: repeat(12, 1fr); gap: 10px; }
+
+    /* Individual cards */
+    .s-card {
+      position: relative; border-radius: 16px; overflow: hidden;
+      cursor: pointer; background: #1c1c1e;
+      transform: translateZ(0);
+    }
+    .s-card img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .s-card:hover img { transform: scale(1.07); }
+    .s-card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.15) 45%, transparent 70%);
+      transition: opacity 0.4s;
+    }
+    .s-card:hover .s-card-overlay { opacity: 1.0; }
+    .s-card-tag {
+      position: absolute; top: 14px; left: 14px;
+      background: rgba(255,255,255,0.1); backdrop-filter: blur(12px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: rgba(255,255,255,0.85); font-size: 10px; font-weight: 600;
+      letter-spacing: 0.8px; text-transform: uppercase;
+      padding: 5px 11px; border-radius: 100px;
+    }
+    .s-card-body {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 20px 22px 22px;
+    }
+    .s-card-name { font-size: 17px; font-weight: 700; color: #fff; letter-spacing: -0.3px; line-height: 1.2; }
+    .s-card-sub { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+    .s-card-prompt {
+      font-size: 12px; color: rgba(255,255,255,0.65); line-height: 1.55;
+      max-height: 0; overflow: hidden; margin-top: 0;
+      transition: max-height 0.4s cubic-bezier(0.25,0.46,0.45,0.94), margin-top 0.4s ease, opacity 0.3s ease;
+      opacity: 0;
+    }
+    .s-card:hover .s-card-prompt { max-height: 72px; margin-top: 10px; opacity: 1; }
+    .s-card-arrow {
+      position: absolute; top: 14px; right: 14px;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transform: scale(0.8) rotate(-45deg);
+      transition: opacity 0.3s, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .s-card:hover .s-card-arrow { opacity: 1; transform: scale(1) rotate(0deg); }
+
+    /* Grid placement — row 1 (3 cards) */
+    .s-card:nth-child(1) { grid-column: span 5; height: 400px; }
+    .s-card:nth-child(2) { grid-column: span 4; height: 400px; }
+    .s-card:nth-child(3) { grid-column: span 3; height: 400px; }
+    /* Row 2 (3 cards) */
+    .s-card:nth-child(4) { grid-column: span 3; height: 330px; }
+    .s-card:nth-child(5) { grid-column: span 5; height: 330px; }
+    .s-card:nth-child(6) { grid-column: span 4; height: 330px; }
+    /* Row 3 (2 cards) */
+    .s-card:nth-child(7) { grid-column: span 7; height: 220px; }
+    .s-card:nth-child(8) { grid-column: span 5; height: 220px; }
+
+    /* CTA row */
+    .styles-cta-row { display: flex; justify-content: center; padding-top: 8px; }
+    .styles-cta-btn {
+      display: inline-flex; align-items: center; gap: 9px;
+      padding: 15px 32px; border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.06); backdrop-filter: blur(12px);
+      color: #fff; font-size: 15px; font-weight: 500; letter-spacing: -0.1px;
+      text-decoration: none; cursor: pointer;
+      transition: background 0.25s, border-color 0.25s, transform 0.2s;
+    }
+    .styles-cta-btn:hover { background: rgba(255,255,255,0.11); border-color: rgba(255,255,255,0.32); transform: translateY(-2px); }
+
+    /* ─── How It Works (beige floating card) ─────────────── */
+    .arch-how { background: #0b0b0b; padding: 80px var(--px); }
+    .arch-how-inner {
+      max-width: 1240px; margin: 0 auto;
+      background: #f0ece3;
+      border-radius: 28px; overflow: hidden;
+      display: flex; flex-direction: column; gap: 56px;
+    }
+    .arch-how-head {
+      display: flex; justify-content: space-between; align-items: flex-end; gap: 40px;
+      padding: 72px 72px 0;
+    }
+    .arch-how-head-left { display: flex; flex-direction: column; gap: 14px; }
+    .arch-how-head h2 { font-size: clamp(38px, 4vw, 54px); font-weight: 700; letter-spacing: -1px; color: #0f0f0f; line-height: 1.1; }
+    .arch-how-head p { font-size: 15px; color: rgba(0,0,0,0.4); line-height: 1.65; max-width: 280px; text-align: right; }
+
+    /* 3-column grid as single unit */
+    .steps-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      overflow: hidden;
+    }
+    .step-card {
+      background: #f0ece3;
+      display: flex; flex-direction: column;
+      position: relative; overflow: hidden;
+      border-right: 1px solid rgba(0,0,0,0.08);
+      transition: background 0.3s;
+    }
+    .step-card:last-child { border-right: none; }
+    .step-card:hover { background: #ebe6dc; }
+    /* Accent line on hover */
+    .step-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #6929c4, #a78bfa);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+      z-index: 3;
+    }
+    .step-card:hover::before { transform: scaleX(1); }
+
+    /* Image zone */
+    .step-img {
+      width: 100%; aspect-ratio: 4/3; overflow: hidden; position: relative; flex-shrink: 0;
+    }
+    .step-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.65s ease; }
+    .step-card:hover .step-img img { transform: scale(1.05); }
+    .step-img::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent 40%, rgba(240,236,227,0.96) 100%);
+    }
+
+    /* Text content */
+    .step-content {
+      padding: 28px 32px 40px;
+      display: flex; flex-direction: column; gap: 10px;
+      flex: 1;
+    }
+    .step-num {
+      font-size: 9.5px; font-weight: 800; letter-spacing: 2.2px;
+      text-transform: uppercase; color: #6929c4;
+    }
+    .step-card h3 { font-size: 21px; font-weight: 700; color: #0f0f0f; letter-spacing: -0.4px; line-height: 1.25; }
+    .step-card p { font-size: 13.5px; line-height: 1.72; color: rgba(0,0,0,0.45); margin-top: 2px; }
+
+    /* Ghost number watermark */
+    .step-big-num {
+      position: absolute; bottom: 20px; right: 24px;
+      font-size: 100px; font-weight: 900; letter-spacing: -6px; line-height: 1;
+      color: rgba(0,0,0,0.04);
+      pointer-events: none; user-select: none;
+    }
+
+    /* ─── Templates ─────────────────────────────────────── */
+    .arch-templates { background: #f8f7f5; padding: 140px var(--px); }
+    .arch-templates-inner { max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; gap: 56px; }
+    .tmpl-header { display: flex; justify-content: space-between; align-items: flex-end; }
+    .tmpl-header-left { display: flex; flex-direction: column; gap: 14px; }
+    .tmpl-header h2 { font-size: clamp(36px, 3.5vw, 52px); font-weight: 700; letter-spacing: -0.9px; color: #0f0f0f; }
+    .tmpl-header p { font-size: 17px; color: #777; line-height: 1.6; max-width: 440px; }
+    .tmpl-header a { font-size: 14px; font-weight: 600; color: var(--accent); text-decoration: none; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+    .tmpl-header a:hover { text-decoration: underline; }
+    .templates-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .tmpl-card { border-radius: 20px; overflow: hidden; background: #fff; border: 1px solid #e6e6e6; transition: transform 0.28s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.28s; cursor: pointer; }
+    .tmpl-card:hover { transform: translateY(-8px); box-shadow: 0 24px 60px rgba(0,0,0,0.1); }
+    .tmpl-card-img { position: relative; overflow: hidden; aspect-ratio: 4/3; }
+    .tmpl-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.55s ease; }
+    .tmpl-card:hover .tmpl-card-img img { transform: scale(1.07); }
+    .tmpl-overlay { position: absolute; inset: 0; background: rgba(10,10,10,0); transition: background 0.28s; display: flex; align-items: center; justify-content: center; }
+    .tmpl-card:hover .tmpl-overlay { background: rgba(10,10,10,0.45); }
+    .tmpl-cta-btn { background: #fff; color: #0f0f0f; padding: 11px 22px; border-radius: 11px; font-size: 13.5px; font-weight: 600; text-decoration: none; opacity: 0; transform: translateY(8px); transition: opacity 0.2s, transform 0.2s; }
+    .tmpl-card:hover .tmpl-cta-btn { opacity: 1; transform: translateY(0); }
+    .tmpl-card-info { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 6px; }
+    .tmpl-tag { font-size: 10.5px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--accent-l); }
+    .tmpl-name { font-size: 16px; font-weight: 600; color: #0f0f0f; letter-spacing: -0.2px; }
+
+    /* ─── Gallery ────────────────────────────────────────── */
+    .arch-gallery { background: #0b0b0b; padding: 140px var(--px); }
+    .arch-gallery-inner { max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; gap: 56px; }
+    .arch-gallery-head { display: flex; justify-content: space-between; align-items: flex-end; }
+    .arch-gallery-head h2 { font-size: clamp(36px, 3.5vw, 52px); font-weight: 700; letter-spacing: -0.9px; color: #fff; }
+    .arch-gallery-head p { font-size: 16px; color: rgba(255,255,255,0.28); max-width: 320px; text-align: right; }
+    .gallery-masonry { columns: 4; column-gap: 14px; }
+    .gallery-item { break-inside: avoid; margin-bottom: 14px; border-radius: 14px; overflow: hidden; position: relative; }
+    .gallery-item img { width: 100%; height: auto; display: block; transition: transform 0.45s ease; }
+    .gallery-item:hover img { transform: scale(1.04); }
+    .gallery-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.48) 0%, transparent 50%); opacity: 0; transition: opacity 0.28s; }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+
+    /* ─── Stats ──────────────────────────────────────────── */
+    .arch-stats { background: #f5f4f0; padding: 0 var(--px); }
+    .arch-stats-inner {
+      max-width: 1240px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid rgba(0,0,0,0.07);
+      border-bottom: 1px solid rgba(0,0,0,0.07);
+    }
+    .stat-item {
+      display: flex; flex-direction: column; gap: 8px;
+      padding: 64px 48px;
+      border-right: 1px solid rgba(0,0,0,0.07);
+    }
+    .stat-item:first-child { padding-left: 0; }
+    .stat-item:last-child { border-right: none; }
+    .stat-num-row { display: flex; align-items: baseline; gap: 3px; }
+    .stat-val { font-size: clamp(48px, 5.5vw, 74px); font-weight: 800; color: #0f0f0f; letter-spacing: -2.5px; line-height: 1; }
+    .stat-sfx { font-size: clamp(24px, 2.5vw, 34px); font-weight: 700; color: rgba(0,0,0,0.32); letter-spacing: -1px; }
+    .stat-lbl { font-size: 14px; color: rgba(0,0,0,0.42); line-height: 1.55; max-width: 200px; }
+
+    /* ─── CTA ────────────────────────────────────────────── */
+    .arch-cta {
+      position: relative; overflow: hidden;
+      min-height: 680px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    /* Full-bleed background image */
+    .arch-cta-bg {
+      position: absolute; inset: 0; z-index: 0;
+    }
+    .arch-cta-bg img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    /* Layered overlays */
+    .arch-cta-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 80% at 50% 60%, rgba(60,20,100,0.55) 0%, transparent 70%),
+        linear-gradient(to bottom, rgba(8,8,8,0.55) 0%, rgba(8,8,8,0.72) 100%);
+    }
+    /* Center content */
+    .arch-cta-inner {
+      position: relative; z-index: 2;
+      max-width: 720px; width: 100%;
+      text-align: center;
+      padding: 120px var(--px);
+      display: flex; flex-direction: column; align-items: center; gap: 0;
+    }
+    .cta-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px; padding: 7px 16px;
+      font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 32px;
+    }
+    .arch-cta h2 {
+      font-size: clamp(44px, 6vw, 78px);
+      font-weight: 700; color: #fff;
+      letter-spacing: -2px; line-height: 1.05;
+      margin-bottom: 20px;
+    }
+    .arch-cta p {
+      font-size: 17px; color: rgba(255,255,255,0.42);
+      max-width: 400px; line-height: 1.65;
+      margin-bottom: 40px;
+    }
+    .arch-cta-btns { display: flex; gap: 12px; align-items: center; margin-bottom: 40px; }
+    .arch-cta-btns .cta-btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      height: 54px; padding: 0 32px;
+      background: #fff; color: #080808;
+      border-radius: 999px;
+      font-size: 15px; font-weight: 600; letter-spacing: -0.2px;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .arch-cta-btns .cta-btn-primary:hover { background: #f0eeff; transform: translateY(-1px); box-shadow: 0 10px 32px rgba(0,0,0,0.4); }
+    .arch-cta-btns .cta-btn-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      height: 54px; padding: 0 28px;
+      color: rgba(255,255,255,0.55);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 999px;
+      font-size: 15px; font-weight: 500; letter-spacing: -0.2px;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .arch-cta-btns .cta-btn-ghost:hover { color: #fff; border-color: rgba(255,255,255,0.35); }
+    .arch-cta-note {
+      font-size: 12px; color: rgba(255,255,255,0.22);
+      letter-spacing: 0.2px;
+    }
+
+    /* ─── Footer ─────────────────────────────────────────── */
+    .arch-footer {
+      background: #080808;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .arch-footer-main {
+      max-width: 1240px; margin: 0 auto;
+      padding: 72px var(--px) 56px;
+      display: grid;
+      grid-template-columns: 1.8fr 1fr 1fr 1fr;
+      gap: 48px;
+    }
+    .footer-brand { display: flex; flex-direction: column; gap: 16px; }
+    .footer-brand-tagline {
+      font-size: 13.5px; line-height: 1.65;
+      color: rgba(255,255,255,0.28); max-width: 260px;
+    }
+    .footer-col h4 {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.8px;
+      text-transform: uppercase; color: rgba(255,255,255,0.25);
+      margin-bottom: 18px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-col ul li a {
+      font-size: 13.5px; color: rgba(255,255,255,0.42);
+      text-decoration: none; transition: color 0.15s;
+    }
+    .footer-col ul li a:hover { color: rgba(255,255,255,0.75); }
+    .arch-footer-bar {
+      max-width: 1240px; margin: 0 auto;
+      padding: 20px var(--px) 24px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 16px;
+    }
+    .arch-footer-copy { font-size: 12.5px; color: rgba(255,255,255,0.22); }
+    .footer-legal { display: flex; gap: 20px; }
+    .footer-legal a {
+      font-size: 12.5px; color: rgba(255,255,255,0.22);
+      text-decoration: none; transition: color 0.15s;
+    }
+    .footer-legal a:hover { color: rgba(255,255,255,0.5); }
+
+    /* ─── Scroll reveal & Premium animations ──────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.in { opacity: 1; transform: none; }
+    .reveal-d1 { transition-delay: 0.08s; }
+    .reveal-d2 { transition-delay: 0.18s; }
+    .reveal-d3 { transition-delay: 0.30s; }
+    .reveal-d4 { transition-delay: 0.42s; }
+
+    /* Reveal from left/right */
+    .reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal-left.in { opacity: 1; transform: none; }
+    .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal-right.in { opacity: 1; transform: none; }
+
+    /* Scale reveal */
+    .reveal-scale { opacity: 0; transform: scale(0.94) translateY(20px); transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal-scale.in { opacity: 1; transform: none; }
+
+    /* Blur reveal (for headings) */
+    .reveal-blur { opacity: 0; filter: blur(8px); transform: translateY(16px); transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), filter 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal-blur.in { opacity: 1; filter: blur(0); transform: none; }
+
+    /* Stagger children */
+    .stagger-children > * { opacity: 0; transform: translateY(28px); transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1); }
+    .stagger-children.in > *:nth-child(1) { opacity: 1; transform: none; transition-delay: 0.04s; }
+    .stagger-children.in > *:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.12s; }
+    .stagger-children.in > *:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.20s; }
+    .stagger-children.in > *:nth-child(4) { opacity: 1; transform: none; transition-delay: 0.28s; }
+    .stagger-children.in > *:nth-child(5) { opacity: 1; transform: none; transition-delay: 0.36s; }
+    .stagger-children.in > *:nth-child(6) { opacity: 1; transform: none; transition-delay: 0.44s; }
+
+    /* Counter animation */
+    .stat-count { display: inline-block; }
+
+    /* Card hover lift */
+    .cap-card { transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease, border-color 0.3s ease !important; }
+    .cap-card:hover { transform: translateY(-6px) scale(1.015) !important; box-shadow: 0 24px 64px rgba(0,0,0,0.5) !important; border-color: rgba(105,41,196,0.4) !important; }
+
+    /* s-card tilt on hover */
+    .s-card { transition: box-shadow 0.4s ease; }
+    .s-card:hover { box-shadow: 0 28px 72px rgba(0,0,0,0.55); }
+
+    /* Shimmer on compare handles */
+    .compare-handle::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.15) 50%, transparent 60%); animation: shimmer 2.5s infinite; }
+    @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+    /* Parallax hero panel */
+    .hero-panel { will-change: transform; }
+
+    /* Section number counter pulse */
+    @keyframes countUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+    /* Gradient text animation */
+    .gradient-animate {
+      background: linear-gradient(90deg, #a78bfa, #6929c4, #e879f9, #a78bfa);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientFlow 4s linear infinite;
+    }
+    @keyframes gradientFlow { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
+
+    /* Floating badge animation */
+    @keyframes floatY { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    .hero-badge { animation: floatY 3.5s ease-in-out infinite; }
+
+    /* Smooth section divider line */
+    .section-line { width: 0; height: 1px; background: currentColor; transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
+    .section-line.in { width: 100%; }
+
+    /* Stats number roll */
+    .stat-num { display: inline-block; }
+
+    /* ══════════════════════════════════════════
+       WOW ANIMATIONS
+    ══════════════════════════════════════════ */
+
+    /* 1. Preloader */
+    #preloader {
+      position: fixed; inset: 0; z-index: 9990;
+      background: #0b0b0b;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px;
+      transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #preloader.out { opacity: 0; transform: scale(1.06); pointer-events: none; }
+    #preloader-logo { opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    #preloader-logo.in { opacity: 1; transform: none; }
+    #preloader-track {
+      width: 160px; height: 1px;
+      background: rgba(255,255,255,0.1); border-radius: 1px; overflow: hidden;
+      opacity: 0; transition: opacity 0.4s 0.2s;
+    }
+    #preloader-track.in { opacity: 1; }
+    #preloader-fill {
+      height: 100%; width: 0%; background: rgba(255,255,255,0.5);
+      transition: width 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    body.cur-on-link
+    body.cur-on-card
+
+    /* 3. Scroll progress bar */
+    #scroll-prog {
+      position: fixed; top: 0; left: 0; z-index: 9997;
+      height: 2px; width: 0%;
+      background: linear-gradient(90deg, #7c3aed, #a855f7, #e879f9);
+      transition: width 0.08s linear;
+      pointer-events: none;
+    }
+
+    /* 4. Hero word reveal — CSS animation, no JS manipulation */
+    .hw {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(32px);
+      animation: hwReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .hw-1 { animation-delay: 0.15s; }
+    .hw-2 { animation-delay: 0.28s; }
+    .hw-3 { animation-delay: 0.42s; }
+    @keyframes hwReveal {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 5. Section heading line-wipe — removed (reveal-blur handles headings) */
+
+    /* 6. Hero grain/noise overlay */
+    .hero-grain {
+      position: absolute; inset: 0; z-index: 2; pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 128px 128px;
+      animation: grainShift 0.5s steps(1) infinite;
+    }
+    @keyframes grainShift {
+      0%  { background-position: 0 0; }
+      20% { background-position: -24px 12px; }
+      40% { background-position: 12px -18px; }
+      60% { background-position: -16px 24px; }
+      80% { background-position: 22px -8px; }
+      100%{ background-position: 0 0; }
+    }
+
+    /* 7. Smooth entrance for bento cards with stagger */
+    .styles-bento .s-card {
+      opacity: 0; transform: translateY(36px) scale(0.97);
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease;
+    }
+    .styles-bento.in .s-card { opacity: 1; transform: none; }
+    .styles-bento.in .s-card:nth-child(1) { transition-delay: 0.04s; }
+    .styles-bento.in .s-card:nth-child(2) { transition-delay: 0.10s; }
+    .styles-bento.in .s-card:nth-child(3) { transition-delay: 0.16s; }
+    .styles-bento.in .s-card:nth-child(4) { transition-delay: 0.22s; }
+    .styles-bento.in .s-card:nth-child(5) { transition-delay: 0.28s; }
+    .styles-bento.in .s-card:nth-child(6) { transition-delay: 0.34s; }
+    .styles-bento.in .s-card:nth-child(7) { transition-delay: 0.40s; }
+    .styles-bento.in .s-card:nth-child(8) { transition-delay: 0.46s; }
+
+    /* 8. Hero glow — removed per user request */
+  </style>
+</head>
+<body>
+
+  <!-- ─── Preloader ──────────────────────────────────────── -->
+  <div id="preloader">
+    <svg id="preloader-logo" width="36" height="36" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M25.9304 11.5692C22.9368 10.8701 19.5513 10.6474 20.371 5.18344L26.4248 6.88008L28.4962 7.38328C28.3938 3.28641 25.0439 0 20.9234 0H7.54167C3.37215 0 0 3.37992 0 7.53914V13.8759C0 16.009 1.14484 16.5968 2.57923 16.9308H2.57032C5.56382 17.6344 8.94933 17.8615 8.12968 23.321L2.07585 21.6244L0.00445461 21.1256C0.0890924 25.2091 3.4256 28.5 7.54167 28.5H20.9679C25.1285 28.5 28.5096 25.1201 28.5096 20.9609V14.6196C28.5096 12.4999 27.3603 11.8987 25.9304 11.5692ZM14.2503 22.8757C12.9229 18.8857 9.76453 15.626 5.62619 14.25C9.76453 12.874 12.9229 9.6232 14.2503 5.6332C15.5823 9.6232 18.7361 12.8784 22.8789 14.2545C18.7361 15.6349 15.5823 18.8857 14.2503 22.8757Z" fill="white"/>
+    </svg>
+    <div id="preloader-track"><div id="preloader-fill"></div></div>
+  </div>
+
+  <!-- ─── Scroll progress ──────────────────────────────── -->
+  <div id="scroll-prog"></div>
+
+  <!-- ─── Navbar ─────────────────────────────────────── -->
+  <header id="site-nav"></header>
+
+  <!-- ─── Hero ─────────────────────────────────────────── -->
+  <section class="arch-hero">
+    <!-- Film grain texture -->
+    <div class="hero-grain"></div>
+    <!-- Full-width line art — visible on dark hero background -->
+    <div class="hero-lineart hero-lineart-full">
+      <svg viewBox="0 0 1300 580" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" stroke="white" stroke-linecap="round" stroke-linejoin="round">
+
+        <!-- VP = (650, 240). Back wall: x 290-1010, y 110-370 -->
+
+        <!-- Room shell -->
+        <rect x="290" y="110" width="720" height="260" stroke-width="0.9"/>
+        <polygon points="0,5 290,110 1010,110 1300,5" stroke-width="0.8"/>
+        <polygon points="0,475 290,370 1010,370 1300,475" stroke-width="0.8"/>
+        <line x1="0" y1="5" x2="0" y2="475" stroke-width="0.6"/>
+        <line x1="1300" y1="5" x2="1300" y2="475" stroke-width="0.6"/>
+        <!-- Left wall block -->
+        <polygon points="0,5 290,110 290,370 0,475" stroke-width="0.5"/>
+        <!-- Right wall block -->
+        <polygon points="1300,5 1010,110 1010,370 1300,475" stroke-width="0.5"/>
+
+        <!-- Ceiling horizontal depth lines -->
+        <line x1="83" y1="35" x2="1217" y2="35" stroke-width="0.3"/>
+        <line x1="166" y1="65" x2="1134" y2="65" stroke-width="0.3"/>
+        <line x1="240" y1="92" x2="1060" y2="92" stroke-width="0.3"/>
+        <!-- Ceiling radial lines to VP -->
+        <line x1="96" y1="0" x2="350" y2="110" stroke-width="0.22"/>
+        <line x1="281" y1="0" x2="450" y2="110" stroke-width="0.22"/>
+        <line x1="465" y1="0" x2="550" y2="110" stroke-width="0.22"/>
+        <line x1="650" y1="0" x2="650" y2="110" stroke-width="0.22"/>
+        <line x1="835" y1="0" x2="750" y2="110" stroke-width="0.22"/>
+        <line x1="1019" y1="0" x2="850" y2="110" stroke-width="0.22"/>
+        <line x1="1204" y1="0" x2="950" y2="110" stroke-width="0.22"/>
+
+        <!-- Floor horizontal depth lines -->
+        <line x1="207" y1="400" x2="1093" y2="400" stroke-width="0.28"/>
+        <line x1="138" y1="425" x2="1162" y2="425" stroke-width="0.28"/>
+        <line x1="69" y1="450" x2="1231" y2="450" stroke-width="0.28"/>
+        <line x1="8" y1="472" x2="1292" y2="472" stroke-width="0.28"/>
+        <!-- Floor depth radial lines -->
+        <line x1="350" y1="370" x2="108" y2="475" stroke-width="0.22"/>
+        <line x1="450" y1="370" x2="238" y2="475" stroke-width="0.22"/>
+        <line x1="550" y1="370" x2="388" y2="475" stroke-width="0.22"/>
+        <line x1="650" y1="370" x2="650" y2="475" stroke-width="0.22"/>
+        <line x1="750" y1="370" x2="912" y2="475" stroke-width="0.22"/>
+        <line x1="850" y1="370" x2="1062" y2="475" stroke-width="0.22"/>
+        <line x1="950" y1="370" x2="1192" y2="475" stroke-width="0.22"/>
+
+        <!-- Window on back wall -->
+        <rect x="500" y="135" width="300" height="185" stroke-width="0.9"/>
+        <line x1="650" y1="135" x2="650" y2="320" stroke-width="0.6"/>
+        <line x1="500" y1="227" x2="800" y2="227" stroke-width="0.6"/>
+        <rect x="495" y="318" width="310" height="10" stroke-width="0.7"/>
+        <!-- Curtain rod -->
+        <line x1="478" y1="127" x2="822" y2="127" stroke-width="0.7"/>
+        <circle cx="478" cy="127" r="4" stroke-width="0.7"/>
+        <circle cx="822" cy="127" r="4" stroke-width="0.7"/>
+        <!-- Drapes -->
+        <path d="M498,127 Q482,168 490,227 Q477,268 498,322" stroke-width="0.7"/>
+        <path d="M802,127 Q818,168 810,227 Q823,268 802,322" stroke-width="0.7"/>
+
+        <!-- Pendant light -->
+        <line x1="650" y1="110" x2="650" y2="165" stroke-width="0.6"/>
+        <path d="M626,165 Q650,157 674,165 L664,202 Q650,208 636,202 Z" stroke-width="0.7"/>
+        <ellipse cx="650" cy="205" rx="30" ry="8" stroke-width="0.35" stroke-dasharray="4 5"/>
+
+        <!-- Wall art (left of window) -->
+        <rect x="356" y="148" width="96" height="80" stroke-width="0.65"/>
+        <line x1="356" y1="148" x2="452" y2="228" stroke-width="0.25"/>
+        <line x1="452" y1="148" x2="356" y2="228" stroke-width="0.25"/>
+
+        <!-- Sofa -->
+        <path d="M375,420 L400,392 L900,392 L925,420 L925,452 L375,452 Z" stroke-width="0.85"/>
+        <path d="M400,392 L404,366 L896,366 L900,392" stroke-width="0.85"/>
+        <line x1="375" y1="430" x2="925" y2="430" stroke-width="0.45"/>
+        <path d="M375,420 L375,452 L400,452 L400,420 L386,411 Z" stroke-width="0.65"/>
+        <path d="M925,420 L925,452 L900,452 L900,420 L914,411 Z" stroke-width="0.65"/>
+        <line x1="534" y1="366" x2="531" y2="392" stroke-width="0.45"/>
+        <line x1="650" y1="366" x2="650" y2="392" stroke-width="0.45"/>
+        <line x1="766" y1="366" x2="769" y2="392" stroke-width="0.45"/>
+        <line x1="531" y1="392" x2="529" y2="430" stroke-width="0.4"/>
+        <line x1="650" y1="392" x2="650" y2="430" stroke-width="0.4"/>
+        <line x1="769" y1="392" x2="771" y2="430" stroke-width="0.4"/>
+        <line x1="388" y1="452" x2="386" y2="464" stroke-width="0.7"/>
+        <line x1="408" y1="452" x2="408" y2="464" stroke-width="0.7"/>
+        <line x1="892" y1="452" x2="892" y2="464" stroke-width="0.7"/>
+        <line x1="912" y1="452" x2="914" y2="464" stroke-width="0.7"/>
+
+        <!-- Coffee table -->
+        <path d="M488,466 L502,453 L798,453 L812,466 L812,477 L488,477 Z" stroke-width="0.75"/>
+        <line x1="504" y1="477" x2="502" y2="493" stroke-width="0.6"/>
+        <line x1="524" y1="477" x2="524" y2="493" stroke-width="0.6"/>
+        <line x1="776" y1="477" x2="776" y2="493" stroke-width="0.6"/>
+        <line x1="796" y1="477" x2="798" y2="493" stroke-width="0.6"/>
+        <line x1="506" y1="487" x2="794" y2="487" stroke-width="0.4"/>
+        <rect x="618" y="449" width="50" height="6" stroke-width="0.5"/>
+        <rect x="622" y="443" width="42" height="6" stroke-width="0.5"/>
+
+        <!-- Floor lamp (right) -->
+        <path d="M1060,490 L1054,478 L1066,478 Z" stroke-width="0.7"/>
+        <line x1="1060" y1="478" x2="1060" y2="375" stroke-width="0.7"/>
+        <path d="M1060,385 Q1078,378 1088,385" stroke-width="0.6"/>
+        <path d="M1078,385 Q1088,380 1098,385 L1094,408 Q1088,413 1082,408 Z" stroke-width="0.7"/>
+
+        <!-- Rug -->
+        <path d="M375,472 L402,453 L898,453 L925,472 L925,520 L375,520 Z" stroke-width="0.5" stroke-dasharray="6 5"/>
+
+        <!-- ── PLANT (tall fiddle-leaf fig, front-left) ── -->
+        <!-- Pot body -->
+        <path d="M116,544 L130,580 L172,580 L186,544 Z" stroke-width="0.85"/>
+        <!-- Pot rim ellipse -->
+        <ellipse cx="151" cy="544" rx="35" ry="7" stroke-width="0.75"/>
+        <!-- Soil line -->
+        <ellipse cx="151" cy="541" rx="28" ry="4.5" stroke-width="0.4"/>
+        <!-- Trunk -->
+        <path d="M151,538 Q155,502 150,465 Q155,428 151,392 Q154,360 149,328 Q152,298 148,265" stroke-width="1"/>
+        <!-- Large leaf 1 — upper right -->
+        <path d="M149,295 Q210,248 232,205 Q205,246 149,293" stroke-width="0.8"/>
+        <line x1="149" y1="295" x2="232" y2="205" stroke-width="0.35"/>
+        <!-- Large leaf 2 — left -->
+        <path d="M150,330 Q88,285 64,244 Q90,283 150,328" stroke-width="0.8"/>
+        <line x1="150" y1="330" x2="64" y2="244" stroke-width="0.35"/>
+        <!-- Leaf 3 — right mid -->
+        <path d="M150,365 Q218,328 242,292 Q214,326 150,363" stroke-width="0.8"/>
+        <line x1="150" y1="365" x2="242" y2="292" stroke-width="0.35"/>
+        <!-- Leaf 4 — upper left -->
+        <path d="M149,310 Q82,260 58,218 Q84,258 149,308" stroke-width="0.8"/>
+        <line x1="149" y1="310" x2="58" y2="218" stroke-width="0.35"/>
+        <!-- Leaf 5 — top centre-right -->
+        <path d="M149,270 Q188,222 200,184 Q183,220 149,268" stroke-width="0.75"/>
+        <line x1="149" y1="270" x2="200" y2="184" stroke-width="0.3"/>
+        <!-- Lower leaves -->
+        <path d="M151,410 Q192,388 210,366 Q189,386 151,408" stroke-width="0.7"/>
+        <line x1="151" y1="410" x2="210" y2="366" stroke-width="0.28"/>
+        <path d="M151,405 Q110,383 92,361 Q112,381 151,403" stroke-width="0.7"/>
+        <line x1="151" y1="405" x2="92" y2="361" stroke-width="0.28"/>
+        <!-- Leaf veins (subtle) -->
+        <line x1="149" y1="295" x2="196" y2="232" stroke-width="0.2"/>
+        <line x1="150" y1="330" x2="102" y2="275" stroke-width="0.2"/>
+
+        <!-- Small potted plant on coffee table -->
+        <!-- Mini pot -->
+        <path d="M636,443 L640,452 L654,452 L658,443 Z" stroke-width="0.6"/>
+        <ellipse cx="647" cy="443" rx="11" ry="3" stroke-width="0.55"/>
+        <!-- Mini plant stems -->
+        <path d="M647,440 Q641,430 635,422" stroke-width="0.6"/>
+        <path d="M647,440 Q652,428 660,420" stroke-width="0.6"/>
+        <path d="M647,440 Q647,428 644,418" stroke-width="0.6"/>
+        <!-- Mini leaves -->
+        <ellipse cx="634" cy="420" rx="5" ry="3" transform="rotate(-30,634,420)" stroke-width="0.55"/>
+        <ellipse cx="661" cy="418" rx="5" ry="3" transform="rotate(25,661,418)" stroke-width="0.55"/>
+        <ellipse cx="643" cy="416" rx="4" ry="3" transform="rotate(-5,643,416)" stroke-width="0.55"/>
+
+        <!-- Wall sconce (left wall) -->
+        <line x1="230" y1="228" x2="256" y2="228" stroke-width="0.6"/>
+        <path d="M256,228 Q263,220 272,224 Q263,234 256,228" stroke-width="0.6"/>
+
+      </svg>
+    </div>
+    <!-- Left column -->
+    <div class="hero-left">
+
+      <!-- Social proof -->
+      <div class="hero-proof reveal">
+        <div class="hero-avatars-wrap">
+          <div class="hero-avatar"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=76&h=76&q=80" alt=""></div>
+          <div class="hero-avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=76&h=76&q=80" alt=""></div>
+          <div class="hero-avatar"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=76&h=76&q=80" alt=""></div>
+          <div class="hero-avatar-count">+32</div>
+        </div>
+        <div class="hero-proof-meta">
+          <div class="hero-proof-stars">
+            <svg viewBox="0 0 14 14" fill="#facc15"><path d="M7 1l1.5 4h4l-3.3 2.4 1.3 4L7 9 3.5 11.4l1.3-4L1.5 5h4z"/></svg>
+            <svg viewBox="0 0 14 14" fill="#facc15"><path d="M7 1l1.5 4h4l-3.3 2.4 1.3 4L7 9 3.5 11.4l1.3-4L1.5 5h4z"/></svg>
+            <svg viewBox="0 0 14 14" fill="#facc15"><path d="M7 1l1.5 4h4l-3.3 2.4 1.3 4L7 9 3.5 11.4l1.3-4L1.5 5h4z"/></svg>
+            <svg viewBox="0 0 14 14" fill="#facc15"><path d="M7 1l1.5 4h4l-3.3 2.4 1.3 4L7 9 3.5 11.4l1.3-4L1.5 5h4z"/></svg>
+            <svg viewBox="0 0 14 14" fill="#facc15"><path d="M7 1l1.5 4h4l-3.3 2.4 1.3 4L7 9 3.5 11.4l1.3-4L1.5 5h4z"/></svg>
+          </div>
+          <span class="hero-proof-text">Trusted by architects worldwide</span>
+        </div>
+      </div>
+
+      <!-- Headline -->
+      <h1 class="hero-headline" id="heroHeadline">
+        <span class="hl-bright">
+          <span class="hw hw-1">Your</span> <span class="hw hw-2">vision,</span>
+        </span>
+        <span class="hl-muted">
+          <span class="hw hw-3">rendered.</span>
+        </span>
+      </h1>
+
+      <!-- Body -->
+      <p class="hero-body reveal reveal-d2">
+        The ultimate AI visualization tool for architects. Transform any sketch, floor plan, or concept into a photorealistic render in seconds.
+      </p>
+
+      <!-- CTAs -->
+      <div class="hero-ctas reveal reveal-d2">
+        <a href="#" class="btn-hero btn-demo">Book a demo</a>
+        <a href="#" class="btn-hero btn-get-started">
+          Get Started
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M16 10l-4.5-4.5M16 10l-4.5 4.5" stroke="#0f0f0f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Right panel -->
+    <div class="hero-right">
+      <div class="hero-panel" id="heroPanel">
+
+        <!-- Slideshow images — 4 renders -->
+        <!-- Line art — sits behind the slideshow images -->
+
+        <div class="hero-slides">
+          <div class="hero-slide active">
+            <img src="/assets/architecture/arch-render-chalet-interior.jpeg" alt="Alpine chalet interior">
+          </div>
+          <div class="hero-slide">
+            <img src="/assets/architecture/arch-render-modern-living.jpg" alt="Textured wall interior">
+          </div>
+          <div class="hero-slide">
+            <img src="/assets/architecture/arch-render-building-exterior.jpeg" alt="Modern feature wall interior">
+          </div>
+          <div class="hero-slide">
+            <img src="/assets/architecture/arch-render-living-room-2.jpeg" alt="Bold architectural exterior">
+          </div>
+        </div>
+
+        <!-- Arc loader + counter — bottom right -->
+        <div class="hero-loader">
+          <svg class="hero-loader-ring" id="loaderRing" viewBox="0 0 38 38">
+            <circle class="ring-bg" cx="19" cy="19" r="16"/>
+            <circle class="ring-arc" id="ringArc" cx="19" cy="19" r="16"/>
+          </svg>
+          <div class="hero-loader-count">
+            <strong id="slideCurrentNum">1</strong> / 4
+          </div>
+        </div>
+
+        <!-- Slide label -->
+        <div class="hero-slide-label" id="slideLabel">Chalet Interior</div>
+
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ─── Before / After ───────────────────────────────── -->
+  <section class="arch-styles">
+    <div class="arch-styles-inner">
+
+      <!-- Header -->
+      <div class="arch-styles-head reveal-blur">
+        <div class="arch-styles-head-left">
+          <span class="section-label" style="color:rgba(255,255,255,0.45);border-color:rgba(255,255,255,0.12);">Templates</span>
+          <h2>One space.<br>Every aesthetic.</h2>
+        </div>
+        <p>From brutalist concrete to warm Japandi — render any style in seconds and show clients exactly what they're getting.</p>
+      </div>
+
+      <!-- Bento Grid -->
+      <div class="styles-bento">
+
+        <!-- 1 — Minimalist -->
+        <div class="s-card">
+          <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80" alt="Minimalist">
+          <div class="s-card-overlay"></div>
+          <span class="s-card-tag">Minimalist</span>
+          <div class="s-card-arrow">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="s-card-body">
+            <div class="s-card-name">Minimalist</div>
+            <div class="s-card-sub">Clean, calm, intentional</div>
+            <div class="s-card-prompt">White walls, polished concrete, floor-to-ceiling windows, warm oak accents, diffused natural light.</div>
+          </div>
+        </div>
+
+        <!-- 2 — Japandi -->
+        <div class="s-card">
+          <img src="https://images.unsplash.com/photo-1598928636135-d146006ff4be?auto=format&fit=crop&w=800&q=80" alt="Japandi">
+          <div class="s-card-overlay"></div>
+          <span class="s-card-tag">Japandi</span>
+          <div class="s-card-arrow">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="s-card-body">
+            <div class="s-card-name">Japandi</div>
+            <div class="s-card-sub">East meets Scandinavian</div>
+            <div class="s-card-prompt">Natural wood, wabi-sabi textures, muted earthy tones, soft shoji light, low furniture.</div>
+          </div>
+        </div>
+
+        <!-- 3 — Brutalist -->
+        <div class="s-card">
+          <img src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=700&q=80" alt="Brutalist">
+          <div class="s-card-overlay"></div>
+          <span class="s-card-tag">Brutalist</span>
+          <div class="s-card-arrow">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="s-card-body">
+            <div class="s-card-name">Brutalist</div>
+            <div class="s-card-sub">Bold, raw, unapologetic</div>
+            <div class="s-card-prompt">Raw concrete, monolithic volumes, geometric shadows, heavy materiality, dramatic side lighting.</div>
+          </div>
+        </div>
+
+        <!-- 4 — Industrial -->
+        <div class="s-card">
+          <img src="https://images.unsplash.com/photo-1545558014-8692077e9b5c?auto=format&fit=crop&w=700&q=80" alt="Industrial">
+          <div class="s-card-overlay"></div>
+          <span class="s-card-tag">Industrial</span>
+          <div class="s-card-arrow">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="s-card-body">
+            <div class="s-card-name">Industrial</div>
+            <div class="s-card-sub">Raw materials, urban soul</div>
+            <div class="s-card-prompt">Exposed brick, steel beams, Edison lighting, open ceilings, reclaimed wood.</div>
+          </div>
+        </div>
+
+        <!-- 5 — Art Deco -->
+        <div class="s-card">
+          <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=900&q=80" alt="Art Deco">
+          <div class="s-card-overlay"></div>
+          <span class="s-card-tag">Art Deco</span>
+          <div class="s-card-arrow">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="s-card-body">
+            <div class="s-card-name">Art Deco</div>
+            <div class="s-card-sub">Glamour, geometry, gold</div>
+            <div class="s-card-prompt">Geometric gold details, marble floors, rich jewel tones, symmetrical grandeur, statement fixtures.</div>
+          </div>
+        </div>
+
+        <!-- 6 — Biophilic -->
+        <div class="s-card">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=80" alt="Biophilic">
+          <div class="s-card-overlay"></div>
+          <span class="s-card-tag">Biophilic</span>
+          <div class="s-card-arrow">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="s-card-body">
+            <div class="s-card-name">Biophilic</div>
+            <div class="s-card-sub">Nature inside the walls</div>
+            <div class="s-card-prompt">Living walls, natural stone, wood ceilings, abundant greenery, organic forms, soft daylight.</div>
+          </div>
+        </div>
+
+        <!-- 7 — Contemporary -->
+        <div class="s-card">
+          <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1100&q=80" alt="Contemporary">
+          <div class="s-card-overlay"></div>
+          <span class="s-card-tag">Contemporary</span>
+          <div class="s-card-arrow">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="s-card-body">
+            <div class="s-card-name">Contemporary</div>
+            <div class="s-card-sub">Modern luxury, refined</div>
+            <div class="s-card-prompt">Neutral palette, sculptural furniture, recessed lighting, seamless surfaces, quiet opulence.</div>
+          </div>
+        </div>
+
+        <!-- 8 — Mediterranean -->
+        <div class="s-card">
+          <img src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=900&q=80" alt="Mediterranean">
+          <div class="s-card-overlay"></div>
+          <span class="s-card-tag">Mediterranean</span>
+          <div class="s-card-arrow">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="s-card-body">
+            <div class="s-card-name">Mediterranean</div>
+            <div class="s-card-sub">Warm arches, terracotta</div>
+            <div class="s-card-prompt">Arched doorways, whitewashed walls, terracotta tiles, wrought iron, warm amber light.</div>
+          </div>
+        </div>
+
+      </div><!-- /bento -->
+
+      <!-- CTA -->
+      <div class="styles-cta-row reveal reveal-d3">
+        <a href="#" class="styles-cta-btn">
+          Explore all templates
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── Gallery ──────────────────────────────────────── -->
+  <section class="arch-caps" style="position:relative;overflow:hidden;">
+
+    <!-- White interior line art background -->
+    <div style="position:absolute;inset:0;pointer-events:none;z-index:0;opacity:0.07;">
+      <svg viewBox="0 0 1300 700" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" stroke="white" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;">
+        <rect x="260" y="130" width="780" height="300" stroke-width="1.2"/>
+        <polygon points="0,10 260,130 1040,130 1300,10" stroke-width="1"/>
+        <polygon points="0,560 260,430 1040,430 1300,560" stroke-width="1"/>
+        <line x1="0" y1="10" x2="0" y2="560" stroke-width="0.8"/>
+        <line x1="1300" y1="10" x2="1300" y2="560" stroke-width="0.8"/>
+        <line x1="75" y1="42" x2="1225" y2="42" stroke-width="0.4"/>
+        <line x1="152" y1="78" x2="1148" y2="78" stroke-width="0.4"/>
+        <line x1="218" y1="110" x2="1082" y2="110" stroke-width="0.4"/>
+        <line x1="180" y1="460" x2="1120" y2="460" stroke-width="0.38"/>
+        <line x1="108" y1="494" x2="1192" y2="494" stroke-width="0.38"/>
+        <line x1="40" y1="528" x2="1260" y2="528" stroke-width="0.38"/>
+        <line x1="390" y1="430" x2="165" y2="560" stroke-width="0.28"/>
+        <line x1="520" y1="430" x2="380" y2="560" stroke-width="0.28"/>
+        <line x1="650" y1="430" x2="650" y2="560" stroke-width="0.28"/>
+        <line x1="780" y1="430" x2="920" y2="560" stroke-width="0.28"/>
+        <line x1="910" y1="430" x2="1135" y2="560" stroke-width="0.28"/>
+        <rect x="470" y="158" width="360" height="220" stroke-width="1.1"/>
+        <line x1="650" y1="158" x2="650" y2="378" stroke-width="0.7"/>
+        <line x1="470" y1="268" x2="830" y2="268" stroke-width="0.7"/>
+        <rect x="464" y="376" width="372" height="12" stroke-width="0.85"/>
+        <line x1="448" y1="148" x2="852" y2="148" stroke-width="0.85"/>
+        <circle cx="448" cy="148" r="5" stroke-width="0.85"/>
+        <circle cx="852" cy="148" r="5" stroke-width="0.85"/>
+        <path d="M468,148 Q450,196 460,268 Q445,318 468,392" stroke-width="0.8"/>
+        <path d="M832,148 Q850,196 840,268 Q855,318 832,392" stroke-width="0.8"/>
+        <line x1="650" y1="130" x2="650" y2="185" stroke-width="0.7"/>
+        <path d="M625,185 Q650,176 675,185 L664,226 Q650,233 636,226 Z" stroke-width="0.85"/>
+        <ellipse cx="650" cy="228" rx="32" ry="9" stroke-width="0.45" stroke-dasharray="5 6"/>
+        <path d="M345,446 L372,414 L928,414 L955,446 L955,484 L345,484 Z" stroke-width="1"/>
+        <path d="M372,414 L376,384 L924,384 L928,414" stroke-width="1"/>
+        <line x1="345" y1="458" x2="955" y2="458" stroke-width="0.5"/>
+        <path d="M345,446 L345,484 L372,484 L372,446 L357,436 Z" stroke-width="0.75"/>
+        <path d="M955,446 L955,484 L928,484 L928,446 L943,436 Z" stroke-width="0.75"/>
+        <line x1="520" y1="384" x2="517" y2="414" stroke-width="0.5"/>
+        <line x1="650" y1="384" x2="650" y2="414" stroke-width="0.5"/>
+        <line x1="780" y1="384" x2="783" y2="414" stroke-width="0.5"/>
+        <line x1="360" y1="484" x2="358" y2="498" stroke-width="0.8"/>
+        <line x1="380" y1="484" x2="380" y2="498" stroke-width="0.8"/>
+        <line x1="920" y1="484" x2="920" y2="498" stroke-width="0.8"/>
+        <line x1="940" y1="484" x2="942" y2="498" stroke-width="0.8"/>
+        <path d="M476,498 L492,484 L808,484 L824,498 L824,510 L476,510 Z" stroke-width="0.9"/>
+        <line x1="494" y1="510" x2="492" y2="528" stroke-width="0.7"/>
+        <line x1="516" y1="510" x2="516" y2="528" stroke-width="0.7"/>
+        <line x1="784" y1="510" x2="784" y2="528" stroke-width="0.7"/>
+        <line x1="806" y1="510" x2="808" y2="528" stroke-width="0.7"/>
+        <rect x="615" y="480" width="56" height="7" stroke-width="0.6"/>
+        <rect x="618" y="473" width="48" height="7" stroke-width="0.6"/>
+        <path d="M108,618 L122,660 L168,660 L182,618 Z" stroke-width="1"/>
+        <ellipse cx="145" cy="618" rx="37" ry="8" stroke-width="0.9"/>
+        <path d="M145,610 Q149,572 144,534 Q150,496 145,458 Q149,424 144,390 Q148,356 143,318" stroke-width="1.1"/>
+        <path d="M144,348 Q210,300 235,256 Q206,298 144,346" stroke-width="0.9"/>
+        <line x1="144" y1="348" x2="235" y2="256" stroke-width="0.4"/>
+        <path d="M145,384 Q76,336 50,290 Q78,334 145,382" stroke-width="0.9"/>
+        <line x1="145" y1="384" x2="50" y2="290" stroke-width="0.4"/>
+        <path d="M145,418 Q218,376 244,340 Q215,374 145,416" stroke-width="0.9"/>
+        <line x1="145" y1="418" x2="244" y2="340" stroke-width="0.4"/>
+        <path d="M144,362 Q72,310 46,268 Q74,308 144,360" stroke-width="0.9"/>
+        <line x1="144" y1="362" x2="46" y2="268" stroke-width="0.4"/>
+        <path d="M144,322 Q186,270 200,228 Q181,268 144,320" stroke-width="0.85"/>
+        <line x1="144" y1="322" x2="200" y2="228" stroke-width="0.35"/>
+        <path d="M145,468 Q190,444 210,420 Q188,442 145,466" stroke-width="0.8"/>
+        <path d="M145,463 Q100,439 80,415 Q102,437 145,461" stroke-width="0.8"/>
+        <path d="M1082,548 L1075,534 L1089,534 Z" stroke-width="0.8"/>
+        <line x1="1082" y1="534" x2="1082" y2="432" stroke-width="0.8"/>
+        <path d="M1082,442 Q1102,434 1114,442" stroke-width="0.7"/>
+        <path d="M1102,442 Q1114,436 1126,442 L1121,468 Q1114,474 1107,468 Z" stroke-width="0.85"/>
+        <path d="M345,504 L374,484 L926,484 L955,504 L955,558 L345,558 Z" stroke-width="0.6" stroke-dasharray="7 5"/>
+      </svg>
+    </div>
+
+    <!-- Centered header -->
+    <div class="arch-caps-header reveal-blur" style="position:relative;z-index:1;">
+      <span class="caps-header-label">Capabilities</span>
+      <h2 class="caps-header-h2">Four ways architects<br>use ImagineArt.</h2>
+      <p class="caps-header-p">From first sketch to final presentation — every stage of the design process, elevated by AI.</p>
+    </div>
+
+    <!-- Full-bleed 4-card grid -->
+    <div class="caps-grid stagger-children" style="position:relative;z-index:1;">
+
+      <div class="caps-card">
+        <img src="/assets/architecture/arch-render-chalet-interior.jpeg" alt="Sketch to render">
+        <div class="caps-card-info">
+          <div class="caps-card-num">Capability 01</div>
+          <div class="caps-card-title">Sketch to Render</div>
+          <div class="caps-card-desc">Upload any sketch, floor plan or CAD export and get a photorealistic render in under 10 seconds.</div>
+        </div>
+      </div>
+
+      <div class="caps-card">
+        <img src="/assets/architecture/arch-render-modern-living.jpg" alt="Style transfer">
+        <div class="caps-card-info">
+          <div class="caps-card-num">Capability 02</div>
+          <div class="caps-card-title">Style Transfer</div>
+          <div class="caps-card-desc">Apply any architectural style — minimalist, Japandi, brutalist, art deco — to any space instantly.</div>
+        </div>
+      </div>
+
+      <div class="caps-card">
+        <img src="/assets/architecture/arch-render-building-exterior.jpeg" alt="Material explorer">
+        <div class="caps-card-info">
+          <div class="caps-card-num">Capability 03</div>
+          <div class="caps-card-title">Material Explorer</div>
+          <div class="caps-card-desc">Swap materials, finishes, and textures in real-time before a single sample is ordered.</div>
+        </div>
+      </div>
+
+      <div class="caps-card">
+        <img src="/assets/architecture/arch-render-living-room-2.jpeg" alt="Client presentations">
+        <div class="caps-card-info">
+          <div class="caps-card-num">Capability 04</div>
+          <div class="caps-card-title">Client Presentations</div>
+          <div class="caps-card-desc">Print-quality renders, multiple variations, export-ready. Present and win in the same meeting.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ─── Style Templates ─────────────────────────────── -->
+  <section class="arch-transform">
+
+    <!-- (line art moved to capabilities section) -->
+    <div style="display:none">
+      <svg>
+        <!-- VP = (650, 300). Room shell -->
+        <rect x="260" y="130" width="780" height="300" stroke-width="1.2"/>
+        <polygon points="0,10 260,130 1040,130 1300,10" stroke-width="1"/>
+        <polygon points="0,560 260,430 1040,430 1300,560" stroke-width="1"/>
+        <line x1="0" y1="10" x2="0" y2="560" stroke-width="0.8"/>
+        <line x1="1300" y1="10" x2="1300" y2="560" stroke-width="0.8"/>
+        <!-- Ceiling depth lines -->
+        <line x1="75" y1="42" x2="1225" y2="42" stroke-width="0.4"/>
+        <line x1="152" y1="78" x2="1148" y2="78" stroke-width="0.4"/>
+        <line x1="218" y1="110" x2="1082" y2="110" stroke-width="0.4"/>
+        <!-- Floor depth lines -->
+        <line x1="180" y1="460" x2="1120" y2="460" stroke-width="0.38"/>
+        <line x1="108" y1="494" x2="1192" y2="494" stroke-width="0.38"/>
+        <line x1="40" y1="528" x2="1260" y2="528" stroke-width="0.38"/>
+        <!-- Floor radials -->
+        <line x1="390" y1="430" x2="165" y2="560" stroke-width="0.28"/>
+        <line x1="520" y1="430" x2="380" y2="560" stroke-width="0.28"/>
+        <line x1="650" y1="430" x2="650" y2="560" stroke-width="0.28"/>
+        <line x1="780" y1="430" x2="920" y2="560" stroke-width="0.28"/>
+        <line x1="910" y1="430" x2="1135" y2="560" stroke-width="0.28"/>
+        <!-- Window -->
+        <rect x="470" y="158" width="360" height="220" stroke-width="1.1"/>
+        <line x1="650" y1="158" x2="650" y2="378" stroke-width="0.7"/>
+        <line x1="470" y1="268" x2="830" y2="268" stroke-width="0.7"/>
+        <rect x="464" y="376" width="372" height="12" stroke-width="0.85"/>
+        <!-- Curtain rod + drapes -->
+        <line x1="448" y1="148" x2="852" y2="148" stroke-width="0.85"/>
+        <circle cx="448" cy="148" r="5" stroke-width="0.85"/>
+        <circle cx="852" cy="148" r="5" stroke-width="0.85"/>
+        <path d="M468,148 Q450,196 460,268 Q445,318 468,392" stroke-width="0.8"/>
+        <path d="M832,148 Q850,196 840,268 Q855,318 832,392" stroke-width="0.8"/>
+        <!-- Pendant -->
+        <line x1="650" y1="130" x2="650" y2="185" stroke-width="0.7"/>
+        <path d="M625,185 Q650,176 675,185 L664,226 Q650,233 636,226 Z" stroke-width="0.85"/>
+        <ellipse cx="650" cy="228" rx="32" ry="9" stroke-width="0.45" stroke-dasharray="5 6"/>
+        <!-- Sofa -->
+        <path d="M345,446 L372,414 L928,414 L955,446 L955,484 L345,484 Z" stroke-width="1"/>
+        <path d="M372,414 L376,384 L924,384 L928,414" stroke-width="1"/>
+        <line x1="345" y1="458" x2="955" y2="458" stroke-width="0.5"/>
+        <path d="M345,446 L345,484 L372,484 L372,446 L357,436 Z" stroke-width="0.75"/>
+        <path d="M955,446 L955,484 L928,484 L928,446 L943,436 Z" stroke-width="0.75"/>
+        <line x1="520" y1="384" x2="517" y2="414" stroke-width="0.5"/>
+        <line x1="650" y1="384" x2="650" y2="414" stroke-width="0.5"/>
+        <line x1="780" y1="384" x2="783" y2="414" stroke-width="0.5"/>
+        <!-- Sofa legs -->
+        <line x1="360" y1="484" x2="358" y2="498" stroke-width="0.8"/>
+        <line x1="380" y1="484" x2="380" y2="498" stroke-width="0.8"/>
+        <line x1="920" y1="484" x2="920" y2="498" stroke-width="0.8"/>
+        <line x1="940" y1="484" x2="942" y2="498" stroke-width="0.8"/>
+        <!-- Coffee table -->
+        <path d="M476,498 L492,484 L808,484 L824,498 L824,510 L476,510 Z" stroke-width="0.9"/>
+        <line x1="494" y1="510" x2="492" y2="528" stroke-width="0.7"/>
+        <line x1="516" y1="510" x2="516" y2="528" stroke-width="0.7"/>
+        <line x1="784" y1="510" x2="784" y2="528" stroke-width="0.7"/>
+        <line x1="806" y1="510" x2="808" y2="528" stroke-width="0.7"/>
+        <!-- Books on table -->
+        <rect x="615" y="480" width="56" height="7" stroke-width="0.6"/>
+        <rect x="618" y="473" width="48" height="7" stroke-width="0.6"/>
+        <!-- Tall plant (left front) -->
+        <path d="M108,618 L122,660 L168,660 L182,618 Z" stroke-width="1"/>
+        <ellipse cx="145" cy="618" rx="37" ry="8" stroke-width="0.9"/>
+        <ellipse cx="145" cy="614" rx="30" ry="5" stroke-width="0.5"/>
+        <path d="M145,610 Q149,572 144,534 Q150,496 145,458 Q149,424 144,390 Q148,356 143,318" stroke-width="1.1"/>
+        <path d="M144,348 Q210,300 235,256 Q206,298 144,346" stroke-width="0.9"/>
+        <line x1="144" y1="348" x2="235" y2="256" stroke-width="0.4"/>
+        <path d="M145,384 Q76,336 50,290 Q78,334 145,382" stroke-width="0.9"/>
+        <line x1="145" y1="384" x2="50" y2="290" stroke-width="0.4"/>
+        <path d="M145,418 Q218,376 244,340 Q215,374 145,416" stroke-width="0.9"/>
+        <line x1="145" y1="418" x2="244" y2="340" stroke-width="0.4"/>
+        <path d="M144,362 Q72,310 46,268 Q74,308 144,360" stroke-width="0.9"/>
+        <line x1="144" y1="362" x2="46" y2="268" stroke-width="0.4"/>
+        <path d="M144,322 Q186,270 200,228 Q181,268 144,320" stroke-width="0.85"/>
+        <line x1="144" y1="322" x2="200" y2="228" stroke-width="0.35"/>
+        <path d="M145,468 Q190,444 210,420 Q188,442 145,466" stroke-width="0.8"/>
+        <path d="M145,463 Q100,439 80,415 Q102,437 145,461" stroke-width="0.8"/>
+        <!-- Floor lamp right -->
+        <path d="M1082,548 L1075,534 L1089,534 Z" stroke-width="0.8"/>
+        <line x1="1082" y1="534" x2="1082" y2="432" stroke-width="0.8"/>
+        <path d="M1082,442 Q1102,434 1114,442" stroke-width="0.7"/>
+        <path d="M1102,442 Q1114,436 1126,442 L1121,468 Q1114,474 1107,468 Z" stroke-width="0.85"/>
+        <!-- Rug -->
+        <path d="M345,504 L374,484 L926,484 L955,504 L955,558 L345,558 Z" stroke-width="0.6" stroke-dasharray="7 5"/>
+      </svg>
+    </div>
+
+    <div class="arch-transform-inner">
+      <div class="arch-transform-header reveal-blur">
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <span class="section-label">The transformation</span>
+          <h2>One sketch.<br>Infinite possibilities.</h2>
+        </div>
+        <p>Upload any rough sketch, floor plan, or reference image. Watch it become a photorealistic visualization your clients will fall in love with. Drag the slider.</p>
+      </div>
+      <!-- Slider 1: big full-width -->
+      <div class="compare-wrap large reveal-scale">
+        <div class="compare-before">
+          <img src="/assets/architecture/arch-compare-before.png" alt="Before — abandoned alpine chalet">
+          <span class="compare-lbl left">Before</span>
+        </div>
+        <div class="compare-after">
+          <img src="/assets/architecture/arch-render-chalet-interior.jpeg" alt="After — AI Render">
+          <span class="compare-lbl right">AI Render</span>
+        </div>
+        <div class="compare-handle">
+          <div class="compare-handle-btn">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 10h8M3 10l3-3M3 10l3 3M17 10l-3-3M17 10l-3 3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+      </div>
+      <!-- Sliders 2 & 3: two small side by side -->
+      <div class="compare-row stagger-children">
+        <div class="compare-wrap small">
+          <div class="compare-before">
+            <img src="/assets/architecture/arch-compare-2-before.jpeg" alt="Raw Reference">
+            <span class="compare-lbl left">Raw Reference</span>
+          </div>
+          <div class="compare-after">
+            <img src="/assets/architecture/arch-compare-2-after.jpeg" alt="AI Render">
+            <span class="compare-lbl right">AI Render</span>
+          </div>
+          <div class="compare-handle">
+            <div class="compare-handle-btn">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 10h8M3 10l3-3M3 10l3 3M17 10l-3-3M17 10l-3 3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="compare-wrap small">
+          <div class="compare-before">
+            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=900&q=80" alt="Raw reference">
+            <span class="compare-lbl left">Raw Reference</span>
+          </div>
+          <div class="compare-after">
+            <img src="https://images.unsplash.com/photo-1560185007-cde436f6a4d0?auto=format&fit=crop&w=900&q=85" alt="AI Render">
+            <span class="compare-lbl right">AI Render</span>
+          </div>
+          <div class="compare-handle">
+            <div class="compare-handle-btn">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 10h8M3 10l3-3M3 10l3 3M17 10l-3-3M17 10l-3 3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Capabilities (Stillpoint 4-card grid) ──────── -->
+  <section class="arch-gallery">
+    <div class="arch-gallery-inner">
+      <div class="arch-gallery-head reveal-blur">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <span class="section-label">Gallery</span>
+          <h2>Created with ImagineArt</h2>
+        </div>
+        <p>A glimpse of what 50,000+ architects and designers are building every day</p>
+      </div>
+      <div class="gallery-masonry reveal reveal-d1">
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1560185007-cde436f6a4d0?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1545558014-8692077e9b5c?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1503708928676-1cb796a0891e?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1560185007-cde436f6a4d0?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Stats ────────────────────────────────────────── -->
+  <section class="arch-stats">
+    <div class="arch-stats-inner stagger-children">
+      <div class="stat-item">
+        <div class="stat-num-row">
+          <span class="stat-val" data-target="90">0</span><span class="stat-sfx">%</span>
+        </div>
+        <p class="stat-lbl">faster than traditional rendering services</p>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num-row">
+          <span class="stat-val" data-target="2">0</span><span class="stat-sfx">M+</span>
+        </div>
+        <p class="stat-lbl">renders generated by architects worldwide</p>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num-row">
+          <span class="stat-val" data-target="8">0</span><span class="stat-sfx">s</span>
+        </div>
+        <p class="stat-lbl">average time from sketch to photorealistic render</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CTA ──────────────────────────────────────────── -->
+  <section class="arch-cta">
+    <div class="arch-cta-bg">
+      <img src="/assets/architecture/arch-render-chalet-interior.jpeg" alt="Architectural render">
+    </div>
+    <div class="arch-cta-inner">
+      <div class="cta-badge reveal">✦ AI Architecture Generator</div>
+      <h2 class="reveal-blur reveal-d1">Your vision deserves<br>a better render.</h2>
+      <p class="reveal reveal-d2">No software to install. Just upload and generate.</p>
+      <div class="arch-cta-btns reveal reveal-d2">
+        <a href="#" class="cta-btn-primary">Try Now</a>
+        <a href="#" class="cta-btn-ghost">Contact Sales →</a>
+      </div>
+      <p class="arch-cta-note reveal reveal-d3">Trusted by studios at Zaha Hadid Architects, Gensler & Foster + Partners</p>
+    </div>
+  </section>
+
+  <!-- ─── Footer ───────────────────────────────────────── -->
+  <footer class="arch-footer">
+    <div class="arch-footer-main">
+
+      <!-- Brand -->
+      <div class="footer-brand">
+        <svg width="120" height="30" viewBox="0 0 158 39" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.55"><path d="M25.9304 11.5692C22.9368 10.8701 19.5513 10.6474 20.371 5.18344L26.4248 6.88008L28.4962 7.38328C28.3938 3.28641 25.0439 0 20.9234 0H7.54167C3.37215 0 0 3.37992 0 7.53914V13.8759C0 16.009 1.14484 16.5968 2.57923 16.9308H2.57032C5.56382 17.6344 8.94933 17.8615 8.12968 23.321L2.07585 21.6244L0.00445461 21.1256C0.0890924 25.2091 3.4256 28.5 7.54167 28.5H20.9679C25.1285 28.5 28.5096 25.1201 28.5096 20.9609V14.6196C28.5096 12.4999 27.3603 11.8987 25.9304 11.5692ZM14.2503 22.8757C12.9229 18.8857 9.76453 15.626 5.62619 14.25C9.76453 12.874 12.9229 9.6232 14.2503 5.6332C15.5823 9.6232 18.7361 12.8784 22.8789 14.2545C18.7361 15.6349 15.5823 18.8857 14.2503 22.8757Z" fill="white"/><path d="M41.7078 6.40685H38.6192V21.1996H41.7078V6.40685Z" fill="white"/></svg>
+        <p class="footer-brand-tagline">AI-powered architectural visualization. From sketch to photorealistic render in seconds.</p>
+      </div>
+
+      <!-- Product -->
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#">Architecture</a></li>
+          <li><a href="#">Interior Design</a></li>
+          <li><a href="#">Style Explorer</a></li>
+          <li><a href="#">Material Library</a></li>
+          <li><a href="#">Pricing</a></li>
+        </ul>
+      </div>
+
+      <!-- Resources -->
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">API Reference</a></li>
+          <li><a href="#">Templates</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Community</a></li>
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="./index.html">Homepage</a></li>
+        </ul>
+      </div>
+
+    </div>
+    <div class="arch-footer-bar">
+      <span class="arch-footer-copy">© 2025 Vyro AI, Inc. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Settings</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── Premium Scroll Reveal System ────────────────────────
+    const REVEAL_SELECTORS = '.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-blur, .stagger-children';
+    const revealEls = document.querySelectorAll(REVEAL_SELECTORS);
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          revealObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.07, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => {
+      // Skip elements in hero — those animate on load
+      if (!el.closest('.arch-hero')) revealObs.observe(el);
+    });
+
+    // Hero reveal on load
+    document.querySelectorAll('.arch-hero .reveal').forEach((el, i) => {
+      setTimeout(() => el.classList.add('in'), 80 + i * 110);
+    });
+
+    // ── Parallax on hero panel ───────────────────────────────
+    (function() {
+      const panel = document.querySelector('.hero-panel');
+      if (!panel) return;
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            const y = window.scrollY;
+            if (y < window.innerHeight) {
+              panel.style.transform = `translateY(${y * 0.18}px)`;
+            }
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+    })();
+
+    // ── Magnetic hover on CTA buttons ───────────────────────
+    (function() {
+      document.querySelectorAll('.btn-primary-arch, .cta-btn-primary, .generate-btn').forEach(btn => {
+        btn.addEventListener('mousemove', e => {
+          const rect = btn.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          btn.style.transform = `translate(${x * 0.18}px, ${y * 0.18}px)`;
+        });
+        btn.addEventListener('mouseleave', () => {
+          btn.style.transform = '';
+        });
+      });
+    })();
+
+    // ── Tilt effect on capability cards ─────────────────────
+    (function() {
+      document.querySelectorAll('.cap-card, .caps-card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+          const rect = card.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width - 0.5;
+          const y = (e.clientY - rect.top) / rect.height - 0.5;
+          card.style.transform = `perspective(800px) rotateX(${-y * 6}deg) rotateY(${x * 6}deg) translateY(-4px)`;
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = '';
+          card.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+          setTimeout(() => card.style.transition = '', 500);
+        });
+      });
+    })();
+
+    // Comparison sliders (handles multiple)
+    (function() {
+      document.querySelectorAll('.compare-wrap').forEach((wrap, wrapIdx) => {
+        const after  = wrap.querySelector('.compare-after');
+        const handle = wrap.querySelector('.compare-handle');
+        let dragging = false;
+        let hovered  = false;
+        let animId   = null;
+        let pct      = 5; // start fully left
+
+        function setPos(p) {
+          pct = Math.max(5, Math.min(95, p));
+          handle.style.left = pct + '%';
+          after.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
+        }
+
+        // Initialise left
+        setPos(5);
+
+        // Auto-sweep: ease from 5% → 88%, pause, ease back to 28%, then hold
+        function startAuto() {
+          const startDelay = 600 + wrapIdx * 300; // stagger each slider
+          let phase = 0; // 0 = sweep right, 1 = pause, 2 = ease back
+          let startTime = null;
+
+          const phases = [
+            { duration: 1600, from: 5,  to: 88 },  // sweep right
+            { duration: 500,  from: 88, to: 88 },  // pause at right
+            { duration: 900,  from: 88, to: 32 },  // ease back to centre-left
+          ];
+
+          function easeInOut(t) {
+            return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+          }
+
+          function tick(ts) {
+            if (hovered || dragging) return; // stop if user takes over
+            if (!startTime) startTime = ts;
+            const elapsed = ts - startTime;
+            const { duration, from, to } = phases[phase];
+            const t = Math.min(elapsed / duration, 1);
+            setPos(from + (to - from) * easeInOut(t));
+
+            if (t < 1) {
+              animId = requestAnimationFrame(tick);
+            } else if (phase < phases.length - 1) {
+              phase++;
+              startTime = null;
+              animId = requestAnimationFrame(tick);
+            }
+            // phase 2 done → animation complete, hold position
+          }
+
+          setTimeout(() => {
+            if (!hovered && !dragging) animId = requestAnimationFrame(tick);
+          }, startDelay);
+        }
+
+        startAuto();
+
+        // Pause on hover, restart from current position on leave
+        wrap.addEventListener('mouseenter', () => { hovered = true; cancelAnimationFrame(animId); });
+        wrap.addEventListener('mouseleave', () => { hovered = false; });
+
+        // Manual drag
+        function dragSetPos(x) {
+          const rect = wrap.getBoundingClientRect();
+          setPos(((x - rect.left) / rect.width) * 100);
+        }
+        wrap.addEventListener('mousedown',  e => { dragging = true; dragSetPos(e.clientX); });
+        wrap.addEventListener('touchstart', e => { dragging = true; dragSetPos(e.touches[0].clientX); }, { passive: true });
+        document.addEventListener('mousemove', e => { if (dragging) dragSetPos(e.clientX); });
+        document.addEventListener('touchmove', e => { if (dragging) dragSetPos(e.touches[0].clientX); }, { passive: true });
+        document.addEventListener('mouseup',  () => { dragging = false; });
+        document.addEventListener('touchend', () => { dragging = false; });
+      });
+    })();
+
+    // s-card 3D tilt
+    (function() {
+      document.querySelectorAll('.s-card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+          const r = card.getBoundingClientRect();
+          const x = (e.clientX - r.left) / r.width - 0.5;
+          const y = (e.clientY - r.top) / r.height - 0.5;
+          card.style.transform = `perspective(900px) rotateX(${-y * 5}deg) rotateY(${x * 5}deg) translateY(-4px) scale(1.01)`;
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = '';
+        });
+      });
+    })();
+
+    // Capabilities hover panel
+    (function() {
+      const items = document.querySelectorAll('.caps-item');
+      const slides = document.querySelectorAll('.caps-panel-slide');
+      if (!items.length) return;
+      let current = 0;
+
+      function goTo(idx) {
+        if (idx === current) return;
+
+        // Slide out old
+        slides[current].classList.remove('active');
+        slides[current].classList.add('exit');
+        setTimeout(() => slides[current].classList.remove('exit'), 500);
+
+        // Remove active from old card
+        items[current].classList.remove('active');
+
+        // Activate new
+        current = idx;
+        slides[current].classList.add('active');
+        items[current].classList.add('active');
+      }
+
+      items.forEach((item, i) => {
+        item.addEventListener('mouseenter', () => goTo(i));
+      });
+    })();
+
+    // ══ WOW ANIMATIONS ══════════════════════════════════════
+
+    // 1. Preloader
+    (function() {
+      const pre = document.getElementById('preloader');
+      const logo = document.getElementById('preloader-logo');
+      const track = document.getElementById('preloader-track');
+      const fill = document.getElementById('preloader-fill');
+      if (!pre) return;
+
+      // Show logo + track immediately
+      requestAnimationFrame(() => {
+        logo.classList.add('in');
+        track.classList.add('in');
+        setTimeout(() => { fill.style.width = '100%'; }, 60);
+      });
+
+      // Dismiss after brief pause
+      function dismiss() {
+        pre.classList.add('out');
+        setTimeout(() => pre.remove(), 750);
+        // Trigger hero entrance
+        triggerHeroEntrance();
+      }
+      let dismissed = false;
+      function safeDismiss() { if (!dismissed) { dismissed = true; dismiss(); } }
+      if (document.readyState === 'complete') {
+        setTimeout(safeDismiss, 800);
+      } else {
+        window.addEventListener('load', () => setTimeout(safeDismiss, 500));
+        setTimeout(safeDismiss, 2000); // hard fallback
+      }
+    })();
+
+    // 2. Hero entrance (called after preloader dismisses)
+    let heroEntranceDone = false;
+    function triggerHeroEntrance() {
+      if (heroEntranceDone) return;
+      heroEntranceDone = true;
+
+      // Stagger other hero elements
+      const heroEls = document.querySelectorAll('.arch-hero .reveal');
+      heroEls.forEach((el, i) => {
+        setTimeout(() => el.classList.add('in'), 200 + i * 100);
+      });
+    }
+
+
+    // 4. Scroll progress bar
+    (function() {
+      const prog = document.getElementById('scroll-prog');
+      if (!prog) return;
+      window.addEventListener('scroll', () => {
+        const total = document.body.scrollHeight - window.innerHeight;
+        if (total > 0) prog.style.width = (window.scrollY / total * 100) + '%';
+      }, { passive: true });
+    })();
+
+    // 5. Bento grid reveal (separate observer so stagger works)
+    (function() {
+      const bento = document.querySelector('.styles-bento');
+      if (!bento) return;
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { bento.classList.add('in'); obs.disconnect(); }
+        });
+      }, { threshold: 0.07 });
+      obs.observe(bento);
+    })();
+
+    // 6. Section headings use reveal-blur class (handled by main IntersectionObserver above)
+
+    // Hero slideshow with arc loader
+    (function() {
+      const slides = document.querySelectorAll('.hero-slide');
+      const numEl  = document.getElementById('slideCurrentNum');
+      const arcEl  = document.getElementById('ringArc');
+      const lblEl  = document.getElementById('slideLabel');
+      if (!slides.length || !arcEl) return;
+
+      const labels = ['Chalet Interior','Textured Wall Study','Feature Wall Living','Architectural Exterior'];
+      let current = 0;
+      const total = slides.length;
+      const CIRCUM = 2 * Math.PI * 16; // ≈ 100.53
+
+      function resetArc() {
+        // Force reflow to restart CSS animation
+        arcEl.style.animation = 'none';
+        arcEl.getBoundingClientRect();
+        arcEl.style.animation = '';
+      }
+
+      function goTo(idx) {
+        slides[current].classList.remove('active');
+        current = (idx + total) % total;
+        slides[current].classList.add('active');
+        numEl.textContent = current + 1;
+        if (lblEl) lblEl.textContent = labels[current] || '';
+        resetArc();
+      }
+
+      // Auto-advance every 5 seconds
+      setInterval(() => goTo(current + 1), 5000);
+    })();
+
+    // Stats counter
+    (function() {
+      const els = document.querySelectorAll('.stat-val[data-target]');
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (!e.isIntersecting) return;
+          const el = e.target;
+          const target = parseFloat(el.dataset.target);
+          let start = 0; const dur = 1800;
+          const t0 = performance.now();
+          function step(now) {
+            const p = Math.min((now - t0) / dur, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            el.textContent = Math.round(eased * target);
+            if (p < 1) requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
+          obs.unobserve(el);
+        });
+      }, { threshold: 0.5 });
+      els.forEach(el => obs.observe(el));
+    })();
+  </script>
+  <script src="navbar.js"></script>
+</body>
+</html>
