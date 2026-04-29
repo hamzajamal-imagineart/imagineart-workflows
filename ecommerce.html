@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ImagineArt — AI Product Photography</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js" } }</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -37,27 +38,13 @@
       align-items: center; text-align: center;
       position: relative;
     }
-    /* Dot grid — faint base layer always visible */
-    .hero::before {
-      content: '';
-      position: absolute; inset: 0;
-      pointer-events: none; z-index: 0;
-      background-image: radial-gradient(circle, rgba(255,255,255,0.13) 1px, transparent 1px);
-      background-size: 28px 28px;
-    }
-    /* Spotlight — bright dot grid masked to cursor radius */
-    .hero::after {
-      content: '';
-      position: absolute; inset: 0;
-      pointer-events: none; z-index: 0;
-      background-image: radial-gradient(circle, rgba(255,255,255,0.55) 1px, transparent 1px);
-      background-size: 28px 28px;
-      -webkit-mask-image: radial-gradient(circle 220px at var(--mx, -9999px) var(--my, -9999px), black 0%, transparent 100%);
-      mask-image: radial-gradient(circle 220px at var(--mx, -9999px) var(--my, -9999px), black 0%, transparent 100%);
-      transition: -webkit-mask-image 0.1s ease, mask-image 0.1s ease;
-    }
-    /* Hero content above dot layers */
+    /* Hero content above Three.js canvas */
     .hero > * { position: relative; z-index: 1; }
+    #hero-dot-canvas {
+      position: absolute; inset: 0;
+      width: 100% !important; height: 100% !important;
+      pointer-events: none; z-index: 0;
+    }
     .hero-h1 {
       font-size: clamp(44px, 5.8vw, 82px); font-weight: 600;
       line-height: 1.06; letter-spacing: -3px; color: #fff;
@@ -67,25 +54,12 @@
       font-size: 15px; color: rgba(255,255,255,0.42);
       max-width: 440px; line-height: 1.7; margin-top: 22px;
     }
-    .hero-ctas { display: flex; gap: 10px; align-items: center; margin-top: 36px; flex-wrap: wrap; justify-content: center; }
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: 8px;
-      height: 52px; padding: 0 28px; border-radius: 100px;
-      background: #fff; color: #0f0f0f; font-size: 15px; font-weight: 600;
-      text-decoration: none; border: none; cursor: pointer;
-      transition: background 0.2s, transform 0.15s;
-    }
-    .btn-primary svg path { stroke: #0f0f0f; }
-    .btn-primary:hover { background: #e8e8e6; transform: translateY(-1px); }
-    .btn-ghost {
-      display: inline-flex; align-items: center; gap: 7px;
-      height: 52px; padding: 0 24px; border-radius: 100px;
-      background: transparent; color: rgba(255,255,255,0.48);
-      border: 1px solid rgba(255,255,255,0.16); font-size: 15px; font-weight: 500;
-      text-decoration: none; cursor: pointer;
-      transition: border-color 0.2s, color 0.2s, transform 0.15s;
-    }
-    .btn-ghost:hover { border-color: rgba(255,255,255,0.38); color: #fff; transform: translateY(-1px); }
+    .hero-ctas { display: flex; gap: 16px; align-items: center; margin-top: 36px; flex-wrap: wrap; justify-content: center; }
+    .btn-hero { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 48px; padding: 12px 20px; border-radius: 18px; font-size: 18px; font-weight: 500; letter-spacing: 0.36px; white-space: nowrap; cursor: pointer; text-decoration: none; transition: opacity 0.15s, transform 0.15s; }
+    .btn-hero:hover { opacity: 0.85; transform: translateY(-1px); }
+    .btn-demo { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.35); color: #fff; }
+    .btn-get-started { background: #fff; color: #0f0f0f; border: none; }
+    .btn-get-started:hover { background: #f0f0f0; transform: translateY(-1px); }
 
     /* Hero showcase — 5 staggered image columns */
     .hero-showcase {
@@ -122,7 +96,7 @@
     /* Inner: ALL hover effects live here — clean transitions, no conflict with parallax */
     .hero-img-inner {
       position: relative; width: 100%; height: 100%;
-      border-radius: 14px 14px 0 0; overflow: hidden;
+      border-radius: 14px; overflow: hidden;
       transform: scale(1) translateY(0);
       filter: saturate(1) brightness(1);
       transition:
@@ -155,16 +129,14 @@
 
     /* Tag: lives outside inner so it isn't clipped, follows the slide */
     .hero-img-label {
-      position: absolute; bottom: 12px; left: 12px; z-index: 2;
-      background: rgba(255,255,255,0.93); backdrop-filter: blur(12px);
-      border-radius: 100px; padding: 5px 12px;
-      font-size: 10px; font-weight: 700; color: #0f0f0f;
-      letter-spacing: 0.6px; text-transform: uppercase;
-      opacity: 0; transform: translateY(8px);
-      transition: opacity 0.35s ease, transform 0.35s ease;
+      position: absolute; top: 12px; left: 12px; z-index: 2;
+      background: rgba(255,255,255,0.1); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 100px; padding: 4px 10px;
+      font-size: 9.5px; font-weight: 700; color: rgba(255,255,255,0.82);
+      letter-spacing: 1px; text-transform: uppercase;
       pointer-events: none;
     }
-    .hero-img:hover .hero-img-label { opacity: 1; transform: translateY(-14px); }
 
     /* ══════════════════════════════════════
        MARQUEE — flows seamlessly from hero
@@ -545,26 +517,85 @@
     .hw em { font-style: italic; font-weight: inherit; color: #fff; }
     em { color: rgba(255,255,255,0.42); }
     @keyframes hwUp { to { opacity: 1; transform: none; } }
+
+    /* ── Preloader ──────────────────────────────────────────── */
+    #preloader {
+      position: fixed; inset: 0; z-index: 9990;
+      background: #0b0b0b;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px;
+      transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #preloader.out { opacity: 0; transform: scale(1.06); pointer-events: none; }
+    #preloader-logo { opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    #preloader-logo.in { opacity: 1; transform: none; }
+    #preloader-track {
+      width: 160px; height: 1px;
+      background: rgba(255,255,255,0.1); border-radius: 1px; overflow: hidden;
+      opacity: 0; transition: opacity 0.4s 0.2s;
+    }
+    #preloader-track.in { opacity: 1; }
+    #preloader-fill {
+      height: 100%; width: 0%; background: rgba(255,255,255,0.5);
+      transition: width 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ── Skeleton loader ─────────────────────────────────────── */
+    .skeleton {
+      position: absolute; inset: 0; z-index: 3;
+      background: #1c1c1c;
+      border-radius: inherit;
+      overflow: hidden;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .skeleton::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255,255,255,0.055) 40%,
+        rgba(255,255,255,0.09) 50%,
+        rgba(255,255,255,0.055) 60%,
+        transparent 100%
+      );
+      background-size: 200% 100%;
+      animation: shimmer 1.6s infinite;
+    }
+    .skeleton.hidden { opacity: 0; pointer-events: none; }
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
   </style>
 </head>
 <body>
+
+  <!-- ─── Preloader ──────────────────────────────────────── -->
+  <div id="preloader">
+    <svg id="preloader-logo" width="36" height="36" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M25.9304 11.5692C22.9368 10.8701 19.5513 10.6474 20.371 5.18344L26.4248 6.88008L28.4962 7.38328C28.3938 3.28641 25.0439 0 20.9234 0H7.54167C3.37215 0 0 3.37992 0 7.53914V13.8759C0 16.009 1.14484 16.5968 2.57923 16.9308H2.57032C5.56382 17.6344 8.94933 17.8615 8.12968 23.321L2.07585 21.6244L0.00445461 21.1256C0.0890924 25.2091 3.4256 28.5 7.54167 28.5H20.9679C25.1285 28.5 28.5096 25.1201 28.5096 20.9609V14.6196C28.5096 12.4999 27.3603 11.8987 25.9304 11.5692ZM14.2503 22.8757C12.9229 18.8857 9.76453 15.626 5.62619 14.25C9.76453 12.874 12.9229 9.6232 14.2503 5.6332C15.5823 9.6232 18.7361 12.8784 22.8789 14.2545C18.7361 15.6349 15.5823 18.8857 14.2503 22.8757Z" fill="white"/>
+    </svg>
+    <div id="preloader-track"><div id="preloader-fill"></div></div>
+  </div>
 
   <div id="prog"></div>
   <header id="site-nav"></header>
 
   <!-- ══ HERO ══ -->
   <section class="hero">
+    <canvas id="hero-dot-canvas"></canvas>
     <h1 class="hero-h1">
       <span class="hw hw-1">Your</span> <span class="hw hw-2">product.</span><br>
       <span class="hw hw-3">Infinite</span> <span class="hw hw-4"><em>looks.</em></span>
     </h1>
     <p class="hero-sub reveal reveal-d2">Upload any product. Generate professional photography for every platform — any background, any mood, any scene.</p>
     <div class="hero-ctas reveal reveal-d3">
-      <a href="#" class="btn-primary">
+      <a href="#" class="btn-hero btn-demo">Book a demo</a>
+      <a href="#" class="btn-hero btn-get-started">
         Get Started
-        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 7.5h9M8 4l4 3.5L8 11" stroke="#0f0f0f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M16 10l-4.5-4.5M16 10l-4.5 4.5" stroke="#0f0f0f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
-      <a href="#" class="btn-ghost">See examples →</a>
     </div>
     <div class="hero-showcase stagger">
       <div class="hero-img" data-parallax="-0.08">
@@ -575,15 +606,15 @@
       </div>
       <div class="hero-img" data-parallax="-0.18">
         <div class="hero-img-inner">
-          <video src="assets/ecommerce/ec-hero-2.mp4" autoplay loop muted playsinline></video>
-        </div>
-        <span class="hero-img-label">Editorial</span>
-      </div>
-      <div class="hero-img" data-parallax="-0.30">
-        <div class="hero-img-inner">
           <video src="assets/ecommerce/ec-hero-3.mp4" autoplay loop muted playsinline></video>
         </div>
         <span class="hero-img-label">Lifestyle</span>
+      </div>
+      <div class="hero-img" data-parallax="-0.30">
+        <div class="hero-img-inner">
+          <video src="assets/ecommerce/ec-hero-2.mp4" autoplay loop muted playsinline></video>
+        </div>
+        <span class="hero-img-label">Editorial</span>
       </div>
       <div class="hero-img" data-parallax="-0.18">
         <div class="hero-img-inner">
@@ -858,6 +889,77 @@
   </footer>
 
   <script>
+    // ── Skeleton loaders ─────────────────────────────────────
+    (function() {
+      function addSkeleton(container) {
+        const sk = document.createElement('div');
+        sk.className = 'skeleton';
+        container.appendChild(sk);
+        return sk;
+      }
+
+      function removeSkeleton(sk) {
+        sk.classList.add('hidden');
+        setTimeout(() => sk.remove(), 420);
+      }
+
+      function attachToMedia(container, media) {
+        const sk = addSkeleton(container);
+        if (!media) { removeSkeleton(sk); return; }
+
+        // Already loaded
+        if (media.tagName === 'VIDEO' && media.readyState >= 3) { removeSkeleton(sk); return; }
+        if (media.tagName === 'IMG'   && media.complete && media.naturalWidth) { removeSkeleton(sk); return; }
+
+        const evt = media.tagName === 'VIDEO' ? 'loadeddata' : 'load';
+        media.addEventListener(evt, () => removeSkeleton(sk), { once: true });
+        media.addEventListener('error', () => removeSkeleton(sk), { once: true });
+      }
+
+      // Hero cards
+      document.querySelectorAll('.hero-img-inner').forEach(el =>
+        attachToMedia(el, el.querySelector('video, img'))
+      );
+      // Showcase cards
+      document.querySelectorAll('.sc-card').forEach(el =>
+        attachToMedia(el, el.querySelector('video, img'))
+      );
+      // Template cards
+      document.querySelectorAll('.s-card').forEach(el =>
+        attachToMedia(el, el.querySelector('video, img'))
+      );
+      // Gallery items
+      document.querySelectorAll('.gallery-item').forEach(el =>
+        attachToMedia(el, el.querySelector('video, img'))
+      );
+    })();
+
+    // ── Preloader ────────────────────────────────────────────
+    (function() {
+      const pre = document.getElementById('preloader');
+      const logo = document.getElementById('preloader-logo');
+      const track = document.getElementById('preloader-track');
+      const fill = document.getElementById('preloader-fill');
+      if (!pre) return;
+      requestAnimationFrame(() => {
+        logo.classList.add('in');
+        track.classList.add('in');
+        setTimeout(() => { fill.style.width = '100%'; }, 60);
+      });
+      function dismiss() {
+        pre.classList.add('out');
+        setTimeout(() => pre.remove(), 750);
+      }
+      let dismissed = false;
+      function safeDismiss() { if (!dismissed) { dismissed = true; dismiss(); } }
+      if (document.readyState === 'complete') {
+        setTimeout(safeDismiss, 800);
+      } else {
+        window.addEventListener('load', () => setTimeout(safeDismiss, 500));
+        setTimeout(safeDismiss, 2000);
+      }
+    })();
+
     // Hero entrance animation — fires after paint so user always sees it
     (function() {
       const showcase = document.querySelector('.hero-showcase');
@@ -889,7 +991,7 @@
 
     // Dot grid spotlight — applied to all dark sections
     (function() {
-      const darkSections = document.querySelectorAll('.hero, .templates, .cta-banner, .footer');
+      const darkSections = document.querySelectorAll('.templates, .cta-banner, .footer');
       darkSections.forEach(el => {
         el.addEventListener('mousemove', e => {
           const r = el.getBoundingClientRect();
@@ -956,5 +1058,75 @@
     document.querySelectorAll('.stat-num[data-target]').forEach(el => so.observe(el));
   </script>
   <script src="navbar.js"></script>
+
+  <!-- ── Three.js dot wave hero background ─────────────────── -->
+  <script type="module">
+    import * as THREE from 'three';
+
+    const canvas = document.getElementById('hero-dot-canvas');
+    if (!canvas) throw new Error('no canvas');
+
+    const hero = canvas.closest('.hero');
+    const W    = () => hero.offsetWidth;
+    const H    = () => hero.offsetHeight;
+
+    const SEPARATION = 150, AMOUNTX = 40, AMOUNTY = 60;
+
+    const scene    = new THREE.Scene();
+    const camera   = new THREE.PerspectiveCamera(100, W() / H(), 1, 10000);
+    camera.position.set(0, 355, 1220);
+
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(W(), H(), false);
+    renderer.setClearColor(0x000000, 0);
+
+    const geometry = new THREE.BufferGeometry();
+    const posArr   = new Float32Array(AMOUNTX * AMOUNTY * 3);
+    const colorArr = new Float32Array(AMOUNTX * AMOUNTY * 3);
+
+    let i = 0;
+    for (let ix = 0; ix < AMOUNTX; ix++) {
+      for (let iy = 0; iy < AMOUNTY; iy++) {
+        posArr[i * 3]     = ix * SEPARATION - (AMOUNTX * SEPARATION) / 2;
+        posArr[i * 3 + 1] = 0;
+        posArr[i * 3 + 2] = iy * SEPARATION - (AMOUNTY * SEPARATION) / 2;
+        colorArr[i * 3] = colorArr[i * 3 + 1] = colorArr[i * 3 + 2] = 0.78;
+        i++;
+      }
+    }
+
+    geometry.setAttribute('position', new THREE.BufferAttribute(posArr, 3));
+    geometry.setAttribute('color',    new THREE.BufferAttribute(colorArr, 3));
+
+    const material = new THREE.PointsMaterial({ size: 8, vertexColors: true, transparent: true, opacity: 0.55, sizeAttenuation: true });
+    const points   = new THREE.Points(geometry, material);
+    scene.add(points);
+
+    let count = 0;
+    const posAttr = geometry.attributes.position;
+
+    (function animate() {
+      requestAnimationFrame(animate);
+      let k = 0;
+      for (let ix = 0; ix < AMOUNTX; ix++) {
+        for (let iy = 0; iy < AMOUNTY; iy++) {
+          posAttr.array[k * 3 + 1] =
+            Math.sin((ix + count) * 0.3) * 50 +
+            Math.sin((iy + count) * 0.5) * 50;
+          k++;
+        }
+      }
+      posAttr.needsUpdate = true;
+      renderer.render(scene, camera);
+      count += 0.1;
+    })();
+
+    window.addEventListener('resize', () => {
+      camera.aspect = W() / H();
+      camera.updateProjectionMatrix();
+      renderer.setSize(W(), H(), false);
+    }, { passive: true });
+  </script>
 </body>
 </html>

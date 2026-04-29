@@ -765,9 +765,9 @@
     .reveal-d4 { transition-delay: 0.42s; }
 
     /* Reveal from left/right */
-    .reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal-left { opacity: 0; transform: translateX(-72px); transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1); }
     .reveal-left.in { opacity: 1; transform: none; }
-    .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal-right { opacity: 0; transform: translateX(72px); transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1); }
     .reveal-right.in { opacity: 1; transform: none; }
 
     /* Scale reveal */
@@ -1180,12 +1180,12 @@
     <div class="arch-styles-inner">
 
       <!-- Header -->
-      <div class="arch-styles-head reveal-blur">
-        <div class="arch-styles-head-left">
+      <div class="arch-styles-head">
+        <div class="arch-styles-head-left reveal-left">
           <span class="section-label" style="color:rgba(255,255,255,0.45);border-color:rgba(255,255,255,0.12);">Templates</span>
           <h2>One space.<br>Every aesthetic.</h2>
         </div>
-        <p>From brutalist concrete to warm Japandi — render any style in seconds and show clients exactly what they're getting.</p>
+        <p class="reveal-right">From brutalist concrete to warm Japandi — render any style in seconds and show clients exactly what they're getting.</p>
       </div>
 
       <!-- Bento Grid -->
@@ -1408,9 +1408,9 @@
     </div>
 
     <!-- Full-bleed 4-card grid -->
-    <div class="caps-grid stagger-children" style="position:relative;z-index:1;">
+    <div class="caps-grid" style="position:relative;z-index:1;">
 
-      <div class="caps-card">
+      <div class="caps-card reveal-left">
         <img src="/assets/architecture/arch-render-chalet-interior.jpeg" alt="Sketch to render">
         <div class="caps-card-info">
           <div class="caps-card-num">Capability 01</div>
@@ -1419,7 +1419,7 @@
         </div>
       </div>
 
-      <div class="caps-card">
+      <div class="caps-card reveal-right">
         <img src="/assets/architecture/arch-render-modern-living.jpg" alt="Style transfer">
         <div class="caps-card-info">
           <div class="caps-card-num">Capability 02</div>
@@ -1428,7 +1428,7 @@
         </div>
       </div>
 
-      <div class="caps-card">
+      <div class="caps-card reveal-left" style="transition-delay:0.12s">
         <img src="/assets/architecture/arch-render-building-exterior.jpeg" alt="Material explorer">
         <div class="caps-card-info">
           <div class="caps-card-num">Capability 03</div>
@@ -1437,7 +1437,7 @@
         </div>
       </div>
 
-      <div class="caps-card">
+      <div class="caps-card reveal-right" style="transition-delay:0.12s">
         <img src="/assets/architecture/arch-render-living-room-2.jpeg" alt="Client presentations">
         <div class="caps-card-info">
           <div class="caps-card-num">Capability 04</div>
@@ -1542,12 +1542,12 @@
     </div>
 
     <div class="arch-transform-inner">
-      <div class="arch-transform-header reveal-blur">
-        <div style="display:flex;flex-direction:column;gap:14px;">
+      <div class="arch-transform-header">
+        <div class="reveal-left" style="display:flex;flex-direction:column;gap:14px;">
           <span class="section-label">The transformation</span>
           <h2>One sketch.<br>Infinite possibilities.</h2>
         </div>
-        <p>Upload any rough sketch, floor plan, or reference image. Watch it become a photorealistic visualization your clients will fall in love with. Drag the slider.</p>
+        <p class="reveal-right">Upload any rough sketch, floor plan, or reference image. Watch it become a photorealistic visualization your clients will fall in love with. Drag the slider.</p>
       </div>
       <!-- Slider 1: big full-width -->
       <div class="compare-wrap large reveal-scale">
@@ -1566,8 +1566,8 @@
         </div>
       </div>
       <!-- Sliders 2 & 3: two small side by side -->
-      <div class="compare-row stagger-children">
-        <div class="compare-wrap small">
+      <div class="compare-row">
+        <div class="compare-wrap small reveal-left">
           <div class="compare-before">
             <img src="/assets/architecture/arch-compare-2-before.jpeg" alt="Raw Reference">
             <span class="compare-lbl left">Raw Reference</span>
@@ -1582,7 +1582,7 @@
             </div>
           </div>
         </div>
-        <div class="compare-wrap small">
+        <div class="compare-wrap small reveal-right" style="transition-delay:0.1s">
           <div class="compare-before">
             <img src="/assets/architecture/arch-compare-3-before.jpeg" alt="Hand Sketch">
             <span class="compare-lbl left">Hand Sketch</span>
