@@ -782,38 +782,6 @@
   </footer>
 
   <script>
-    // Smooth scroll
-    (function() {
-      let current = window.scrollY;
-      let target  = window.scrollY;
-      const ease  = 0.06;
-      let raf     = null;
-
-      function tick() {
-        const diff = target - current;
-        if (Math.abs(diff) < 0.3) {
-          current = target;
-          window.scrollTo(0, current);
-          raf = null;
-          return;
-        }
-        current += diff * ease;
-        window.scrollTo(0, current);
-        raf = requestAnimationFrame(tick);
-      }
-
-      window.addEventListener('wheel', (e) => {
-        e.preventDefault();
-        target += e.deltaY;
-        target = Math.max(0, Math.min(target, document.body.scrollHeight - window.innerHeight));
-        if (!raf) raf = requestAnimationFrame(tick);
-      }, { passive: false });
-
-      window.addEventListener('scroll', () => {
-        if (!raf) { current = window.scrollY; target = window.scrollY; }
-      }, { passive: true });
-    })();
-
     // Hero entrance animation — fires after paint so user always sees it
     (function() {
       const showcase = document.querySelector('.hero-showcase');
