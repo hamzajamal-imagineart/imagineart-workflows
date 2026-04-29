@@ -15,9 +15,10 @@
     transition: padding 0.3s ease;
   }
   .navbar-inner {
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 10px 40px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 10px clamp(40px, 8vw, 140px);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -29,10 +30,15 @@
     transition: background 0.5s cubic-bezier(0.4,0,0.2,1),
                 border-color 0.5s cubic-bezier(0.4,0,0.2,1),
                 box-shadow 0.5s cubic-bezier(0.4,0,0.2,1),
-                backdrop-filter 0.5s cubic-bezier(0.4,0,0.2,1);
+                backdrop-filter 0.5s cubic-bezier(0.4,0,0.2,1),
+                max-width 0.55s cubic-bezier(0.4,0,0.2,1),
+                padding 0.55s cubic-bezier(0.4,0,0.2,1);
   }
   .navbar.scrolled { padding: 10px 0; }
   .navbar.scrolled .navbar-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 10px 40px;
     background: rgba(255,255,255,0.82);
     backdrop-filter: saturate(200%) blur(24px);
     -webkit-backdrop-filter: saturate(200%) blur(24px);
@@ -55,8 +61,8 @@
   .nav-dropdown-menu::before { content: ''; position: absolute; top: -10px; left: 0; right: 0; height: 10px; }
   .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
   .nav-dropdown-item { display: flex; align-items: center; padding: 9px 14px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: #0f0f0f; text-decoration: none; transition: background 0.12s, color 0.12s; white-space: nowrap; }
-  .nav-dropdown-item:hover { background: #f4f0ff; color: #6929c4; }
-  .nav-dropdown-item.current { color: #6929c4; background: #f4f0ff; }
+  .nav-dropdown-item:hover { background: #f0f0f0; color: #0f0f0f; }
+  .nav-dropdown-item.current { color: #0f0f0f; background: #f0f0f0; }
   .navbar:not(.scrolled) .nav-dropdown-trigger { color: rgba(255,255,255,0.75); }
   .navbar:not(.scrolled) .nav-dropdown-trigger:hover { color: #fff; background: rgba(255,255,255,0.08); }
   .nav-actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
@@ -129,7 +135,7 @@
   .nav-mobile-section { padding: 6px 14px 4px; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(0,0,0,0.3); }
   .nav-mobile-sub { padding-left: 10px; }
   .nav-mobile-sub .nav-mobile-link { font-size: 14px; color: rgba(0,0,0,0.7); }
-  .nav-mobile-sub .nav-mobile-link.current { color: #6929c4; background: #f4f0ff; }
+  .nav-mobile-sub .nav-mobile-link.current { color: #0f0f0f; background: #f0f0f0; }
   .nav-mobile-divider { height: 1px; background: rgba(0,0,0,0.07); margin: 6px 0; }
   .nav-mobile-actions { display: flex; gap: 8px; padding: 8px 6px 6px; }
   .nav-mobile-actions .navbar-btn { flex: 1; justify-content: center; height: 42px; font-size: 14px; border-radius: 12px; }
@@ -143,7 +149,7 @@
     .nav-links { display: none; }
     .nav-actions { display: none; }
     .nav-hamburger { display: flex; }
-    .navbar-inner { padding: 10px 16px; }
+    .navbar-inner { padding: 10px 20px; }
     .navbar.scrolled { padding: 8px 0; }
   }
 `;
@@ -153,9 +159,11 @@
   var path = window.location.pathname;
   var isArch = path.indexOf('architecture') !== -1;
   var isEcom = path.indexOf('ecommerce') !== -1;
-  var logoHref = (isArch || isEcom) ? './index.html' : '/';
+  var isMkt  = path.indexOf('marketing') !== -1;
+  var logoHref = (isArch || isEcom || isMkt) ? './index.html' : '/';
   var archCurrent = isArch ? ' current' : '';
   var ecomCurrent = isEcom ? ' current' : '';
+  var mktCurrent  = isMkt  ? ' current' : '';
 
   var html = `
   <header class="navbar" id="site-navbar">
@@ -301,7 +309,7 @@
           <div class="nav-dropdown-menu">
             <a href="#" class="nav-dropdown-item">Fashion</a>
             <a href="./ecommerce.html" class="nav-dropdown-item${ecomCurrent}">E-commerce</a>
-            <a href="#" class="nav-dropdown-item">Marketing Agencies</a>
+            <a href="./marketing.html" class="nav-dropdown-item${mktCurrent}">Marketing Agencies</a>
             <a href="#" class="nav-dropdown-item">Beauty</a>
             <a href="./architecture.html" class="nav-dropdown-item${archCurrent}">Architecture</a>
           </div>
@@ -332,7 +340,7 @@
       <div class="nav-mobile-sub">
         <a href="#" class="nav-mobile-link">Fashion</a>
         <a href="./ecommerce.html" class="nav-mobile-link${ecomCurrent}">E-commerce</a>
-        <a href="#" class="nav-mobile-link">Marketing Agencies</a>
+        <a href="./marketing.html" class="nav-mobile-link${mktCurrent}">Marketing Agencies</a>
         <a href="#" class="nav-mobile-link">Beauty</a>
         <a href="./architecture.html" class="nav-mobile-link${archCurrent}">Architecture</a>
       </div>

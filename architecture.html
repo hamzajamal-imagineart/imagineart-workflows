@@ -13,41 +13,6 @@
     html { scroll-behavior: smooth; }
     body { font-family: 'Inter', sans-serif; background: #fff; color: #0f0f0f; overflow-x: hidden; }
 
-    /* ─── Navbar ─────────────────────────────────────────── */
-    .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 16px 0; transition: padding 0.3s ease; }
-    .navbar.scrolled { padding: 10px 0; }
-    .navbar-inner { max-width: 1240px; margin: 0 auto; padding: 12px 40px; display: flex; align-items: center; justify-content: space-between; gap: 32px; border-radius: 16px; border: 1px solid transparent; transition: all 0.3s ease; overflow: visible; }
-    .navbar.scrolled .navbar-inner { background: rgba(255,255,255,0.82); backdrop-filter: saturate(200%) blur(24px); -webkit-backdrop-filter: saturate(200%) blur(24px); border-color: rgba(255,255,255,0.9); box-shadow: 0 0 0 1px rgba(0,0,0,0.04), 0 4px 6px rgba(0,0,0,0.03), 0 12px 48px rgba(0,0,0,0.1); }
-    .logo { display: flex; align-items: center; text-decoration: none; flex-shrink: 0; overflow: visible; line-height: 0; }
-    .logo-white { display: block; } .logo-dark { display: none; }
-    .navbar.scrolled .logo-white { display: none; } .navbar.scrolled .logo-dark { display: block; }
-    .nav-links { display: flex; align-items: center; gap: 2px; }
-    .nav-link { display: flex; align-items: center; justify-content: center; padding: 6px 14px; border-radius: 8px; font-size: 14px; font-weight: 500; letter-spacing: 0.14px; color: rgba(15,15,15,0.75); text-decoration: none; white-space: nowrap; transition: color 0.15s, background 0.15s; }
-    .nav-link:hover { color: #0f0f0f; background: rgba(15,15,15,0.05); }
-    .navbar:not(.scrolled) .nav-link { color: rgba(255,255,255,0.75); }
-    .navbar:not(.scrolled) .nav-link:hover { color: #fff; background: rgba(255,255,255,0.08); }
-    .navbar.scrolled .nav-link { color: rgba(15,15,15,0.75); }
-    .navbar.scrolled .nav-link:hover { color: #0f0f0f; background: rgba(15,15,15,0.05); }
-    .nav-dropdown { position: relative; }
-    .nav-dropdown-trigger { cursor: pointer; border: none; background: none; font-family: inherit; gap: 5px; }
-    .nav-dropdown-trigger svg { transition: transform 0.2s ease; flex-shrink: 0; }
-    .nav-dropdown:hover .nav-dropdown-trigger svg { transform: rotate(180deg); }
-    .nav-dropdown-menu { position: absolute; top: calc(100% + 10px); left: 50%; transform: translateX(-50%) translateY(-6px); background: #fff; border: 1px solid rgba(0,0,0,0.08); border-radius: 14px; box-shadow: 0 8px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06); padding: 6px; min-width: 200px; opacity: 0; pointer-events: none; transition: opacity 0.18s ease, transform 0.18s ease; z-index: 200; }
-    .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
-    .nav-dropdown-item { display: flex; align-items: center; padding: 9px 14px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: #0f0f0f; text-decoration: none; transition: background 0.12s, color 0.12s; white-space: nowrap; }
-    .nav-dropdown-item:hover { background: #f4f0ff; color: #6929c4; }
-    .nav-dropdown-item.current { color: #6929c4; background: #f4f0ff; }
-    .nav-actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
-    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 9px; font-size: 13.5px; font-weight: 500; letter-spacing: 0.14px; white-space: nowrap; cursor: pointer; border: none; text-decoration: none; transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease, color 0.15s; font-family: inherit; }
-    .btn-ghost { background: transparent; color: rgba(15,15,15,0.7); }
-    .btn-ghost:hover { background: rgba(15,15,15,0.06); color: #0f0f0f; }
-    .navbar:not(.scrolled) .btn-ghost { color: rgba(255,255,255,0.75); }
-    .navbar:not(.scrolled) .btn-ghost:hover { color: #fff; background: rgba(255,255,255,0.08); }
-    .btn-dark { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.25); }
-    .btn-dark:hover { background: rgba(255,255,255,0.2); }
-    .navbar.scrolled .btn-dark { background: #111; border-color: transparent; box-shadow: 0 1px 2px rgba(0,0,0,0.15); }
-    .navbar.scrolled .btn-dark:hover { background: #222; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-
     /* ─── Hero (Editorial Split) ────────────────────────────── */
     .arch-hero {
       position: relative;
@@ -58,8 +23,16 @@
       overflow: hidden;
       background: #0b0b0b;
     }
-    /* Subtle dot grid left side */
-    /* hero dot-grid removed */
+    /* Navbar scrim — fixed overlay just below navbar */
+    #nav-scrim {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 140px;
+      background: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.2) 75%, transparent 100%);
+      pointer-events: none; z-index: 99;
+      opacity: 1;
+      transition: opacity 0.4s ease;
+    }
+    #nav-scrim.hidden { opacity: 0; }
 
     /* Hero line art */
     /* Full-width lineart at arch-hero level — visible on left dark bg */
@@ -609,16 +582,22 @@
     .tmpl-name { font-size: 16px; font-weight: 600; color: #0f0f0f; letter-spacing: -0.2px; }
 
     /* ─── Gallery ────────────────────────────────────────── */
-    .arch-gallery { background: #0b0b0b; padding: 140px var(--px); }
-    .arch-gallery-inner { max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; gap: 56px; }
-    .arch-gallery-head { display: flex; justify-content: space-between; align-items: flex-end; }
-    .arch-gallery-head h2 { font-size: clamp(36px, 3.5vw, 52px); font-weight: 700; letter-spacing: -0.9px; color: #fff; }
-    .arch-gallery-head p { font-size: 16px; color: rgba(255,255,255,0.28); max-width: 320px; text-align: right; }
-    .gallery-masonry { columns: 4; column-gap: 14px; }
-    .gallery-item { break-inside: avoid; margin-bottom: 14px; border-radius: 14px; overflow: hidden; position: relative; }
-    .gallery-item img { width: 100%; height: auto; display: block; transition: transform 0.45s ease; }
-    .gallery-item:hover img { transform: scale(1.04); }
-    .gallery-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.48) 0%, transparent 50%); opacity: 0; transition: opacity 0.28s; }
+    .arch-gallery { background: #0b0b0b; padding-top: 120px; }
+    .arch-gallery-inner { max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; gap: 0; }
+    .arch-gallery-head { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 40px 52px; gap: 14px; }
+    .arch-gallery-head h2 { font-size: clamp(32px, 3.5vw, 52px); font-weight: 700; letter-spacing: -1.2px; color: #fff; line-height: 1.08; }
+    .arch-gallery-head p { font-size: 15px; color: rgba(255,255,255,0.32); max-width: 400px; line-height: 1.65; }
+    .arch-gallery-link { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.4); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: color 0.2s; }
+    .arch-gallery-link:hover { color: #fff; }
+    /* Pinch zoom-out gallery */
+    .gallery-pin-wrap { position: relative; height: 250vh; }
+    .gallery-pin { position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; align-items: center; }
+    /* Full-width 6-col grid */
+    .gallery-masonry { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; width: 100%; transform: scale(1.5); transform-origin: center center; will-change: transform; }
+    .gallery-item { aspect-ratio: 3/4; overflow: hidden; position: relative; border-radius: 0; margin-bottom: 0; break-inside: unset; }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.55s cubic-bezier(0.4,0,0.2,1), filter 0.55s ease; filter: brightness(0.8) saturate(0.9); }
+    .gallery-item:hover img { transform: scale(1.06); filter: brightness(1) saturate(1.1); }
+    .gallery-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.52) 0%, transparent 50%); opacity: 0; transition: opacity 0.28s; }
     .gallery-item:hover .gallery-overlay { opacity: 1; }
 
     /* ─── Stats ──────────────────────────────────────────── */
@@ -716,40 +695,34 @@
       letter-spacing: 0.2px;
     }
 
-    /* ── Shared footer ── */
-    .sf { background: #070707; border-top: 1px solid rgba(255,255,255,0.06); }
-    .sf-inner { max-width: 1240px; margin: 0 auto; padding: 0 var(--px); }
-    .sf-top { display: flex; gap: 72px; padding: 72px 0 48px; }
-    .sf-brand { display: flex; flex-direction: column; flex-shrink: 0; width: 160px; }
-    .sf-cols { display: grid; grid-template-columns: repeat(5, 1fr); gap: 28px; flex: 1; }
-    .sf-col-h { font-size: 10.5px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: rgba(255,255,255,0.2); margin-bottom: 18px; display: block; }
-    .sf-col ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
-    .sf-col ul li a { font-size: 13px; color: rgba(255,255,255,0.38); text-decoration: none; transition: color 0.15s; }
-    .sf-col ul li a:hover { color: rgba(255,255,255,0.75); }
-    .sf-trust { display: flex; flex-direction: column; gap: 14px; }
-    .sf-soc2 { display: flex; align-items: center; gap: 8px; text-decoration: none; font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.35); transition: color 0.15s; }
-    .sf-soc2:hover { color: rgba(255,255,255,0.65); }
-    .sf-soc2 svg { width: 26px; height: 26px; flex-shrink: 0; }
-    .sf-tp { text-decoration: none; display: flex; flex-direction: column; gap: 7px; }
-    .sf-tp-name { display: flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.5); }
-    .sf-tp-stars { display: flex; gap: 2px; }
-    .sf-tp-star { width: 20px; height: 20px; background: #219653; display: flex; align-items: center; justify-content: center; }
-    .sf-tp-star svg { width: 11px; height: 11px; fill: #fff; }
-    .sf-app { display: flex; flex-direction: column; gap: 9px; margin-top: auto; padding-top: 36px; }
-    .sf-app-lbl { font-size: 10px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: rgba(255,255,255,0.2); margin-bottom: 2px; }
-    .sf-store { display: inline-flex; align-items: center; gap: 7px; padding: 7px 12px; border-radius: 9px; border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); text-decoration: none; font-size: 11.5px; font-weight: 600; transition: border-color 0.15s, color 0.15s; }
-    .sf-store:hover { border-color: rgba(255,255,255,0.28); color: #fff; }
-    .sf-store svg { width: 15px; height: 15px; flex-shrink: 0; }
-    .sf-wordmark { font-size: 17vw; font-weight: 900; color: rgba(255,255,255,0.04); text-align: center; line-height: 0.85; letter-spacing: -0.04em; user-select: none; pointer-events: none; padding: 4px 0 0; font-family: 'Inter', sans-serif; }
-    .sf-bar { display: flex; justify-content: space-between; align-items: center; padding: 18px 0 32px; border-top: 1px solid rgba(255,255,255,0.05); }
-    .sf-bar-l { display: flex; align-items: center; gap: 2px; }
-    .sf-copy { font-size: 12px; color: rgba(255,255,255,0.2); }
-    .sf-cookies { font-size: 12px; color: rgba(255,255,255,0.2); text-decoration: none; padding: 0 14px; transition: color 0.15s; }
-    .sf-cookies:hover { color: rgba(255,255,255,0.5); }
-    .sf-socials { display: flex; align-items: center; gap: 2px; }
-    .sf-soc { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.3); text-decoration: none; transition: color 0.15s, background 0.15s; }
-    .sf-soc:hover { color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.06); }
-    .sf-soc svg { width: 15px; height: 15px; }
+    /* Footer injected via footer.js */
+
+    /* ─── Skeleton loaders ───────────────────────────────── */
+    .skeleton {
+      position: absolute; inset: 0; z-index: 3;
+      background: #1c1c1c;
+      border-radius: inherit;
+      overflow: hidden;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .skeleton::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255,255,255,0.055) 40%,
+        rgba(255,255,255,0.09) 50%,
+        rgba(255,255,255,0.055) 60%,
+        transparent 100%);
+      background-size: 200% 100%;
+      animation: shimmer 1.6s infinite;
+    }
+    .skeleton.hidden { opacity: 0; pointer-events: none; }
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
 
     /* ─── Scroll reveal & Premium animations ──────────────── */
     .reveal {
@@ -916,6 +889,138 @@
     .styles-bento.in .s-card:nth-child(8) { transition-delay: 0.46s; }
 
     /* 8. Hero glow — removed per user request */
+
+    /* ══════════════════════════════════════════
+       RESPONSIVE — TABLET (≤ 1024px)
+    ══════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      /* Hero */
+      .arch-hero { grid-template-columns: 1fr; height: auto; min-height: 100svh; }
+      .hero-left { padding: 120px 40px 60px; padding-top: 120px; }
+      .hero-right { height: 56vw; min-height: 300px; max-height: 480px; padding: 12px 20px 20px; }
+
+      /* Capabilities */
+      .caps-grid { grid-template-columns: repeat(2, 1fr); }
+
+      /* Transform */
+      .arch-transform-header { grid-template-columns: 1fr; gap: 24px; }
+      .compare-row { grid-template-columns: 1fr; }
+
+      /* Feature Bento */
+      .bento { grid-template-columns: 1fr; grid-template-rows: auto auto auto; height: auto; gap: 12px; }
+      .bcard-main { grid-row: auto; aspect-ratio: 16/9; }
+      .bcard-tr, .bcard-br { grid-column: auto; }
+
+      /* Styles bento */
+      .styles-bento { grid-template-columns: repeat(6, 1fr); }
+      .s-card:nth-child(1) { grid-column: span 3; height: 280px; }
+      .s-card:nth-child(2) { grid-column: span 3; height: 280px; }
+      .s-card:nth-child(3) { grid-column: span 3; height: 280px; }
+      .s-card:nth-child(4) { grid-column: span 3; height: 240px; }
+      .s-card:nth-child(5) { grid-column: span 3; height: 240px; }
+      .s-card:nth-child(6) { grid-column: span 3; height: 240px; }
+      .s-card:nth-child(7) { grid-column: span 6; height: 200px; }
+      .s-card:nth-child(8) { grid-column: span 6; height: 200px; }
+
+      /* How */
+      .arch-how-head { padding: 52px 40px 0; flex-direction: column; gap: 16px; }
+      .arch-how-head p { text-align: left; max-width: 100%; }
+
+      /* Templates */
+      .templates-grid { grid-template-columns: 1fr 1fr; }
+
+      /* Stats */
+      .arch-stats-inner { grid-template-columns: 1fr 1fr; }
+      .stat-item:nth-child(2) { border-right: none; }
+    }
+
+    /* ══════════════════════════════════════════
+       RESPONSIVE — MOBILE (≤ 768px)
+    ══════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      :root { --px: 20px; }
+
+      /* Hero */
+      .arch-hero { grid-template-columns: 1fr; }
+      .hero-left { padding: 96px 24px 48px; }
+      .hero-headline { font-size: clamp(38px, 10vw, 56px); letter-spacing: -2px; }
+      .hero-body { font-size: 15px; }
+      .hero-ctas { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .hero-cta-primary, .hero-cta-ghost { width: 100%; justify-content: center; }
+      .hero-right { height: 72vw; min-height: 260px; max-height: 360px; padding: 8px 12px 12px; }
+
+      /* Marquee items — smaller */
+      .mq-item { width: 200px; height: 140px; }
+
+      /* Capabilities */
+      .arch-caps { padding: 80px 0 0; }
+      .arch-caps-header { padding: 0 24px 52px; }
+      .caps-grid { grid-template-columns: 1fr 1fr; }
+      .caps-card { aspect-ratio: 2/3; }
+      .caps-card-title { font-size: 20px; }
+
+      /* Transform section */
+      .arch-transform { padding: 80px 24px; }
+      .arch-transform-header { grid-template-columns: 1fr; gap: 20px; }
+      .arch-transform-header p { text-align: left; }
+      .compare-row { grid-template-columns: 1fr; gap: 16px; }
+      .compare-wrap.large { aspect-ratio: 4/3; }
+
+      /* Feature bento */
+      .arch-features { padding: 80px 24px; }
+      .bento { height: auto; grid-template-columns: 1fr; gap: 10px; }
+      .bcard-main { aspect-ratio: 4/3; }
+      .sketch-to-render { flex-direction: column; }
+      .str-side { aspect-ratio: 4/3; width: 100%; }
+
+      /* Styles bento */
+      .arch-styles { padding: 80px 0; }
+      .arch-styles-inner { padding: 0 20px; gap: 32px; }
+      .arch-styles-head { flex-direction: column; align-items: flex-start; }
+      .arch-styles-head p { text-align: left; max-width: 100%; }
+      .styles-bento { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .s-card:nth-child(n) { grid-column: span 1 !important; height: 180px !important; }
+      .s-card:nth-child(1), .s-card:nth-child(2) { height: 220px !important; }
+
+      /* How it works */
+      .arch-how { padding: 60px 24px; }
+      .arch-how-inner { border-radius: 20px; }
+      .arch-how-head { padding: 40px 28px 0; flex-direction: column; gap: 14px; }
+      .arch-how-head p { text-align: left; max-width: 100%; }
+      .steps-row { grid-template-columns: 1fr; }
+      .step-card { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.08); }
+      .step-card:last-child { border-bottom: none; }
+      .step-img { aspect-ratio: 16/9; }
+
+      /* Templates */
+      .arch-templates { padding: 80px 24px; }
+      .tmpl-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .templates-grid { grid-template-columns: 1fr; gap: 16px; }
+
+      /* Gallery — disable sticky scroll */
+      .arch-gallery { padding-top: 80px; }
+      .gallery-pin-wrap { height: auto; }
+      .gallery-pin { position: relative; height: auto; display: block; }
+      .gallery-masonry { transform: none; grid-template-columns: repeat(3, 1fr); }
+      .gallery-item { aspect-ratio: 1/1; border-radius: 8px; }
+
+      /* Stats */
+      .arch-stats { padding: 0 24px; }
+      .arch-stats-inner { grid-template-columns: 1fr 1fr; }
+      .stat-item { padding: 40px 20px; }
+      .stat-item:first-child { padding-left: 20px; }
+      .stat-item:nth-child(1), .stat-item:nth-child(2) { border-bottom: 1px solid rgba(0,0,0,0.07); }
+      .stat-item:nth-child(2) { border-right: none; }
+      .stat-item:last-child { border-right: 1px solid rgba(0,0,0,0.07); }
+      .stat-item:nth-child(4) { border-right: none; }
+
+      /* CTA */
+      .arch-cta-inner { padding: 80px 24px; }
+      .arch-cta h2 { font-size: clamp(36px, 9vw, 56px); }
+      .arch-cta-btns { flex-direction: column; align-items: stretch; gap: 10px; }
+      .arch-cta-btns .cta-btn-primary,
+      .arch-cta-btns .cta-btn-ghost { width: 100%; justify-content: center; }
+    }
   </style>
 </head>
 <body>
@@ -930,6 +1035,9 @@
 
   <!-- ─── Scroll progress ──────────────────────────────── -->
   <div id="scroll-prog"></div>
+
+  <!-- ─── Navbar scrim ────────────────────────────────── -->
+  <div id="nav-scrim"></div>
 
   <!-- ─── Navbar ─────────────────────────────────────── -->
   <header id="site-nav"></header>
@@ -1605,25 +1713,28 @@
   <section class="arch-gallery">
     <div class="arch-gallery-inner">
       <div class="arch-gallery-head reveal-blur">
-        <div style="display:flex;flex-direction:column;gap:12px;">
-          <span class="section-label">Gallery</span>
-          <h2>Created with ImagineArt</h2>
-        </div>
+        <span class="section-label">Gallery</span>
+        <h2>Created with ImagineArt</h2>
         <p>A glimpse of what 50,000+ architects and designers are building every day</p>
+        <a href="#" class="arch-gallery-link">Browse all work →</a>
       </div>
-      <div class="gallery-masonry reveal reveal-d1">
-        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
-        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
-        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
-        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
-        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1560185007-cde436f6a4d0?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
-        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1600573472592-401b489a3cdc?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
-        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
-        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
-        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1503708928676-1cb796a0891e?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
-        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
-        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
-        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+    </div>
+    <div class="gallery-pin-wrap">
+      <div class="gallery-pin">
+        <div class="gallery-masonry" id="archGalleryGrid">
+          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1560185007-cde436f6a4d0?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1600573472592-401b489a3cdc?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1503708928676-1cb796a0891e?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+        </div>
       </div>
     </div>
   </section>
@@ -1670,111 +1781,7 @@
   </section>
 
   <!-- ─── Footer ───────────────────────────────────────── -->
-  <footer class="sf">
-    <div class="sf-inner">
-
-      <div class="sf-top">
-        <!-- Brand + App store -->
-        <div class="sf-brand">
-          <svg width="110" height="28" viewBox="0 0 158 39" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.45"><path d="M25.9304 11.5692C22.9368 10.8701 19.5513 10.6474 20.371 5.18344L26.4248 6.88008L28.4962 7.38328C28.3938 3.28641 25.0439 0 20.9234 0H7.54167C3.37215 0 0 3.37992 0 7.53914V13.8759C0 16.009 1.14484 16.5968 2.57923 16.9308H2.57032C5.56382 17.6344 8.94933 17.8615 8.12968 23.321L2.07585 21.6244L0.00445461 21.1256C0.0890924 25.2091 3.4256 28.5 7.54167 28.5H20.9679C25.1285 28.5 28.5096 25.1201 28.5096 20.9609V14.6196C28.5096 12.4999 27.3603 11.8987 25.9304 11.5692ZM14.2503 22.8757C12.9229 18.8857 9.76453 15.626 5.62619 14.25C9.76453 12.874 12.9229 9.6232 14.2503 5.6332C15.5823 9.6232 18.7361 12.8784 22.8789 14.2545C18.7361 15.6349 15.5823 18.8857 14.2503 22.8757Z" fill="white"/><path d="M41.7078 6.40685H38.6192V21.1996H41.7078V6.40685Z" fill="white"/></svg>
-          <div class="sf-app">
-            <span class="sf-app-lbl">Try Imagine</span>
-            <a href="https://app.adjust.com/1a1xymg6" class="sf-store" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-              App Store
-            </a>
-            <a href="https://app.adjust.com/1rx90a0u" class="sf-store" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.75c.33.18.7.26 1.08.22l13.12-7.57-2.82-2.82-11.38 10.17zM.75 1.13C.28 1.63 0 2.39 0 3.36v17.28c0 .97.28 1.73.76 2.22l.12.11 9.68-9.68v-.23L.87 3.02.75 1.13zM20.9 9.61l-2.8-1.62-3.15 3.14 3.15 3.15 2.81-1.62c.8-.46.8-1.21 0-1.67v.62zM4.26.25L17.38 7.82l-2.82 2.82L3.18.47A1.39 1.39 0 014.26.25z"/></svg>
-              Google Play
-            </a>
-          </div>
-        </div>
-
-        <!-- Link columns -->
-        <div class="sf-cols">
-          <div class="sf-col">
-            <span class="sf-col-h">Explore</span>
-            <ul>
-              <li><a href="#">Image</a></li>
-              <li><a href="#">Video</a></li>
-              <li><a href="#">Music</a></li>
-              <li><a href="#">Voice</a></li>
-              <li><a href="#">Teams</a></li>
-            </ul>
-          </div>
-          <div class="sf-col">
-            <span class="sf-col-h">Tools</span>
-            <ul>
-              <li><a href="#">AI Image Generator</a></li>
-              <li><a href="#">AI Art Generator</a></li>
-              <li><a href="#">AI Video Generator</a></li>
-              <li><a href="#">AI Music Generator</a></li>
-              <li><a href="#">AI Avatar Generator</a></li>
-              <li><a href="#">AI Shorts Generator</a></li>
-              <li><a href="#">AI Voice Generator</a></li>
-            </ul>
-          </div>
-          <div class="sf-col">
-            <span class="sf-col-h">Contact Us</span>
-            <ul>
-              <li><a href="#">Contact Sales</a></li>
-              <li><a href="https://calendly.com/d/cr9s-6pt-mr3/one-on-one-demo-with-an-imagineart-expert" target="_blank" rel="noopener">Book a demo</a></li>
-            </ul>
-          </div>
-          <div class="sf-col">
-            <span class="sf-col-h">Community</span>
-            <ul>
-              <li><a href="https://discord.com/invite/z7kjUyvAbv" target="_blank" rel="noopener">Discord</a></li>
-              <li><a href="https://x.com/ImagineArt_X" target="_blank" rel="noopener">Twitter</a></li>
-              <li><a href="https://www.instagram.com/imagineartofficial" target="_blank" rel="noopener">Instagram</a></li>
-            </ul>
-          </div>
-          <div class="sf-col">
-            <span class="sf-col-h">Trust & Reviews</span>
-            <div class="sf-trust">
-              <a href="https://trust.imagine.art" class="sf-soc2" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 6v5c0 5.25 3.5 10.15 8 11.35C16.5 21.15 20 16.25 20 11V6z"/></svg>
-                SOC2 Compliant
-              </a>
-              <a href="https://www.trustpilot.com/review/www.imagine.art" class="sf-tp" target="_blank" rel="noopener">
-                <div class="sf-tp-name">
-                  <svg viewBox="0 0 24 24" fill="#219653" width="14" height="14"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
-                  Trustpilot
-                </div>
-                <div class="sf-tp-stars">
-                  <div class="sf-tp-star"><svg viewBox="0 0 12 12"><path d="M6 1l1.2 3.6H11L8.1 6.9l1.1 3.6L6 8.4l-3.2 2.1 1.1-3.6L1 4.6h3.8z" fill="white"/></svg></div>
-                  <div class="sf-tp-star"><svg viewBox="0 0 12 12"><path d="M6 1l1.2 3.6H11L8.1 6.9l1.1 3.6L6 8.4l-3.2 2.1 1.1-3.6L1 4.6h3.8z" fill="white"/></svg></div>
-                  <div class="sf-tp-star"><svg viewBox="0 0 12 12"><path d="M6 1l1.2 3.6H11L8.1 6.9l1.1 3.6L6 8.4l-3.2 2.1 1.1-3.6L1 4.6h3.8z" fill="white"/></svg></div>
-                  <div class="sf-tp-star"><svg viewBox="0 0 12 12"><path d="M6 1l1.2 3.6H11L8.1 6.9l1.1 3.6L6 8.4l-3.2 2.1 1.1-3.6L1 4.6h3.8z" fill="white"/></svg></div>
-                  <div class="sf-tp-star"><svg viewBox="0 0 12 12"><path d="M6 1l1.2 3.6H11L8.1 6.9l1.1 3.6L6 8.4l-3.2 2.1 1.1-3.6L1 4.6h3.8z" fill="white"/></svg></div>
-                </div>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Wordmark -->
-      <div class="sf-wordmark" aria-hidden="true">imagine</div>
-
-      <!-- Bottom bar -->
-      <div class="sf-bar">
-        <div class="sf-bar-l">
-          <span class="sf-copy">© 2025 Vyro Turkey. All rights reserved.</span>
-          <a href="#" class="sf-cookies">Manage Cookie Preferences</a>
-        </div>
-        <div class="sf-socials">
-          <a href="https://www.facebook.com/groups/imagineai" class="sf-soc" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
-          <a href="https://x.com/ImagineArt_X" class="sf-soc" target="_blank" rel="noopener" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.741l7.432-8.5L2.25 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-          <a href="https://discord.com/invite/z7kjUyvAbv" class="sf-soc" target="_blank" rel="noopener" aria-label="Discord"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.04.03.05a19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028 14.09 14.09 0 001.226-1.994.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128c.126-.094.252-.192.372-.292a.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.1.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></a>
-          <a href="https://www.instagram.com/imagineartofficial" class="sf-soc" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
-          <a href="https://www.youtube.com/@imagineartofficial" class="sf-soc" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12z"/></svg></a>
-          <a href="https://www.reddit.com/r/ImagineAiArt/" class="sf-soc" target="_blank" rel="noopener" aria-label="Reddit"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg></a>
-        </div>
-      </div>
-
-    </div>
-  </footer>
+  <div id="site-footer"></div>
 
   <script>
     // ── Premium Scroll Reveal System ────────────────────────
@@ -2029,6 +2036,15 @@
       }, { passive: true });
     })();
 
+    // Navbar scrim — fade out once user scrolls past hero
+    (function() {
+      const scrim = document.getElementById('nav-scrim');
+      if (!scrim) return;
+      window.addEventListener('scroll', () => {
+        scrim.classList.toggle('hidden', window.scrollY > 80);
+      }, { passive: true });
+    })();
+
     // 5. Bento grid reveal (separate observer so stagger works)
     (function() {
       const bento = document.querySelector('.styles-bento');
@@ -2099,6 +2115,65 @@
       els.forEach(el => obs.observe(el));
     })();
   </script>
+  <script>
+    // Gallery pinch zoom-out
+    (function() {
+      const pinWrap = document.querySelector('.gallery-pin-wrap');
+      const grid = document.getElementById('archGalleryGrid');
+      if (!pinWrap || !grid) return;
+      const SCALE_START = 1.5, SCALE_END = 1.0;
+      function update() {
+        if (window.innerWidth <= 768) { grid.style.transform = ''; return; }
+        const rect = pinWrap.getBoundingClientRect();
+        const scrollRange = pinWrap.offsetHeight - window.innerHeight;
+        const progress = Math.max(0, Math.min(1, -rect.top / scrollRange));
+        grid.style.transform = 'scale(' + (SCALE_START - (SCALE_START - SCALE_END) * progress) + ')';
+      }
+      window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update, { passive: true });
+      update();
+    })();
+
+    // ── Skeleton loaders ─────────────────────────────────────
+    (function() {
+      function addSkeleton(container) {
+        const sk = document.createElement('div');
+        sk.className = 'skeleton';
+        container.appendChild(sk);
+        return sk;
+      }
+      function removeSkeleton(sk) {
+        sk.classList.add('hidden');
+        setTimeout(() => sk.remove(), 420);
+      }
+      function attachToMedia(container, media) {
+        const sk = addSkeleton(container);
+        if (!media) { removeSkeleton(sk); return; }
+        if (media.tagName === 'VIDEO' && media.readyState >= 3) { removeSkeleton(sk); return; }
+        if (media.tagName === 'IMG'   && media.complete && media.naturalWidth) { removeSkeleton(sk); return; }
+        const evt = media.tagName === 'VIDEO' ? 'loadeddata' : 'load';
+        media.addEventListener(evt, () => removeSkeleton(sk), { once: true });
+        media.addEventListener('error', () => removeSkeleton(sk), { once: true });
+      }
+      // Hero visual panel (contains the slideshow)
+      document.querySelectorAll('.hero-panel').forEach(el =>
+        attachToMedia(el, el.querySelector('img, video'))
+      );
+      // Style cards
+      document.querySelectorAll('.s-card').forEach(el =>
+        attachToMedia(el, el.querySelector('img, video'))
+      );
+      // Capability cards
+      document.querySelectorAll('.caps-card').forEach(el =>
+        attachToMedia(el, el.querySelector('img, video'))
+      );
+      // Gallery items
+      document.querySelectorAll('.gallery-item').forEach(el =>
+        attachToMedia(el, el.querySelector('img, video'))
+      );
+    })();
+  </script>
   <script src="navbar.js"></script>
+  <script src="footer.js"></script>
 </body>
 </html>
