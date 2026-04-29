@@ -199,7 +199,16 @@
     /* ══════════════════════════════════════
        STATEMENT
     ══════════════════════════════════════ */
-    .statement { background: var(--white); padding: 140px var(--px); text-align: center; }
+    /* Scroll-pin wrapper — tall enough to "hold" the viewport while highlight plays */
+    .statement-pin { position: relative; height: 300vh; }
+    .statement {
+      background: var(--white);
+      position: sticky; top: 0;
+      height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 0 var(--px);
+    }
     .statement-inner { max-width: 800px; margin: 0 auto; }
     .statement h2 {
       font-size: clamp(22px, 2.6vw, 38px); font-weight: 600;
@@ -524,10 +533,10 @@
     .stagger.in > *:nth-child(4) { opacity: 1; transform: none; transition-delay: 0.21s; }
     .stagger.in > *:nth-child(5) { opacity: 1; transform: none; transition-delay: 0.27s; }
     .hw { display: inline-block; opacity: 0; transform: translateY(22px); animation: hwUp 0.75s cubic-bezier(0.16,1,0.3,1) forwards; }
-    .hw-1 { font-weight: 300; animation-delay: 0.05s; }
-    .hw-2 { font-weight: 800; animation-delay: 0.16s; }
-    .hw-3 { font-weight: 400; animation-delay: 0.27s; }
-    .hw-4 { font-weight: 300; animation-delay: 0.38s; }
+    .hw-1 { animation-delay: 0.05s; }
+    .hw-2 { animation-delay: 0.16s; }
+    .hw-3 { animation-delay: 0.27s; }
+    .hw-4 { animation-delay: 0.38s; }
     .hw em { font-style: italic; font-weight: inherit; color: #fff; }
     em { color: rgba(255,255,255,0.42); }
     @keyframes hwUp { to { opacity: 1; transform: none; } }
@@ -587,15 +596,17 @@
   </section>
 
   <!-- ══ STATEMENT ══ -->
-  <section class="statement">
-    <div class="statement-inner">
-      <h2 id="statement-text">
-        <span class="w">A</span> <span class="w">studio</span> <span class="w">shoot</span> <span class="w">costs</span> <span class="w">$4,000</span> <span class="w">a</span> <span class="w">day.</span><br>
-        <span class="w">Your</span> <span class="w">next</span> <span class="w">thousand</span> <span class="w">product</span> <span class="w">photos</span><br>
-        <span class="w">cost</span> <span class="w">less</span> <span class="w">than</span> <span class="w">lunch.</span>
-      </h2>
-    </div>
-  </section>
+  <div class="statement-pin">
+    <section class="statement">
+      <div class="statement-inner">
+        <h2 id="statement-text">
+          <span class="w">A</span> <span class="w">studio</span> <span class="w">shoot</span> <span class="w">costs</span> <span class="w">$4,000</span> <span class="w">a</span> <span class="w">day.</span><br>
+          <span class="w">Your</span> <span class="w">next</span> <span class="w">thousand</span> <span class="w">product</span> <span class="w">photos</span><br>
+          <span class="w">cost</span> <span class="w">less</span> <span class="w">than</span> <span class="w">lunch.</span>
+        </h2>
+      </div>
+    </section>
+  </div>
 
   <!-- ══ STATS ══ -->
   <section class="stats">
@@ -827,20 +838,16 @@
       });
     })();
 
-    // Statement: word-by-word scroll highlight
+    // Statement: scroll-pinned word-by-word highlight
+    // Progress is driven entirely by how far the user has scrolled inside the 300vh pin wrapper
     (function() {
-      const words = document.querySelectorAll('#statement-text .w');
-      const section = document.querySelector('.statement');
-      if (!words.length || !section) return;
+      const words  = document.querySelectorAll('#statement-text .w');
+      const pin    = document.querySelector('.statement-pin');
+      if (!words.length || !pin) return;
       function update() {
-        const vh = window.innerHeight;
-        const r = section.getBoundingClientRect();
-        // Start when section top hits 75% down the viewport, finish when section bottom hits 25%
-        const start = vh * 0.75;
-        const end   = vh * 0.25;
-        const totalTravel = r.height + (start - end);
-        const traveled    = start - r.top;
-        const progress    = Math.max(0, Math.min(1, traveled / totalTravel));
+        const scrolled    = window.scrollY - pin.offsetTop;          // px scrolled past pin start
+        const scrollRange = pin.offsetHeight - window.innerHeight;   // total scrollable range inside pin
+        const progress    = Math.max(0, Math.min(1, scrolled / scrollRange));
         const litCount    = Math.round(progress * words.length);
         words.forEach((w, i) => w.classList.toggle('lit', i < litCount));
       }
