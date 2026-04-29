@@ -233,7 +233,7 @@
     /* ══════════════════════════════════════
        SHOWCASE CARDS
     ══════════════════════════════════════ */
-    .showcase { background: #0b0b0b; padding: 100px var(--px) 110px; }
+    .showcase { background: var(--white); padding: 100px var(--px) 110px; }
     .showcase-inner { max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; gap: 44px; }
     .showcase-head { display: flex; align-items: flex-end; justify-content: space-between; }
     .showcase-head-left { display: flex; flex-direction: column; gap: 10px; }
@@ -244,17 +244,17 @@
     }
     .showcase-eyebrow svg { opacity: 0.5; }
     .showcase-title { font-size: clamp(28px, 3.2vw, 46px); font-weight: 600; line-height: 1.05; letter-spacing: -2px; }
-    .showcase-title .st1 { display: block; color: #fff; }
-    .showcase-title .st2 { display: block; color: rgba(255,255,255,0.32); }
+    .showcase-title .st1 { display: block; color: var(--ink); }
+    .showcase-title .st2 { display: block; color: var(--muted); }
     .showcase-more {
       display: inline-flex; align-items: center; gap: 5px;
       height: 40px; padding: 0 16px 0 20px; border-radius: 100px;
-      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.85); font-size: 13px; font-weight: 500;
-      text-decoration: none; backdrop-filter: blur(8px);
-      transition: background 0.2s; white-space: nowrap;
+      background: transparent; border: 1px solid var(--border);
+      color: rgba(15,15,15,0.7); font-size: 13px; font-weight: 500;
+      text-decoration: none; transition: background 0.2s, border-color 0.2s;
+      white-space: nowrap;
     }
-    .showcase-more:hover { background: rgba(255,255,255,0.1); }
+    .showcase-more:hover { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.15); color: var(--ink); }
     .showcase-cards {
       display: flex; justify-content: center; gap: 8px;
     }
@@ -615,32 +615,6 @@
     </div>
   </section>
 
-  <!-- ══ TEMPLATES ══ -->
-  <section class="templates">
-    <div class="templates-inner">
-      <div class="templates-head reveal-blur">
-        <div class="templates-head-left">
-          <span class="tmpl-label">Templates</span>
-          <h2>Every product.<br><em>Every aesthetic.</em></h2>
-        </div>
-        <p>From moody luxury studio to bright editorial — any style, instantly.</p>
-      </div>
-      <div class="styles-bento">
-        <div class="s-card"><video src="assets/ecommerce/ec-template-studio-dark.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Studio</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Studio Dark</div><div class="s-card-sub">Moody, dramatic lighting</div><div class="s-card-prompt">Dark polished surface, dramatic side lighting, premium reflections</div></div></div>
-        <div class="s-card"><video src="assets/ecommerce/ec-template-editorial-clean.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Editorial</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Editorial Clean</div><div class="s-card-sub">Crisp white, sharp detail</div><div class="s-card-prompt">Bright white studio, razor-sharp detail, minimal shadows</div></div></div>
-        <div class="s-card"><video src="assets/ecommerce/ec-template-lifestyle-scene.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Lifestyle</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Lifestyle Scene</div><div class="s-card-sub">Contextual, warm, real</div><div class="s-card-prompt">Natural setting, warm tones, ambient lifestyle context</div></div></div>
-        <div class="s-card"><video src="assets/ecommerce/ec-template-minimal-float.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Minimal</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Minimal Float</div><div class="s-card-sub">Clean, floating, shadowless</div><div class="s-card-prompt">Pure white background, product floating, zero distraction</div></div></div>
-        <div class="s-card"><video src="assets/ecommerce/ec-template-luxury-marble.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Luxury</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Luxury Marble</div><div class="s-card-sub">Marble, gold, opulence</div><div class="s-card-prompt">White marble surface, gold accents, premium atmosphere</div></div></div>
-        <div class="s-card"><video src="assets/ecommerce/ec-template-bold-color.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Bold</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Bold Color</div><div class="s-card-sub">Vivid, high contrast, pop</div><div class="s-card-prompt">Saturated color background, bold shadow play, editorial energy</div></div></div>
-        <div class="s-card"><video src="assets/ecommerce/ec-template-outdoor-natural.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Outdoor</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Outdoor Natural</div><div class="s-card-sub">Sun flare, bokeh, travel</div><div class="s-card-prompt">Natural outdoor light, golden sun flare, travel aesthetic</div></div></div>
-        <div class="s-card"><video src="assets/ecommerce/ec-template-ambient-glow.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Ambient</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Ambient Glow</div><div class="s-card-sub">Warm, soft, bokeh flame</div><div class="s-card-prompt">Warm golden light, linen textures, soft bokeh atmosphere</div></div></div>
-      </div>
-      <div class="tmpl-cta reveal">
-        <a href="#" class="btn-outline-light">Explore Templates <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 7.5h9M8 4l4 3.5L8 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-      </div>
-    </div>
-  </section>
-
   <!-- ══ SHOWCASE CARDS ══ -->
   <section class="showcase">
     <div class="showcase-inner">
@@ -673,6 +647,32 @@
         </a>
       </div>
 
+    </div>
+  </section>
+
+  <!-- ══ TEMPLATES ══ -->
+  <section class="templates">
+    <div class="templates-inner">
+      <div class="templates-head reveal-blur">
+        <div class="templates-head-left">
+          <span class="tmpl-label">Templates</span>
+          <h2>Every product.<br><em>Every aesthetic.</em></h2>
+        </div>
+        <p>From moody luxury studio to bright editorial — any style, instantly.</p>
+      </div>
+      <div class="styles-bento">
+        <div class="s-card"><video src="assets/ecommerce/ec-template-studio-dark.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Studio</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Studio Dark</div><div class="s-card-sub">Moody, dramatic lighting</div><div class="s-card-prompt">Dark polished surface, dramatic side lighting, premium reflections</div></div></div>
+        <div class="s-card"><video src="assets/ecommerce/ec-template-editorial-clean.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Editorial</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Editorial Clean</div><div class="s-card-sub">Crisp white, sharp detail</div><div class="s-card-prompt">Bright white studio, razor-sharp detail, minimal shadows</div></div></div>
+        <div class="s-card"><video src="assets/ecommerce/ec-template-lifestyle-scene.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Lifestyle</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Lifestyle Scene</div><div class="s-card-sub">Contextual, warm, real</div><div class="s-card-prompt">Natural setting, warm tones, ambient lifestyle context</div></div></div>
+        <div class="s-card"><video src="assets/ecommerce/ec-template-minimal-float.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Minimal</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Minimal Float</div><div class="s-card-sub">Clean, floating, shadowless</div><div class="s-card-prompt">Pure white background, product floating, zero distraction</div></div></div>
+        <div class="s-card"><video src="assets/ecommerce/ec-template-luxury-marble.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Luxury</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Luxury Marble</div><div class="s-card-sub">Marble, gold, opulence</div><div class="s-card-prompt">White marble surface, gold accents, premium atmosphere</div></div></div>
+        <div class="s-card"><video src="assets/ecommerce/ec-template-bold-color.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Bold</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Bold Color</div><div class="s-card-sub">Vivid, high contrast, pop</div><div class="s-card-prompt">Saturated color background, bold shadow play, editorial energy</div></div></div>
+        <div class="s-card"><video src="assets/ecommerce/ec-template-outdoor-natural.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Outdoor</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Outdoor Natural</div><div class="s-card-sub">Sun flare, bokeh, travel</div><div class="s-card-prompt">Natural outdoor light, golden sun flare, travel aesthetic</div></div></div>
+        <div class="s-card"><video src="assets/ecommerce/ec-template-ambient-glow.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Ambient</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Ambient Glow</div><div class="s-card-sub">Warm, soft, bokeh flame</div><div class="s-card-prompt">Warm golden light, linen textures, soft bokeh atmosphere</div></div></div>
+      </div>
+      <div class="tmpl-cta reveal">
+        <a href="#" class="btn-outline-light">Explore Templates <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 7.5h9M8 4l4 3.5L8 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
     </div>
   </section>
 
