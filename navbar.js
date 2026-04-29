@@ -73,6 +73,79 @@
   .navbar:not(.scrolled) .nav-link:hover { color: #fff; background: rgba(255,255,255,0.08); }
   .navbar.scrolled .nav-link { color: rgba(15,15,15,0.75); }
   .navbar.scrolled .nav-link:hover { color: #0f0f0f; background: rgba(15,15,15,0.05); }
+
+  /* ─── Hamburger ───────────────────────────────────────── */
+  .nav-hamburger {
+    display: none;
+    align-items: center; justify-content: center;
+    width: 38px; height: 38px; border-radius: 10px;
+    background: transparent; border: none; cursor: pointer;
+    color: #fff; transition: background 0.15s; padding: 0; flex-shrink: 0;
+  }
+  .nav-hamburger:hover { background: rgba(255,255,255,0.1); }
+  .navbar.scrolled .nav-hamburger { color: #0f0f0f; }
+  .navbar.scrolled .nav-hamburger:hover { background: rgba(0,0,0,0.06); }
+  .nav-hamburger .bar {
+    display: block; width: 18px; height: 1.5px;
+    background: currentColor; border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.2s ease;
+    transform-origin: center;
+  }
+  .nav-hamburger .bars { display: flex; flex-direction: column; gap: 4.5px; }
+  .nav-hamburger.open .bar:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .nav-hamburger.open .bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .nav-hamburger.open .bar:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+  /* ─── Mobile menu panel ──────────────────────────────── */
+  .nav-mobile-menu {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 99;
+    padding-top: 72px;
+    pointer-events: none; visibility: hidden;
+  }
+  .nav-mobile-menu.open { pointer-events: auto; visibility: visible; }
+  .nav-mobile-inner {
+    margin: 0 12px;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: saturate(200%) blur(24px);
+    -webkit-backdrop-filter: saturate(200%) blur(24px);
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 18px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.14);
+    padding: 8px;
+    transform: translateY(-12px); opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), opacity 0.25s ease;
+  }
+  .nav-mobile-menu.open .nav-mobile-inner {
+    transform: translateY(0); opacity: 1;
+  }
+  .nav-mobile-link {
+    display: flex; align-items: center;
+    padding: 11px 14px; border-radius: 10px;
+    font-size: 15px; font-weight: 500;
+    color: #0f0f0f; text-decoration: none;
+    transition: background 0.12s;
+  }
+  .nav-mobile-link:hover { background: rgba(0,0,0,0.05); }
+  .nav-mobile-section { padding: 6px 14px 4px; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(0,0,0,0.3); }
+  .nav-mobile-sub { padding-left: 10px; }
+  .nav-mobile-sub .nav-mobile-link { font-size: 14px; color: rgba(0,0,0,0.7); }
+  .nav-mobile-sub .nav-mobile-link.current { color: #6929c4; background: #f4f0ff; }
+  .nav-mobile-divider { height: 1px; background: rgba(0,0,0,0.07); margin: 6px 0; }
+  .nav-mobile-actions { display: flex; gap: 8px; padding: 8px 6px 6px; }
+  .nav-mobile-actions .navbar-btn { flex: 1; justify-content: center; height: 42px; font-size: 14px; border-radius: 12px; }
+  .nav-mobile-actions .navbar-btn-ghost { color: #0f0f0f; border: 1px solid rgba(0,0,0,0.1); }
+  .nav-mobile-actions .navbar-btn-ghost:hover { background: rgba(0,0,0,0.05); }
+  .nav-mobile-actions .navbar-btn-dark { background: #111; color: #fff; border: none; }
+  .nav-mobile-actions .navbar-btn-dark:hover { background: #222; }
+
+  /* ─── Responsive breakpoint ──────────────────────────── */
+  @media (max-width: 820px) {
+    .nav-links { display: none; }
+    .nav-actions { display: none; }
+    .nav-hamburger { display: flex; }
+    .navbar-inner { padding: 10px 16px; }
+    .navbar.scrolled { padding: 8px 0; }
+  }
 `;
   document.head.appendChild(style);
 
@@ -238,8 +311,38 @@
         <a href="#" class="navbar-btn navbar-btn-ghost">Sign in</a>
         <a href="#" class="navbar-btn navbar-btn-dark">Try it free</a>
       </div>
+      <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu">
+        <span class="bars">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </span>
+      </button>
     </div>
-  </header>`;
+  </header>
+  <div class="nav-mobile-menu" id="nav-mobile-menu">
+    <div class="nav-mobile-inner">
+      <a href="#" class="nav-mobile-link">Platform</a>
+      <a href="#" class="nav-mobile-link">Pricing</a>
+      <a href="#" class="nav-mobile-link">Resources</a>
+      <a href="#" class="nav-mobile-link">APIs</a>
+      <a href="#" class="nav-mobile-link">Community</a>
+      <div class="nav-mobile-divider"></div>
+      <div class="nav-mobile-section">Usecases</div>
+      <div class="nav-mobile-sub">
+        <a href="#" class="nav-mobile-link">Fashion</a>
+        <a href="./ecommerce.html" class="nav-mobile-link${ecomCurrent}">E-commerce</a>
+        <a href="#" class="nav-mobile-link">Marketing Agencies</a>
+        <a href="#" class="nav-mobile-link">Beauty</a>
+        <a href="./architecture.html" class="nav-mobile-link${archCurrent}">Architecture</a>
+      </div>
+      <div class="nav-mobile-divider"></div>
+      <div class="nav-mobile-actions">
+        <a href="#" class="navbar-btn navbar-btn-ghost">Sign in</a>
+        <a href="#" class="navbar-btn navbar-btn-dark">Try it free</a>
+      </div>
+    </div>
+  </div>`;
 
   var mount = document.getElementById('site-nav');
   if (!mount) return;
@@ -251,4 +354,34 @@
   function onScroll() { navbar.classList.toggle('scrolled', window.scrollY > 20); }
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
+
+  // ── Hamburger toggle ───────────────────────────────────
+  var hamburger = document.getElementById('nav-hamburger');
+  var mobileMenu = document.getElementById('nav-mobile-menu');
+  if (hamburger && mobileMenu) {
+    hamburger.addEventListener('click', function () {
+      var isOpen = mobileMenu.classList.toggle('open');
+      hamburger.classList.toggle('open', isOpen);
+      hamburger.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+    // Close on link click
+    mobileMenu.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function () {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
+    // Close on outside click
+    document.addEventListener('click', function (e) {
+      if (mobileMenu.classList.contains('open') &&
+          !mobileMenu.contains(e.target) &&
+          !hamburger.contains(e.target)) {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    });
+  }
 })();
