@@ -51,11 +51,10 @@
     /* ─── Hero (Editorial Split) ────────────────────────────── */
     .arch-hero {
       position: relative;
-      height: 100vh;
-      min-height: 700px;
+      min-height: 140vh;
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      overflow: hidden;
+      grid-template-columns: 58% 42%;
+      align-items: start;
       background: #0b0b0b;
     }
     /* Subtle dot grid left side */
@@ -67,17 +66,20 @@
       position: absolute; inset: 0;
       z-index: 1; pointer-events: none;
       opacity: 0.07;
+      background-size: cover;
     }
     .hero-lineart-full svg { width: 100%; height: 100%; }
     /* Hero columns sit above the lineart */
     .hero-slides { position: relative; z-index: 2; }
 
-    /* Left column */
+    /* Left column — sticky under navbar */
     .hero-left {
       display: flex; flex-direction: column; justify-content: center;
       padding: 0 40px 48px max(40px, calc((100vw - 1240px) / 2 + 40px));
       padding-top: 100px;
-      position: relative; z-index: 3;
+      position: sticky; top: 68px;
+      height: calc(100vh - 68px);
+      z-index: 3;
       gap: 0;
     }
 
@@ -165,6 +167,7 @@
       position: relative; z-index: 3;
       display: flex; align-items: stretch;
       padding: 28px 36px 28px 16px;
+      min-height: 140vh;
     }
     .hero-panel {
       flex: 1; border-radius: 22px; overflow: hidden; position: relative;
