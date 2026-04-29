@@ -208,31 +208,9 @@
       display: flex; align-items: center; justify-content: center;
       text-align: center;
       padding: 0 var(--px);
-      overflow: hidden;
     }
 
-    /* ── Flow background ── */
-    .statement-bg {
-      position: absolute; inset: 0; pointer-events: none; z-index: 0;
-    }
-    .statement-bg svg { width: 100%; height: 100%; }
-
-    @keyframes fl-drift  { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -900; } }
-    @keyframes fl-driftR { from { stroke-dashoffset: 0; } to { stroke-dashoffset:  900; } }
-    @keyframes fl-driftV { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -700; } }
-
-    .statement-bg .fl {
-      fill: none;
-      stroke: rgba(0,0,0,0.025);
-      stroke-width: 1;
-      stroke-dasharray: 260 160;
-      animation: fl-drift 18s linear infinite;
-    }
-    .statement-bg .fl-r { animation-name: fl-driftR; animation-duration: 22s; }
-    .statement-bg .fl-v { animation-name: fl-driftV; animation-duration: 20s; stroke-dasharray: 200 120; }
-    .statement-bg .fl-s { stroke: rgba(0,0,0,0.015); stroke-dasharray: 180 200; animation-duration: 28s; }
-
-    .statement-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+    .statement-inner { max-width: 800px; margin: 0 auto; }
     .statement h2 {
       font-size: clamp(22px, 2.6vw, 38px); font-weight: 600;
       line-height: 1.32; letter-spacing: -0.8px; color: var(--ink);
@@ -621,42 +599,6 @@
   <!-- ══ STATEMENT ══ -->
   <div class="statement-pin">
     <section class="statement">
-
-      <!-- Animated flow lineart background -->
-      <div class="statement-bg" aria-hidden="true">
-        <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-          <!-- Top horizontal flows -->
-          <path class="fl"   d="M-120,55  C160,20  380,90  620,50  S940,10  1160,55  S1420,90  1600,55"/>
-          <path class="fl-r" d="M-120,115 C180,80  400,150 640,110 S960,70  1180,115 S1440,150 1600,115"/>
-          <path class="fl-s" d="M-120,175 C200,140 420,210 660,170 S980,130 1200,175 S1460,210 1600,175"/>
-          <path class="fl"   d="M-120,235 C220,200 440,260 680,230 S1000,190 1220,235 S1480,260 1600,235" style="animation-delay:-6s"/>
-
-          <!-- Bottom horizontal flows -->
-          <path class="fl"   d="M-120,665 C160,700 380,630 620,665 S940,700 1160,660 S1420,630 1600,665"/>
-          <path class="fl-r" d="M-120,725 C180,760 400,690 640,725 S960,760 1180,720 S1440,690 1600,725"/>
-          <path class="fl-s" d="M-120,785 C200,820 420,750 660,785 S980,820 1200,780 S1460,750 1600,785"/>
-          <path class="fl"   d="M-120,845 C220,880 440,810 680,845 S1000,880 1220,840 S1480,810 1600,845" style="animation-delay:-9s"/>
-
-          <!-- Mid-field subtle sweepers -->
-          <path class="fl-s" d="M-120,360 C280,330 520,390 760,355 S1100,320 1340,365 S1560,390 1600,360" style="animation-delay:-4s"/>
-          <path class="fl-s" d="M-120,450 C300,420 540,480 780,445 S1120,410 1360,455 S1580,480 1600,450" style="animation-delay:-12s"/>
-          <path class="fl-s" d="M-120,540 C260,510 500,570 740,535 S1080,500 1320,545 S1560,570 1600,540" style="animation-delay:-7s"/>
-
-          <!-- Left vertical flows -->
-          <path class="fl-v" d="M60,-60  C20,140  90,340  55,540  S10,740  60,900"/>
-          <path class="fl-v" d="M130,-60 C90,160  160,360 125,560 S80,760  130,940" style="animation-delay:-8s"/>
-          <path class="fl-s fl-v" d="M200,-60 C160,180 230,380 195,580 S150,780 200,960" style="animation-delay:-3s"/>
-
-          <!-- Right vertical flows -->
-          <path class="fl-v" d="M1380,-60 C1420,140 1350,340 1385,540 S1430,740 1380,900"/>
-          <path class="fl-v" d="M1310,-60 C1350,160 1280,360 1315,560 S1360,760 1310,940" style="animation-delay:-11s"/>
-          <path class="fl-s fl-v" d="M1240,-60 C1280,180 1210,380 1245,580 S1290,780 1240,960" style="animation-delay:-5s"/>
-
-          <!-- Diagonal accent curves -->
-          <path class="fl-r fl-s" d="M-120,300 C200,260 460,340 700,290 S1020,240 1260,295 S1520,340 1600,300" style="animation-delay:-14s"/>
-          <path class="fl-s"      d="M-120,600 C240,560 500,640 740,590 S1060,540 1300,595 S1560,640 1600,600" style="animation-delay:-2s"/>
-        </svg>
-      </div>
 
       <div class="statement-inner">
         <h2 id="statement-text">
