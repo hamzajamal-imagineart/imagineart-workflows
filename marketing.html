@@ -841,7 +841,7 @@
   </section>
 
   <!-- ─── Section 3: Ads ──────────────────────────────────── -->
-  <section class="mkt-ads">
+  <section class="mkt-ads" id="sec-ads">
     <div class="mkt-ads-inner">
 
       <div class="ads-head reveal-blur">
@@ -932,7 +932,7 @@
     </div>
   </section>
 
-  <section class="templates">
+  <section class="templates" id="sec-templates">
     <div class="templates-inner">
       <div class="templates-head reveal-blur">
         <div class="templates-head-left">
@@ -959,7 +959,7 @@
   </section>
 
   <!-- ─── Editorial Showcase ─────────────────────────────── -->
-  <section class="mkt-showcase">
+  <section class="mkt-showcase" id="sec-showcase">
     <div class="showcase-driver">
       <div class="showcase-sticky">
 
@@ -1013,7 +1013,7 @@
   </section>
 
   <!-- ─── Section 4: Gallery ─────────────────────────────── -->
-  <section class="mkt-gallery">
+  <section class="mkt-gallery" id="sec-gallery">
     <div class="gallery-header">
       <div class="sec-label reveal">Gallery</div>
       <h2 class="sec-h2 reveal">Real campaigns.<br>Zero production cost.</h2>
@@ -1042,7 +1042,7 @@
 
   <!-- ─── Final CTA ────────────────────────────────────────── -->
   <!-- ─── Final CTA ──────────────────────────────────────── -->
-  <section class="mkt-final">
+  <section class="mkt-final" id="sec-final">
     <video class="mkt-final-bg" src="assets/marketing/mkt-hero-11.mp4" autoplay loop muted playsinline></video>
     <div class="mkt-final-overlay"></div>
     <div class="mkt-final-noise"></div>
@@ -1295,6 +1295,51 @@
         const t = document.body.scrollHeight - window.innerHeight;
         if (t > 0) prog.style.width = (window.scrollY / t * 100) + '%';
       }, { passive: true });
+    })();
+  </script>
+
+  <script>
+    (function () {
+      const NAV_LINKS = [
+        { label: 'Ads',       href: '#sec-ads'       },
+        { label: 'Templates', href: '#sec-templates'  },
+        { label: 'Showcase',  href: '#sec-showcase'   },
+        { label: 'Gallery',   href: '#sec-gallery'    },
+      ];
+      const SHARED_STYLE = `
+        .navbar-btn-ghost { display: none !important; }
+        .nav-link-active { color: #0f0f0f !important; background: rgba(15,15,15,0.09) !important; font-weight: 500 !important; }
+        .navbar:not(.scrolled) .nav-link-active { color: #fff !important; background: rgba(255,255,255,0.18) !important; }
+        .navbar.scrolled .nav-link-active { color: #0f0f0f !important; background: rgba(15,15,15,0.09) !important; }
+        .nav-link { font-weight: 400 !important; }
+      `;
+      const s = document.createElement('style');
+      s.textContent = SHARED_STYLE;
+      document.head.appendChild(s);
+      function init() {
+        const navLinksEl = document.querySelector('.nav-links');
+        if (!navLinksEl) { setTimeout(init, 50); return; }
+        const logo = document.querySelector('.logo');
+        if (logo) logo.addEventListener('click', e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+        navLinksEl.innerHTML = NAV_LINKS.map(l => `<a href="${l.href}" class="nav-link" data-sec="${l.href.slice(1)}">${l.label}</a>`).join('');
+        navLinksEl.addEventListener('click', e => {
+          const a = e.target.closest('.nav-link[data-sec]');
+          if (!a) return; e.preventDefault();
+          const t = document.getElementById(a.dataset.sec);
+          links.forEach(a => a.classList.remove("nav-link-active")); a.classList.add("nav-link-active"); if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+        const sections = NAV_LINKS.map(l => document.getElementById(l.href.slice(1))).filter(Boolean);
+        const links = navLinksEl.querySelectorAll('.nav-link[data-sec]');
+        function setActive() {
+          const scrollY = window.scrollY + window.innerHeight * 0.35;
+          let active = sections[0];
+          sections.forEach(sec => { if (sec.offsetTop <= scrollY) active = sec; });
+          links.forEach(a => a.classList.toggle('nav-link-active', a.dataset.sec === active.id));
+        }
+        window.addEventListener('scroll', setActive, { passive: true });
+        setActive();
+      }
+      init();
     })();
   </script>
 </body>

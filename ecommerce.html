@@ -705,7 +705,7 @@
   </section>
 
   <!-- ══ STATEMENT ══ -->
-  <section class="statement">
+  <section class="statement" id="sec-statement">
     <div class="statement-inner">
       <h2 id="statement-text">
         <span class="w">A</span> <span class="w">studio</span> <span class="w">shoot</span> <span class="w">costs</span> <span class="w">$4,000</span> <span class="w">a</span> <span class="w">day.</span><br>
@@ -716,7 +716,7 @@
   </section>
 
   <!-- ══ STATS ══ -->
-  <section class="stats">
+  <section class="stats" id="sec-stats">
     <div class="stats-inner stagger">
       <div class="stat">
         <div class="stat-row"><span class="stat-num" data-target="80">0</span><span class="stat-sfx">%</span></div>
@@ -738,7 +738,7 @@
   </section>
 
   <!-- ══ SHOWCASE CARDS ══ -->
-  <section class="showcase">
+  <section class="showcase" id="sec-showcase">
     <div class="showcase-inner">
 
       <div class="showcase-head reveal">
@@ -773,7 +773,7 @@
   </section>
 
   <!-- ══ TEMPLATES ══ -->
-  <section class="templates">
+  <section class="templates" id="sec-templates">
     <div class="templates-inner">
       <div class="templates-head reveal-blur">
         <div class="templates-head-left">
@@ -799,7 +799,7 @@
   </section>
 
   <!-- ══ GALLERY ══ -->
-  <section class="gallery">
+  <section class="gallery" id="sec-gallery">
     <div class="gallery-inner">
       <div class="gallery-head reveal">
         <div class="gallery-head-left">
@@ -1124,5 +1124,50 @@
     })();
   </script>
   <script src="footer.js"></script>
+
+  <script>
+    (function () {
+      const NAV_LINKS = [
+        { label: 'Overview',  href: '#sec-statement' },
+        { label: 'Showcase',  href: '#sec-showcase'  },
+        { label: 'Templates', href: '#sec-templates' },
+        { label: 'Gallery',   href: '#sec-gallery'   },
+      ];
+      const SHARED_STYLE = `
+        .navbar-btn-ghost { display: none !important; }
+        .nav-link-active { color: #0f0f0f !important; background: rgba(15,15,15,0.09) !important; font-weight: 500 !important; }
+        .navbar:not(.scrolled) .nav-link-active { color: #fff !important; background: rgba(255,255,255,0.18) !important; }
+        .navbar.scrolled .nav-link-active { color: #0f0f0f !important; background: rgba(15,15,15,0.09) !important; }
+        .nav-link { font-weight: 400 !important; }
+      `;
+      const s = document.createElement('style');
+      s.textContent = SHARED_STYLE;
+      document.head.appendChild(s);
+      function init() {
+        const navLinksEl = document.querySelector('.nav-links');
+        if (!navLinksEl) { setTimeout(init, 50); return; }
+        const logo = document.querySelector('.logo');
+        if (logo) logo.addEventListener('click', e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+        navLinksEl.innerHTML = NAV_LINKS.map(l => `<a href="${l.href}" class="nav-link" data-sec="${l.href.slice(1)}">${l.label}</a>`).join('');
+        navLinksEl.addEventListener('click', e => {
+          const a = e.target.closest('.nav-link[data-sec]');
+          if (!a) return; e.preventDefault();
+          const t = document.getElementById(a.dataset.sec);
+          links.forEach(a => a.classList.remove("nav-link-active")); a.classList.add("nav-link-active"); if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+        const sections = NAV_LINKS.map(l => document.getElementById(l.href.slice(1))).filter(Boolean);
+        const links = navLinksEl.querySelectorAll('.nav-link[data-sec]');
+        function setActive() {
+          const scrollY = window.scrollY + window.innerHeight * 0.35;
+          let active = sections[0];
+          sections.forEach(sec => { if (sec.offsetTop <= scrollY) active = sec; });
+          links.forEach(a => a.classList.toggle('nav-link-active', a.dataset.sec === active.id));
+        }
+        window.addEventListener('scroll', setActive, { passive: true });
+        setActive();
+      }
+      init();
+    })();
+  </script>
 </body>
 </html>

@@ -1043,7 +1043,7 @@
   <header id="site-nav"></header>
 
   <!-- ─── Hero ─────────────────────────────────────────── -->
-  <section class="arch-hero">
+  <section class="arch-hero" id="sec-hero">
     <!-- Film grain texture -->
     <div class="hero-grain"></div>
     <!-- Full-width line art — visible on dark hero background -->
@@ -1284,7 +1284,7 @@
   </section>
 
   <!-- ─── Before / After ───────────────────────────────── -->
-  <section class="arch-styles">
+  <section class="arch-styles" id="sec-styles">
     <div class="arch-styles-inner">
 
       <!-- Header -->
@@ -1433,7 +1433,7 @@
   </section>
 
   <!-- ─── Gallery ──────────────────────────────────────── -->
-  <section class="arch-caps" style="position:relative;overflow:hidden;">
+  <section class="arch-caps" id="sec-caps" style="position:relative;overflow:hidden;">
 
     <!-- White interior line art background -->
     <div style="position:absolute;inset:0;pointer-events:none;z-index:0;opacity:0.07;">
@@ -1559,7 +1559,7 @@
 
 
   <!-- ─── Style Templates ─────────────────────────────── -->
-  <section class="arch-transform">
+  <section class="arch-transform" id="sec-transform">
 
     <!-- (line art moved to capabilities section) -->
     <div style="display:none">
@@ -1710,7 +1710,7 @@
   </section>
 
   <!-- ─── Capabilities (Stillpoint 4-card grid) ──────── -->
-  <section class="arch-gallery">
+  <section class="arch-gallery" id="sec-gallery">
     <div class="arch-gallery-inner">
       <div class="arch-gallery-head reveal-blur">
         <span class="section-label">Gallery</span>
@@ -1740,7 +1740,7 @@
   </section>
 
   <!-- ─── Stats ────────────────────────────────────────── -->
-  <section class="arch-stats">
+  <section class="arch-stats" id="sec-stats">
     <div class="arch-stats-inner stagger-children">
       <div class="stat-item">
         <div class="stat-num-row">
@@ -2175,5 +2175,78 @@
   </script>
   <script src="navbar.js"></script>
   <script src="footer.js"></script>
+
+  <script>
+    // ── Architecture page nav links ─────────────────────────────────
+    (function () {
+      const NAV_LINKS = [
+        { label: 'Styles',       href: '#sec-styles'    },
+        { label: 'Capabilities', href: '#sec-caps'      },
+        { label: 'Transform',    href: '#sec-transform' },
+        { label: 'Gallery',      href: '#sec-gallery'   },
+        { label: 'Results',      href: '#sec-stats'     },
+      ];
+
+      // Wait for navbar to render
+      function init() {
+        const navLinksEl = document.querySelector('.nav-links');
+        if (!navLinksEl) { setTimeout(init, 50); return; }
+
+        // Logo → scroll to top
+        const logo = document.querySelector('.logo');
+        if (logo) {
+          logo.addEventListener('click', e => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+        }
+
+        // Replace existing links with section links
+        navLinksEl.innerHTML = NAV_LINKS.map(l =>
+          `<a href="${l.href}" class="nav-link" data-sec="${l.href.slice(1)}">${l.label}</a>`
+        ).join('');
+
+        // Smooth scroll
+        navLinksEl.addEventListener('click', function (e) {
+          const a = e.target.closest('.nav-link[data-sec]');
+          if (!a) return;
+          e.preventDefault();
+          const target = document.getElementById(a.dataset.sec);
+          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+
+        // Active state on scroll
+        const sections = NAV_LINKS.map(l => document.getElementById(l.href.slice(1))).filter(Boolean);
+        const links    = navLinksEl.querySelectorAll('.nav-link[data-sec]');
+
+        function setActive() {
+          const scrollY = window.scrollY + window.innerHeight * 0.35;
+          let active = sections[0];
+          sections.forEach(sec => { if (sec.offsetTop <= scrollY) active = sec; });
+          links.forEach(a => {
+            a.classList.toggle('nav-link-active', a.dataset.sec === active.id);
+          });
+        }
+
+        window.addEventListener('scroll', setActive, { passive: true });
+        setActive();
+      }
+
+      // Inject active link CSS + hide sign in
+      const s = document.createElement('style');
+      s.textContent = `
+        .navbar:not(.scrolled) .nav-link-active { color: #fff !important; background: rgba(255,255,255,0.12) !important; }
+        .navbar.scrolled .nav-link-active { color: #fff !important; background: #0f0f0f !important; }
+        .navbar-btn-ghost { display: none !important; }
+        .nav-link-active { color: #0f0f0f !important; background: rgba(15,15,15,0.09) !important; font-weight: 500 !important; }
+        .navbar:not(.scrolled) .nav-link-active { color: #fff !important; background: rgba(255,255,255,0.18) !important; }
+        .navbar.scrolled .nav-link-active { color: #0f0f0f !important; background: rgba(15,15,15,0.09) !important; }
+        .nav-link { font-weight: 400 !important; }
+      `;
+      document.head.appendChild(s);
+
+      init();
+    })();
+  </script>
 </body>
 </html>

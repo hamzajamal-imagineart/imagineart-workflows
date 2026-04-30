@@ -317,7 +317,7 @@
       </nav>
       <div class="nav-actions">
         <a href="#" class="navbar-btn navbar-btn-ghost">Sign in</a>
-        <a href="#" class="navbar-btn navbar-btn-dark">Try it free</a>
+        <a href="#" class="navbar-btn navbar-btn-dark">Get Started</a>
       </div>
       <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu">
         <span class="bars">
@@ -347,7 +347,7 @@
       <div class="nav-mobile-divider"></div>
       <div class="nav-mobile-actions">
         <a href="#" class="navbar-btn navbar-btn-ghost">Sign in</a>
-        <a href="#" class="navbar-btn navbar-btn-dark">Try it free</a>
+        <a href="#" class="navbar-btn navbar-btn-dark">Get Started</a>
       </div>
     </div>
   </div>`;
