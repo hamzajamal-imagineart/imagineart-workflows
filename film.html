@@ -19,12 +19,10 @@
     .navbar:not(.scrolled) .navbar-btn.outline { color: rgba(255,255,255,0.7); border-color: rgba(255,255,255,0.2); }
     .navbar:not(.scrolled) .navbar-btn.outline:hover { color: #fff; border-color: rgba(255,255,255,0.5); }
 
-    /* ─── Nav scrim ─────────────────────────────────────────────── */
-    #nav-scrim {
-      position: fixed; top: 0; left: 0; right: 0; height: 160px;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 55%, transparent 100%);
-      pointer-events: none; z-index: 99;
-    }
+    /* ─── Hide site nav until scrolled ──────────────────────────── */
+    #site-nav .navbar:not(.scrolled) { background: transparent !important; }
+    #site-nav .navbar:not(.scrolled) .nav-link { color: rgba(255,255,255,0.7); }
+    #site-nav .navbar:not(.scrolled) .nav-link:hover { color: #fff; background: rgba(255,255,255,0.08); }
 
     /* ─── Shared grain ───────────────────────────────────────────── */
     .grain::after {
@@ -99,105 +97,134 @@
     .arrow-icon { flex-shrink: 0; }
 
     /* ═══════════════════════════════════════════════════════════════
+       PRELOADER
+    ═══════════════════════════════════════════════════════════════ */
+    .preloader {
+      position: fixed; inset: 0; z-index: 1000;
+      background: var(--dark);
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.9s cubic-bezier(0.4,0,0.2,1), visibility 0.9s;
+    }
+    .preloader.done { opacity: 0; visibility: hidden; }
+    .preloader-count {
+      font-size: 12px; font-weight: 400; letter-spacing: 1px;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
        HERO
     ═══════════════════════════════════════════════════════════════ */
     .film-hero {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: minmax(480px, 620px) 1fr;
-      padding-left: var(--px);
-      background: var(--dark);
       position: relative;
+      width: 100%; height: 100vh;
       overflow: hidden;
+      background: var(--dark);
     }
 
-    /* subtle dot grid */
-    .film-hero::before {
-      content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
-      background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
-      background-size: 32px 32px;
-      mask-image: radial-gradient(ellipse 80% 100% at 70% 50%, black 20%, transparent 80%);
-      -webkit-mask-image: radial-gradient(ellipse 80% 100% at 70% 50%, black 20%, transparent 80%);
+    /* Background videos */
+    .hero-bg { position: absolute; inset: 0; }
+    .hero-video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1s ease;
     }
+    .hero-video.active { opacity: 1; }
 
-    .hero-left {
-      display: flex; flex-direction: column; justify-content: center;
-      padding: 140px 64px 100px 0;
-      position: relative; z-index: 2;
+    /* Vignette */
+    .hero-vignette {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background: radial-gradient(ellipse 90% 100% at 50% 50%, transparent 35%, rgba(0,0,0,0.55) 100%);
     }
-
-    .hero-overline { margin-bottom: 40px; }
-
-    .hero-headline {
-      font-size: clamp(56px, 5.5vw, 92px);
-      font-weight: 700;
-      margin-bottom: 28px;
-    }
-
-    .hero-sub {
-      font-size: 16px; font-weight: 400; line-height: 1.7;
-      color: rgba(255,255,255,0.42);
-      max-width: 400px; margin-bottom: 48px;
-    }
-
-    .hero-ctas { display: flex; gap: 12px; align-items: center; margin-bottom: 60px; }
-
-    .hero-pills { display: flex; flex-wrap: wrap; gap: 8px; }
-    .hero-pill {
-      height: 30px; padding: 0 14px;
-      border: 1px solid rgba(255,255,255,0.1); border-radius: 100px;
-      font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.32);
-      display: inline-flex; align-items: center; cursor: default;
-      transition: color 0.15s, border-color 0.15s;
-    }
-    .hero-pill:hover { color: rgba(255,255,255,0.65); border-color: rgba(255,255,255,0.22); }
-    .hero-pill.active { color: rgba(255,255,255,0.8); border-color: rgba(255,255,255,0.3); }
-
-    /* Hero right — cinematic frame */
-    .hero-right {
-      position: relative;
-      display: flex; align-items: center;
-      padding: 100px 0 100px 48px;
-      z-index: 1;
-    }
-
-    .hero-frame-wrap {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16 / 10;
-    }
-
-    .hero-frame-wrap .ph { border-radius: 6px; }
-
-    /* Metadata strip */
-    .frame-meta {
-      position: absolute;
-      bottom: -1px; left: 0; right: 0;
-      display: flex; gap: 0;
-      border-top: 1px solid rgba(255,255,255,0.08);
-    }
-    .frame-meta-item {
-      padding: 12px 20px;
-      border-right: 1px solid rgba(255,255,255,0.07);
-      display: flex; flex-direction: column; gap: 3px;
-    }
-    .frame-meta-item:last-child { border-right: none; }
-    .meta-key {
-      font-size: 9px; letter-spacing: 1.8px; text-transform: uppercase;
-      color: rgba(255,255,255,0.25);
-    }
-    .meta-val {
-      font-size: 12px; font-weight: 600; letter-spacing: 0.3px;
-      color: rgba(255,255,255,0.65);
-    }
-
-    /* Right edge fade on hero */
-    .hero-right::after {
+    /* Bottom gradient for legibility */
+    .hero-vignette::after {
       content: '';
-      position: absolute; top: 0; right: 0; bottom: 0; width: 120px;
-      background: linear-gradient(to right, transparent, var(--dark));
-      pointer-events: none;
+      position: absolute; bottom: 0; left: 0; right: 0; height: 220px;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
     }
+
+    /* Center content */
+    .hero-center {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 5; pointer-events: none;
+      gap: 14px;
+    }
+
+    .hero-title-clip { overflow: hidden; }
+    .hero-title {
+      font-size: clamp(32px, 4vw, 60px);
+      font-weight: 600; letter-spacing: -0.02em;
+      color: #fff; text-align: center;
+      transform: translateY(110%);
+      transition: transform 1s cubic-bezier(0.16,1,0.3,1);
+      will-change: transform;
+    }
+    .hero-title.in { transform: translateY(0); }
+
+    .hero-shot-tag {
+      font-size: 10.5px; letter-spacing: 2.2px; text-transform: uppercase;
+      color: rgba(255,255,255,0.38);
+      opacity: 0; transition: opacity 0.8s ease 0.35s;
+    }
+    .hero-shot-tag.in { opacity: 1; }
+
+    /* Prev / Next arrows */
+    .hero-arrow {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      z-index: 10;
+      background: none; border: none; cursor: pointer;
+      width: 64px; height: 64px;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.35);
+      transition: color 0.2s;
+      opacity: 0; transition: opacity 0.7s ease 0.7s, color 0.2s;
+    }
+    .hero-arrow.in { opacity: 1; }
+    .hero-arrow:hover { color: rgba(255,255,255,0.9); }
+    .hero-prev { left: clamp(16px, 2.5vw, 40px); }
+    .hero-next { right: clamp(16px, 2.5vw, 40px); }
+
+    /* Bottom bar */
+    .hero-bottom {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      display: flex; align-items: flex-end; justify-content: space-between;
+      padding: 0 clamp(24px, 3vw, 56px) 36px;
+      z-index: 10;
+      opacity: 0; transition: opacity 0.8s ease 0.5s;
+    }
+    .hero-bottom.in { opacity: 1; }
+
+    .hero-bottom-left { display: flex; flex-direction: column; gap: 8px; }
+
+    .hero-counter {
+      font-size: 11.5px; font-weight: 500; letter-spacing: 1.5px;
+      color: rgba(255,255,255,0.4);
+    }
+    .hero-meta-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+    .hero-meta-pill {
+      font-size: 10px; letter-spacing: 0.8px;
+      color: rgba(255,255,255,0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 100px; padding: 3px 10px;
+    }
+
+    /* Thumbnail strip */
+    .hero-thumbs { display: flex; gap: 3px; align-items: flex-end; }
+    .hero-thumb {
+      width: 68px; height: 38px;
+      overflow: hidden; cursor: pointer;
+      opacity: 0.28;
+      border-radius: 3px;
+      border: 1px solid rgba(255,255,255,0.07);
+      transition: opacity 0.25s;
+      flex-shrink: 0;
+    }
+    .hero-thumb.active { opacity: 1; border-color: rgba(255,255,255,0.35); }
+    .hero-thumb:hover:not(.active) { opacity: 0.55; }
+    .hero-thumb video { width: 100%; height: 100%; object-fit: cover; display: block; }
 
     /* ═══════════════════════════════════════════════════════════════
        STATEMENT
@@ -501,9 +528,7 @@
        MOBILE
     ═══════════════════════════════════════════════════════════════ */
     @media (max-width: 1024px) {
-      .film-hero { grid-template-columns: 1fr; padding-left: 0; }
-      .hero-left { padding: 140px 40px 80px; }
-      .hero-right { display: none; }
+      .hero-thumbs { display: none; }
       .shot-row { min-height: 420px; }
       .camera-bento { grid-template-columns: 1fr; }
       .cb.wide { grid-template-columns: 1fr; }
@@ -513,7 +538,8 @@
 
     @media (max-width: 768px) {
       :root { --px: 24px; }
-      .hero-headline { font-size: 44px; }
+      .hero-title { font-size: 32px; }
+      .hero-thumbs { display: none; }
       .film-statement, .shot-types-section, .camera-section,
       .stats-section, .film-cta { padding-left: 24px; padding-right: 24px; }
       .section-header { padding-left: 24px; padding-right: 24px; padding-top: 64px; }
@@ -533,61 +559,64 @@
 </head>
 <body>
 
-  <div id="nav-scrim"></div>
   <header id="site-nav"></header>
+
+  <!-- ═══════ PRELOADER ═══════ -->
+  <div class="preloader" id="preloader">
+    <span class="preloader-count" id="preloader-count">0%</span>
+  </div>
 
   <!-- ═══════ HERO ═══════ -->
   <section class="film-hero">
-    <div class="hero-left">
-      <span class="overline hero-overline">ImagineArt Film</span>
-      <h1 class="display hero-headline">From<br>Imagination<br>to Film.</h1>
-      <p class="hero-sub">Generate cinematic frames with full directorial control over every shot, angle, lens, and light. Built for the professionals who make the world watch.</p>
-      <div class="hero-ctas">
-        <a href="#" class="btn-primary">
-          Start Creating
-          <svg class="arrow-icon" width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-        <a href="#" class="btn-ghost">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-          Watch a Film
-        </a>
-      </div>
-      <div class="hero-pills">
-        <span class="hero-pill active">Character Action</span>
-        <span class="hero-pill">Dialogue</span>
-        <span class="hero-pill">Scene Coverage</span>
-        <span class="hero-pill">B-Roll</span>
-        <span class="hero-pill">Time Jump</span>
-        <span class="hero-pill">Scene Jump</span>
-      </div>
+
+    <!-- Background videos -->
+    <div class="hero-bg">
+      <video class="hero-video active" src="assets/film/character-action.mp4" autoplay loop muted playsinline></video>
+      <video class="hero-video" src="assets/film/dialogue.mp4" loop muted playsinline></video>
+      <video class="hero-video" src="assets/film/scene%20coverage.mp4" loop muted playsinline></video>
+      <video class="hero-video" src="assets/film/B-roll%20coverage.mp4" loop muted playsinline></video>
+      <video class="hero-video" src="assets/film/time%20jump.mp4" loop muted playsinline></video>
+      <video class="hero-video" src="assets/film/scene%20jump.mp4" loop muted playsinline></video>
     </div>
-    <div class="hero-right">
-      <div class="hero-frame-wrap">
-        <video src="assets/film/character-action.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;display:block;border-radius:6px;"></video>
-        <div class="frame-meta">
-          <div class="frame-meta-item">
-            <span class="meta-key">Shot Type</span>
-            <span class="meta-val">Character Action</span>
-          </div>
-          <div class="frame-meta-item">
-            <span class="meta-key">Focal Length</span>
-            <span class="meta-val">35mm</span>
-          </div>
-          <div class="frame-meta-item">
-            <span class="meta-key">Aperture</span>
-            <span class="meta-val">f / 1.8</span>
-          </div>
-          <div class="frame-meta-item">
-            <span class="meta-key">Setting</span>
-            <span class="meta-val">Exterior · Night</span>
-          </div>
-          <div class="frame-meta-item">
-            <span class="meta-key">Lighting</span>
-            <span class="meta-val">Practical</span>
-          </div>
+
+    <div class="hero-vignette"></div>
+
+    <!-- Centered title -->
+    <div class="hero-center">
+      <div class="hero-title-clip">
+        <h1 class="hero-title" id="hero-title">Character Action.</h1>
+      </div>
+      <span class="hero-shot-tag" id="hero-shot-tag">ImagineArt Film — Shot Type 01</span>
+    </div>
+
+    <!-- Prev / Next -->
+    <button class="hero-arrow hero-prev" id="hero-prev" aria-label="Previous shot">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+    </button>
+    <button class="hero-arrow hero-next" id="hero-next" aria-label="Next shot">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+
+    <!-- Bottom bar -->
+    <div class="hero-bottom" id="hero-bottom">
+      <div class="hero-bottom-left">
+        <div class="hero-counter" id="hero-counter">01 — 06</div>
+        <div class="hero-meta-pills">
+          <span class="hero-meta-pill" id="meta-focal">35mm</span>
+          <span class="hero-meta-pill" id="meta-aperture">f / 1.8</span>
+          <span class="hero-meta-pill" id="meta-setting">Exterior · Night</span>
         </div>
       </div>
+      <div class="hero-thumbs" id="hero-thumbs">
+        <div class="hero-thumb active" data-index="0"><video src="assets/film/character-action.mp4" autoplay loop muted playsinline></video></div>
+        <div class="hero-thumb" data-index="1"><video src="assets/film/dialogue.mp4" autoplay loop muted playsinline></video></div>
+        <div class="hero-thumb" data-index="2"><video src="assets/film/scene%20coverage.mp4" autoplay loop muted playsinline></video></div>
+        <div class="hero-thumb" data-index="3"><video src="assets/film/B-roll%20coverage.mp4" autoplay loop muted playsinline></video></div>
+        <div class="hero-thumb" data-index="4"><video src="assets/film/time%20jump.mp4" autoplay loop muted playsinline></video></div>
+        <div class="hero-thumb" data-index="5"><video src="assets/film/scene%20jump.mp4" autoplay loop muted playsinline></video></div>
+      </div>
     </div>
+
   </section>
 
   <!-- ═══════ STATEMENT ═══════ -->
@@ -892,7 +921,82 @@
   <script src="navbar.js"></script>
   <script src="footer.js"></script>
   <script>
-    // Gallery zoom on scroll
+    // ── Shot data ──────────────────────────────────────────────────
+    const shots = [
+      { title: 'Character Action.', tag: 'Shot Type 01', focal: '35mm', aperture: 'f / 1.8', setting: 'Exterior · Night' },
+      { title: 'Dialogue Coverage.', tag: 'Shot Type 02', focal: '50mm', aperture: 'f / 2.8', setting: 'Interior · Day' },
+      { title: 'Scene Coverage.', tag: 'Shot Type 03', focal: '24mm', aperture: 'f / 5.6', setting: 'Exterior · Golden Hour' },
+      { title: 'B-Roll Coverage.', tag: 'Shot Type 04', focal: '85mm', aperture: 'f / 1.4', setting: 'Macro · Studio' },
+      { title: 'Time Jump.', tag: 'Shot Type 05', focal: '16mm', aperture: 'f / 8', setting: 'Aerial · Dusk' },
+      { title: 'Scene Jump.', tag: 'Shot Type 06', focal: '35mm', aperture: 'f / 2.0', setting: 'Interior · Practical' },
+    ];
+
+    let current = 0;
+    const heroVideos = document.querySelectorAll('.hero-video');
+    const thumbs = document.querySelectorAll('.hero-thumb');
+    const titleEl = document.getElementById('hero-title');
+    const tagEl = document.getElementById('hero-shot-tag');
+    const counterEl = document.getElementById('hero-counter');
+
+    function goTo(idx) {
+      if (idx < 0) idx = shots.length - 1;
+      if (idx >= shots.length) idx = 0;
+      heroVideos[current].classList.remove('active');
+      thumbs[current].classList.remove('active');
+      current = idx;
+      heroVideos[current].classList.add('active');
+      heroVideos[current].play();
+      thumbs[current].classList.add('active');
+      // Animate title out then in
+      titleEl.style.transition = 'none';
+      titleEl.style.transform = 'translateY(110%)';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        titleEl.textContent = shots[current].title;
+        titleEl.style.transition = 'transform 0.85s cubic-bezier(0.16,1,0.3,1)';
+        titleEl.style.transform = 'translateY(0)';
+      }));
+      tagEl.textContent = `ImagineArt Film — ${shots[current].tag}`;
+      counterEl.textContent = `${String(current+1).padStart(2,'0')} — 06`;
+      document.getElementById('meta-focal').textContent = shots[current].focal;
+      document.getElementById('meta-aperture').textContent = shots[current].aperture;
+      document.getElementById('meta-setting').textContent = shots[current].setting;
+    }
+
+    document.getElementById('hero-prev')?.addEventListener('click', () => goTo(current - 1));
+    document.getElementById('hero-next')?.addEventListener('click', () => goTo(current + 1));
+    thumbs.forEach(t => t.addEventListener('click', () => goTo(+t.dataset.index)));
+
+    // Keyboard navigation
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft') goTo(current - 1);
+      if (e.key === 'ArrowRight') goTo(current + 1);
+    });
+
+    // ── Preloader ──────────────────────────────────────────────────
+    const preloader = document.getElementById('preloader');
+    const countEl = document.getElementById('preloader-count');
+    let count = 0;
+
+    const tick = setInterval(() => {
+      count += Math.floor(Math.random() * 6) + 2;
+      if (count >= 100) {
+        count = 100;
+        clearInterval(tick);
+        countEl.textContent = '100%';
+        setTimeout(() => {
+          preloader.classList.add('done');
+          // Stagger reveal
+          document.getElementById('hero-title')?.classList.add('in');
+          document.getElementById('hero-shot-tag')?.classList.add('in');
+          document.querySelectorAll('.hero-arrow').forEach(a => a.classList.add('in'));
+          document.getElementById('hero-bottom')?.classList.add('in');
+        }, 320);
+      } else {
+        countEl.textContent = count + '%';
+      }
+    }, 30);
+
+    // ── Gallery zoom ───────────────────────────────────────────────
     const grid = document.getElementById('film-gallery');
     const SCALE_START = 1.18, SCALE_END = 1.0;
 
