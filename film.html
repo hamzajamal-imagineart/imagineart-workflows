@@ -46,6 +46,14 @@
       color: rgba(255,255,255,0.1);
     }
 
+    /* ─── Video assets ───────────────────────────────────────────── */
+    .shot-visual video,
+    .hero-frame-wrap video,
+    .gi video,
+    .cb-visual video {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+
     /* ─── Shared type ────────────────────────────────────────────── */
     .overline {
       display: inline-flex; align-items: center; gap: 12px;
@@ -555,7 +563,7 @@
     </div>
     <div class="hero-right">
       <div class="hero-frame-wrap">
-        <div class="ph"><span class="ph-label">Cinematic Frame</span></div>
+        <video src="assets/film/character-action.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;display:block;border-radius:6px;"></video>
         <div class="frame-meta">
           <div class="frame-meta-item">
             <span class="meta-key">Shot Type</span>
@@ -613,7 +621,7 @@
           <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
-      <div class="shot-visual"><div class="ph"><span class="ph-label">Character Action</span></div></div>
+      <div class="shot-visual"><video src="assets/film/character-action.mp4" autoplay loop muted playsinline></video></div>
     </div>
 
     <div class="shot-row rev">
@@ -626,7 +634,7 @@
           <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
-      <div class="shot-visual"><div class="ph"><span class="ph-label">Dialogue Coverage</span></div></div>
+      <div class="shot-visual"><video src="assets/film/dialogue.mp4" autoplay loop muted playsinline></video></div>
     </div>
 
     <div class="shot-row">
@@ -639,7 +647,7 @@
           <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
-      <div class="shot-visual"><div class="ph"><span class="ph-label">Scene Coverage</span></div></div>
+      <div class="shot-visual"><video src="assets/film/scene%20coverage.mp4" autoplay loop muted playsinline></video></div>
     </div>
 
     <div class="shot-row rev">
@@ -652,7 +660,7 @@
           <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
-      <div class="shot-visual"><div class="ph"><span class="ph-label">B-Roll Coverage</span></div></div>
+      <div class="shot-visual"><video src="assets/film/B-roll%20coverage.mp4" autoplay loop muted playsinline></video></div>
     </div>
 
     <div class="shot-row">
@@ -665,7 +673,7 @@
           <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
-      <div class="shot-visual"><div class="ph"><span class="ph-label">Time Jump</span></div></div>
+      <div class="shot-visual"><video src="assets/film/time%20jump.mp4" autoplay loop muted playsinline></video></div>
     </div>
 
     <div class="shot-row rev">
@@ -678,7 +686,7 @@
           <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
-      <div class="shot-visual"><div class="ph"><span class="ph-label">Scene Jump</span></div></div>
+      <div class="shot-visual"><video src="assets/film/scene%20jump.mp4" autoplay loop muted playsinline></video></div>
     </div>
   </section>
 
@@ -744,7 +752,7 @@
           </div>
         </div>
         <div class="cb-visual">
-          <div class="ph"><span class="ph-label">Camera Control UI</span></div>
+          <video src="assets/film/full%20camera%20roll.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;display:block;border-radius:8px;"></video>
         </div>
       </div>
 
@@ -846,18 +854,18 @@
     <div class="gallery-pin-wrap">
       <div class="gallery-pin">
         <div class="gallery-grid" id="film-gallery">
-          <div class="gi"><div class="ph"><span class="ph-label">Character Action</span></div><div class="gi-overlay"></div><span class="gi-label">Character Action</span></div>
-          <div class="gi"><div class="ph"><span class="ph-label">Dialogue Coverage</span></div><div class="gi-overlay"></div><span class="gi-label">Dialogue Coverage</span></div>
-          <div class="gi"><div class="ph"><span class="ph-label">Scene Coverage</span></div><div class="gi-overlay"></div><span class="gi-label">Scene Coverage</span></div>
-          <div class="gi"><div class="ph"><span class="ph-label">B-Roll Coverage</span></div><div class="gi-overlay"></div><span class="gi-label">B-Roll Coverage</span></div>
-          <div class="gi"><div class="ph"><span class="ph-label">Time Jump</span></div><div class="gi-overlay"></div><span class="gi-label">Time Jump</span></div>
-          <div class="gi"><div class="ph"><span class="ph-label">Scene Jump</span></div><div class="gi-overlay"></div><span class="gi-label">Scene Jump</span></div>
-          <div class="gi"><div class="ph"><span class="ph-label">Character Action</span></div><div class="gi-overlay"></div><span class="gi-label">Character Action</span></div>
-          <div class="gi"><div class="ph"><span class="ph-label">Dialogue Coverage</span></div><div class="gi-overlay"></div><span class="gi-label">Dialogue Coverage</span></div>
-          <div class="gi"><div class="ph"><span class="ph-label">Scene Coverage</span></div><div class="gi-overlay"></div><span class="gi-label">Scene Coverage</span></div>
-          <div class="gi"><div class="ph"><span class="ph-label">B-Roll</span></div><div class="gi-overlay"></div><span class="gi-label">B-Roll</span></div>
-          <div class="gi"><div class="ph"><span class="ph-label">Time Jump</span></div><div class="gi-overlay"></div><span class="gi-label">Time Jump</span></div>
-          <div class="gi"><div class="ph"><span class="ph-label">Scene Jump</span></div><div class="gi-overlay"></div><span class="gi-label">Scene Jump</span></div>
+          <div class="gi"><video src="assets/film/character-action.mp4" autoplay loop muted playsinline></video><div class="gi-overlay"></div><span class="gi-label">Character Action</span></div>
+          <div class="gi"><video src="assets/film/dialogue.mp4" autoplay loop muted playsinline></video><div class="gi-overlay"></div><span class="gi-label">Dialogue Coverage</span></div>
+          <div class="gi"><video src="assets/film/scene%20coverage.mp4" autoplay loop muted playsinline></video><div class="gi-overlay"></div><span class="gi-label">Scene Coverage</span></div>
+          <div class="gi"><video src="assets/film/B-roll%20coverage.mp4" autoplay loop muted playsinline></video><div class="gi-overlay"></div><span class="gi-label">B-Roll Coverage</span></div>
+          <div class="gi"><video src="assets/film/time%20jump.mp4" autoplay loop muted playsinline></video><div class="gi-overlay"></div><span class="gi-label">Time Jump</span></div>
+          <div class="gi"><video src="assets/film/scene%20jump.mp4" autoplay loop muted playsinline></video><div class="gi-overlay"></div><span class="gi-label">Scene Jump</span></div>
+          <div class="gi"><video src="assets/film/full%20camera%20roll.mp4" autoplay loop muted playsinline></video><div class="gi-overlay"></div><span class="gi-label">Full Camera</span></div>
+          <div class="gi"><video src="assets/film/character-action.mp4" autoplay loop muted playsinline></video><div class="gi-overlay"></div><span class="gi-label">Character Action</span></div>
+          <div class="gi"><video src="assets/film/dialogue.mp4" autoplay loop muted playsinline></video><div class="gi-overlay"></div><span class="gi-label">Dialogue Coverage</span></div>
+          <div class="gi"><video src="assets/film/scene%20coverage.mp4" autoplay loop muted playsinline></video><div class="gi-overlay"></div><span class="gi-label">Scene Coverage</span></div>
+          <div class="gi"><video src="assets/film/B-roll%20coverage.mp4" autoplay loop muted playsinline></video><div class="gi-overlay"></div><span class="gi-label">B-Roll Coverage</span></div>
+          <div class="gi"><video src="assets/film/time%20jump.mp4" autoplay loop muted playsinline></video><div class="gi-overlay"></div><span class="gi-label">Time Jump</span></div>
         </div>
       </div>
     </div>
