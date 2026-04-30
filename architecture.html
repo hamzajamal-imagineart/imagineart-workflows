@@ -48,7 +48,7 @@
     /* Left column */
     .hero-left {
       display: flex; flex-direction: column; justify-content: center;
-      padding: 0 40px 48px max(40px, calc((100vw - 1240px) / 2 + 40px));
+      padding: 0 40px 48px clamp(40px, 8vw, 140px);
       padding-top: 100px;
       position: relative; z-index: 3;
       gap: 0;
