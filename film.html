@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ImagineArt Film — From Imagination to Film</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@100..900&family=Google+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --px: clamp(40px, 12vw, 220px); --dark: #080808; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Google Sans Flex', 'Google Sans', sans-serif; background: var(--dark); color: #fff; overflow-x: hidden; }
+
+    /* ─── Navbar overrides for dark page ───────────────────────── */
+    .navbar:not(.scrolled) .nav-link { color: rgba(255,255,255,0.65); }
+    .navbar:not(.scrolled) .nav-link:hover { color: #fff; background: rgba(255,255,255,0.08); }
+    .navbar:not(.scrolled) .navbar-btn.outline { color: rgba(255,255,255,0.7); border-color: rgba(255,255,255,0.2); }
+    .navbar:not(.scrolled) .navbar-btn.outline:hover { color: #fff; border-color: rgba(255,255,255,0.5); }
+
+    /* ─── Nav scrim ─────────────────────────────────────────────── */
+    #nav-scrim {
+      position: fixed; top: 0; left: 0; right: 0; height: 160px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 55%, transparent 100%);
+      pointer-events: none; z-index: 99;
+    }
+
+    /* ─── Shared grain ───────────────────────────────────────────── */
+    .grain::after {
+      content: '';
+      position: absolute; inset: 0; pointer-events: none; z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.032;
+    }
+
+    /* ─── Shared placeholder ─────────────────────────────────────── */
+    .ph {
+      background: #111;
+      border: 1px solid rgba(255,255,255,0.055);
+      display: flex; align-items: center; justify-content: center;
+      width: 100%; height: 100%;
+    }
+    .ph-label {
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      color: rgba(255,255,255,0.1);
+    }
+
+    /* ─── Shared type ────────────────────────────────────────────── */
+    .overline {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-size: 10.5px; font-weight: 600; letter-spacing: 2.2px; text-transform: uppercase;
+      color: rgba(255,255,255,0.28);
+    }
+    .overline::before { content: ''; width: 22px; height: 1px; background: rgba(255,255,255,0.2); flex-shrink: 0; }
+
+    .display {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      line-height: 1.04;
+      letter-spacing: -0.025em;
+      color: #fff;
+    }
+
+    /* ─── Shared buttons ─────────────────────────────────────────── */
+    .btn-primary {
+      height: 50px; padding: 0 28px;
+      background: #fff; color: #080808;
+      border: none; border-radius: 14px;
+      font-size: 14px; font-weight: 600; letter-spacing: 0.2px;
+      cursor: pointer; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: opacity 0.15s, transform 0.15s;
+      font-family: inherit;
+    }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .btn-ghost {
+      height: 50px; padding: 0 26px;
+      background: transparent; color: rgba(255,255,255,0.55);
+      border: 1px solid rgba(255,255,255,0.14); border-radius: 14px;
+      font-size: 14px; font-weight: 500;
+      cursor: pointer; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 9px;
+      transition: color 0.15s, border-color 0.15s;
+      font-family: inherit;
+    }
+    .btn-ghost:hover { color: #fff; border-color: rgba(255,255,255,0.32); }
+
+    /* ─── Arrow icon ─────────────────────────────────────────────── */
+    .arrow-icon { flex-shrink: 0; }
+
+    /* ═══════════════════════════════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════════════════════════════ */
+    .film-hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(480px, 620px) 1fr;
+      padding-left: var(--px);
+      background: var(--dark);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* subtle dot grid */
+    .film-hero::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(ellipse 80% 100% at 70% 50%, black 20%, transparent 80%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 100% at 70% 50%, black 20%, transparent 80%);
+    }
+
+    .hero-left {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 140px 64px 100px 0;
+      position: relative; z-index: 2;
+    }
+
+    .hero-overline { margin-bottom: 40px; }
+
+    .hero-headline {
+      font-size: clamp(56px, 5.5vw, 92px);
+      font-weight: 700;
+      margin-bottom: 28px;
+    }
+
+    .hero-sub {
+      font-size: 16px; font-weight: 400; line-height: 1.7;
+      color: rgba(255,255,255,0.42);
+      max-width: 400px; margin-bottom: 48px;
+    }
+
+    .hero-ctas { display: flex; gap: 12px; align-items: center; margin-bottom: 60px; }
+
+    .hero-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .hero-pill {
+      height: 30px; padding: 0 14px;
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 100px;
+      font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.32);
+      display: inline-flex; align-items: center; cursor: default;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .hero-pill:hover { color: rgba(255,255,255,0.65); border-color: rgba(255,255,255,0.22); }
+    .hero-pill.active { color: rgba(255,255,255,0.8); border-color: rgba(255,255,255,0.3); }
+
+    /* Hero right — cinematic frame */
+    .hero-right {
+      position: relative;
+      display: flex; align-items: center;
+      padding: 100px 0 100px 48px;
+      z-index: 1;
+    }
+
+    .hero-frame-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+    }
+
+    .hero-frame-wrap .ph { border-radius: 6px; }
+
+    /* Metadata strip */
+    .frame-meta {
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      display: flex; gap: 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .frame-meta-item {
+      padding: 12px 20px;
+      border-right: 1px solid rgba(255,255,255,0.07);
+      display: flex; flex-direction: column; gap: 3px;
+    }
+    .frame-meta-item:last-child { border-right: none; }
+    .meta-key {
+      font-size: 9px; letter-spacing: 1.8px; text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+    }
+    .meta-val {
+      font-size: 12px; font-weight: 600; letter-spacing: 0.3px;
+      color: rgba(255,255,255,0.65);
+    }
+
+    /* Right edge fade on hero */
+    .hero-right::after {
+      content: '';
+      position: absolute; top: 0; right: 0; bottom: 0; width: 120px;
+      background: linear-gradient(to right, transparent, var(--dark));
+      pointer-events: none;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       STATEMENT
+    ═══════════════════════════════════════════════════════════════ */
+    .film-statement {
+      padding: 160px var(--px);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      position: relative; overflow: hidden;
+    }
+
+    .statement-inner { max-width: 860px; position: relative; z-index: 1; }
+
+    .statement-headline {
+      font-size: clamp(52px, 6vw, 96px);
+      font-weight: 400;
+      margin: 32px 0 36px;
+    }
+
+    .statement-sub {
+      font-size: 17px; color: rgba(255,255,255,0.38); line-height: 1.72;
+      max-width: 500px; margin-bottom: 48px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       SIX SHOT TYPES
+    ═══════════════════════════════════════════════════════════════ */
+    .shot-types-section {
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .section-header {
+      padding: 100px var(--px) 80px;
+    }
+
+    .section-headline {
+      font-size: clamp(38px, 4vw, 64px);
+      font-weight: 700;
+      margin: 28px 0 18px;
+    }
+
+    .section-sub {
+      font-size: 15px; color: rgba(255,255,255,0.35); line-height: 1.75; max-width: 480px;
+    }
+
+    /* Shot rows */
+    .shot-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      min-height: 520px;
+    }
+    .shot-row:last-child { border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+    .shot-text {
+      padding: 80px 60px 80px var(--px);
+      display: flex; flex-direction: column; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .shot-row.rev .shot-text {
+      padding: 80px var(--px) 80px 60px;
+      order: 2;
+    }
+    .shot-row.rev .shot-visual { order: 1; }
+
+    .shot-num {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 160px; font-weight: 700; font-style: italic;
+      color: rgba(255,255,255,0.03);
+      line-height: 1; position: absolute;
+      top: 30px; left: var(--px);
+      pointer-events: none; user-select: none;
+    }
+    .shot-row.rev .shot-num { left: 60px; }
+
+    .shot-name {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(30px, 2.8vw, 48px);
+      font-weight: 700; font-style: italic;
+      color: #fff; line-height: 1.12;
+      margin-bottom: 20px; position: relative; z-index: 1;
+    }
+
+    .shot-desc {
+      font-size: 14.5px; color: rgba(255,255,255,0.38); line-height: 1.8;
+      max-width: 360px; margin-bottom: 36px;
+      position: relative; z-index: 1;
+    }
+
+    .shot-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 600; letter-spacing: 0.4px;
+      color: rgba(255,255,255,0.38); text-decoration: none;
+      transition: color 0.15s; position: relative; z-index: 1;
+      width: fit-content;
+    }
+    .shot-link svg { transition: transform 0.2s; }
+    .shot-link:hover { color: #fff; }
+    .shot-link:hover svg { transform: translateX(4px); }
+
+    .shot-visual {
+      position: relative; overflow: hidden;
+    }
+    .shot-visual .ph {
+      height: 100%; border-radius: 0;
+      border-top: none; border-bottom: none;
+    }
+    .shot-text + .shot-visual .ph { border-left: 1px solid rgba(255,255,255,0.04); border-right: none; }
+    .shot-row.rev .shot-visual .ph { border-right: 1px solid rgba(255,255,255,0.04); border-left: none; }
+
+    /* ═══════════════════════════════════════════════════════════════
+       CAMERA CONTROL
+    ═══════════════════════════════════════════════════════════════ */
+    .camera-section {
+      padding: 120px var(--px) 140px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .camera-header { margin-bottom: 72px; }
+    .camera-header .section-headline { margin-bottom: 16px; }
+
+    .camera-bento {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 2px;
+    }
+
+    .cb {
+      background: rgba(255,255,255,0.025);
+      padding: 44px 48px;
+      transition: background 0.2s;
+    }
+    .cb:hover { background: rgba(255,255,255,0.038); }
+    .cb:first-child { border-radius: 16px 0 0 0; }
+    .cb:nth-child(2) { border-radius: 0 16px 0 0; }
+    .cb.wide {
+      grid-column: 1 / -1;
+      display: grid; grid-template-columns: 1fr 1.1fr; gap: 56px; align-items: center;
+      border-radius: 0 0 16px 16px;
+    }
+
+    .cb-tag {
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      color: rgba(255,255,255,0.22); margin-bottom: 18px;
+    }
+    .cb-title {
+      font-size: 20px; font-weight: 600; color: #fff;
+      margin-bottom: 12px; line-height: 1.3;
+    }
+    .cb-desc {
+      font-size: 13.5px; color: rgba(255,255,255,0.32); line-height: 1.72;
+    }
+
+    .cb-pills {
+      display: flex; flex-wrap: wrap; gap: 7px; margin-top: 22px;
+    }
+    .cb-pill {
+      height: 26px; padding: 0 11px;
+      border: 1px solid rgba(255,255,255,0.09); border-radius: 100px;
+      font-size: 11.5px; color: rgba(255,255,255,0.38);
+      display: inline-flex; align-items: center;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .cb-pill:hover { color: rgba(255,255,255,0.7); border-color: rgba(255,255,255,0.2); }
+
+    .cb-visual { aspect-ratio: 16/9; }
+    .cb-visual .ph { border-radius: 8px; }
+
+    /* ═══════════════════════════════════════════════════════════════
+       STATS
+    ═══════════════════════════════════════════════════════════════ */
+    .stats-section {
+      padding: 140px var(--px);
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .stats-eyebrow {
+      font-size: 10.5px; letter-spacing: 2.2px; text-transform: uppercase;
+      color: rgba(255,255,255,0.22);
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 64px;
+    }
+    .stats-eyebrow::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.05); }
+
+    .stats-headline {
+      font-size: clamp(38px, 4vw, 64px);
+      font-weight: 700;
+      margin-bottom: 80px; max-width: 640px;
+    }
+
+    .stats-row {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 18px; overflow: hidden;
+      margin-bottom: 2px;
+    }
+
+    .stat-cell {
+      padding: 52px 44px;
+      background: rgba(255,255,255,0.018);
+      transition: background 0.2s;
+      border-right: 1px solid rgba(255,255,255,0.05);
+    }
+    .stat-cell:last-child { border-right: none; }
+    .stat-cell:hover { background: rgba(255,255,255,0.035); }
+
+    .stat-number {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(44px, 4.5vw, 68px);
+      font-weight: 400; font-style: italic;
+      color: #fff; line-height: 1; margin-bottom: 14px;
+    }
+    .stat-desc { font-size: 13px; color: rgba(255,255,255,0.3); line-height: 1.55; }
+
+    /* Feature cards below stats */
+    .stats-features {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 2px; margin-top: 2px;
+    }
+
+    .sf-card {
+      padding: 40px 36px;
+      background: rgba(255,255,255,0.018);
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    .sf-card:hover { background: rgba(255,255,255,0.035); }
+
+    .sf-icon {
+      width: 38px; height: 38px;
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 22px;
+    }
+    .sf-title { font-size: 14.5px; font-weight: 600; color: #fff; margin-bottom: 10px; }
+    .sf-desc { font-size: 13px; color: rgba(255,255,255,0.28); line-height: 1.7; }
+
+    /* ═══════════════════════════════════════════════════════════════
+       GALLERY
+    ═══════════════════════════════════════════════════════════════ */
+    .gallery-section {
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding-top: 100px;
+    }
+
+    .gallery-header {
+      padding: 0 var(--px) 64px;
+    }
+    .gallery-header .section-headline { margin-top: 24px; margin-bottom: 0; }
+
+    .gallery-pin-wrap { height: 300vh; }
+    .gallery-pin {
+      position: sticky; top: 0; height: 100vh;
+      overflow: hidden;
+      display: flex; align-items: center;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px; padding: 0 3px;
+      width: 100%;
+      transform-origin: center center;
+    }
+    .gi {
+      aspect-ratio: 16 / 9;
+      overflow: hidden; position: relative;
+    }
+    .gi .ph { border-radius: 2px; border: none; }
+    .gi-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0);
+      transition: background 0.3s; z-index: 1;
+    }
+    .gi:hover .gi-overlay { background: rgba(0,0,0,0.22); }
+    .gi-label {
+      position: absolute; bottom: 13px; left: 16px;
+      font-size: 10px; letter-spacing: 1.6px; text-transform: uppercase;
+      color: rgba(255,255,255,0); transition: color 0.3s; z-index: 2;
+    }
+    .gi:hover .gi-label { color: rgba(255,255,255,0.55); }
+
+    /* ═══════════════════════════════════════════════════════════════
+       CTA
+    ═══════════════════════════════════════════════════════════════ */
+    .film-cta {
+      padding: 160px var(--px) 140px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      position: relative; overflow: hidden;
+    }
+
+    .cta-headline {
+      font-size: clamp(52px, 6.5vw, 104px);
+      font-weight: 700;
+      margin: 32px 0 52px;
+      max-width: 780px;
+    }
+
+    .cta-btns { display: flex; gap: 14px; align-items: center; }
+
+    /* ═══════════════════════════════════════════════════════════════
+       MOBILE
+    ═══════════════════════════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .film-hero { grid-template-columns: 1fr; padding-left: 0; }
+      .hero-left { padding: 140px 40px 80px; }
+      .hero-right { display: none; }
+      .shot-row { min-height: 420px; }
+      .camera-bento { grid-template-columns: 1fr; }
+      .cb.wide { grid-template-columns: 1fr; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .stats-features { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      :root { --px: 24px; }
+      .hero-headline { font-size: 44px; }
+      .film-statement, .shot-types-section, .camera-section,
+      .stats-section, .film-cta { padding-left: 24px; padding-right: 24px; }
+      .section-header { padding-left: 24px; padding-right: 24px; padding-top: 64px; }
+      .shot-row { grid-template-columns: 1fr; min-height: auto; }
+      .shot-row.rev .shot-text { order: 1; padding: 48px 24px; }
+      .shot-row.rev .shot-visual { order: 2; }
+      .shot-text { padding: 48px 24px; }
+      .shot-visual { height: 260px; }
+      .statement-headline { font-size: 42px; }
+      .gallery-pin-wrap { height: auto; }
+      .gallery-pin { position: relative; height: auto; display: block; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); transform: none !important; }
+      .cta-btns { flex-direction: column; align-items: flex-start; }
+      .cta-headline { font-size: 40px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="nav-scrim"></div>
+  <header id="site-nav"></header>
+
+  <!-- ═══════ HERO ═══════ -->
+  <section class="film-hero">
+    <div class="hero-left">
+      <span class="overline hero-overline">ImagineArt Film</span>
+      <h1 class="display hero-headline">From<br>Imagination<br>to Film.</h1>
+      <p class="hero-sub">Generate cinematic frames with full directorial control over every shot, angle, lens, and light. Built for the professionals who make the world watch.</p>
+      <div class="hero-ctas">
+        <a href="#" class="btn-primary">
+          Start Creating
+          <svg class="arrow-icon" width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#" class="btn-ghost">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          Watch a Film
+        </a>
+      </div>
+      <div class="hero-pills">
+        <span class="hero-pill active">Character Action</span>
+        <span class="hero-pill">Dialogue</span>
+        <span class="hero-pill">Scene Coverage</span>
+        <span class="hero-pill">B-Roll</span>
+        <span class="hero-pill">Time Jump</span>
+        <span class="hero-pill">Scene Jump</span>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-frame-wrap">
+        <div class="ph"><span class="ph-label">Cinematic Frame</span></div>
+        <div class="frame-meta">
+          <div class="frame-meta-item">
+            <span class="meta-key">Shot Type</span>
+            <span class="meta-val">Character Action</span>
+          </div>
+          <div class="frame-meta-item">
+            <span class="meta-key">Focal Length</span>
+            <span class="meta-val">35mm</span>
+          </div>
+          <div class="frame-meta-item">
+            <span class="meta-key">Aperture</span>
+            <span class="meta-val">f / 1.8</span>
+          </div>
+          <div class="frame-meta-item">
+            <span class="meta-key">Setting</span>
+            <span class="meta-val">Exterior · Night</span>
+          </div>
+          <div class="frame-meta-item">
+            <span class="meta-key">Lighting</span>
+            <span class="meta-val">Practical</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ STATEMENT ═══════ -->
+  <section class="film-statement grain">
+    <div class="statement-inner">
+      <span class="overline">The Vision</span>
+      <h2 class="display statement-headline">You imagine it.<br>We film it.</h2>
+      <p class="statement-sub">From pre-production references to final frame generation — ImagineArt Film gives every director, cinematographer, and visual storyteller the power to create without limits.</p>
+      <a href="#" class="btn-primary">
+        Start Creating
+        <svg class="arrow-icon" width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ═══════ SIX SHOT TYPES ═══════ -->
+  <section class="shot-types-section">
+    <div class="section-header">
+      <span class="overline">Capabilities</span>
+      <h2 class="display section-headline">Six Shot Types.<br>One Complete Story.</h2>
+      <p class="section-sub">The full grammar of cinema — every coverage type trained on professional cinematography, directed by you.</p>
+    </div>
+
+    <div class="shot-row">
+      <div class="shot-text">
+        <span class="shot-num">01</span>
+        <h3 class="shot-name">Character Action.</h3>
+        <p class="shot-desc">Generate high-stakes, character-driven frames that capture movement, emotion, and physical presence. Built for actors, stunts, and the decisive moment.</p>
+        <a href="#" class="shot-link">
+          Explore
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <div class="shot-visual"><div class="ph"><span class="ph-label">Character Action</span></div></div>
+    </div>
+
+    <div class="shot-row rev">
+      <div class="shot-text">
+        <span class="shot-num">02</span>
+        <h3 class="shot-name">Dialogue Coverage.</h3>
+        <p class="shot-desc">Over-the-shoulder, close-up reaction, two-shot. Every angle of a conversation, rendered with the depth and intimacy of 35mm cinema.</p>
+        <a href="#" class="shot-link">
+          Explore
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <div class="shot-visual"><div class="ph"><span class="ph-label">Dialogue Coverage</span></div></div>
+    </div>
+
+    <div class="shot-row">
+      <div class="shot-text">
+        <span class="shot-num">03</span>
+        <h3 class="shot-name">Scene Coverage.</h3>
+        <p class="shot-desc">Establish space, scale, and atmosphere with wide masters and full-scene compositions. Set the stage before the camera moves in.</p>
+        <a href="#" class="shot-link">
+          Explore
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <div class="shot-visual"><div class="ph"><span class="ph-label">Scene Coverage</span></div></div>
+    </div>
+
+    <div class="shot-row rev">
+      <div class="shot-text">
+        <span class="shot-num">04</span>
+        <h3 class="shot-name">B-Roll Coverage.</h3>
+        <p class="shot-desc">Supporting visuals that breathe life into the narrative. Cutaways, inserts, environmental details — the texture that makes a story feel real.</p>
+        <a href="#" class="shot-link">
+          Explore
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <div class="shot-visual"><div class="ph"><span class="ph-label">B-Roll Coverage</span></div></div>
+    </div>
+
+    <div class="shot-row">
+      <div class="shot-text">
+        <span class="shot-num">05</span>
+        <h3 class="shot-name">Time Jump.</h3>
+        <p class="shot-desc">Compress or expand time within a single frame. Suggest the passage of hours, seasons, or decades through light, composition, and visual metaphor.</p>
+        <a href="#" class="shot-link">
+          Explore
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <div class="shot-visual"><div class="ph"><span class="ph-label">Time Jump</span></div></div>
+    </div>
+
+    <div class="shot-row rev">
+      <div class="shot-text">
+        <span class="shot-num">06</span>
+        <h3 class="shot-name">Scene Jump.</h3>
+        <p class="shot-desc">Cut across locations, timelines, and worlds. Generate the visual bridge between two scenes that keeps the audience oriented and pulled forward.</p>
+        <a href="#" class="shot-link">
+          Explore
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <div class="shot-visual"><div class="ph"><span class="ph-label">Scene Jump</span></div></div>
+    </div>
+  </section>
+
+  <!-- ═══════ CAMERA CONTROL ═══════ -->
+  <section class="camera-section">
+    <div class="camera-header">
+      <span class="overline">Technical</span>
+      <h2 class="display section-headline">Full Camera<br>Control.</h2>
+      <p class="section-sub">Every parameter a director of photography reaches for — at your prompt.</p>
+    </div>
+
+    <div class="camera-bento">
+      <div class="cb">
+        <div class="cb-tag">Lens & Optics</div>
+        <div class="cb-title">Focal Length & Aperture</div>
+        <div class="cb-desc">Specify the exact character of your lens. Wide-angle distortion, telephoto compression, or the shallow focus of a fast prime.</div>
+        <div class="cb-pills">
+          <span class="cb-pill">16mm</span>
+          <span class="cb-pill">24mm</span>
+          <span class="cb-pill">35mm</span>
+          <span class="cb-pill">50mm</span>
+          <span class="cb-pill">85mm</span>
+          <span class="cb-pill">135mm</span>
+          <span class="cb-pill">f / 1.2</span>
+          <span class="cb-pill">f / 1.8</span>
+          <span class="cb-pill">f / 2.8</span>
+          <span class="cb-pill">f / 5.6</span>
+        </div>
+      </div>
+
+      <div class="cb">
+        <div class="cb-tag">Camera Angle</div>
+        <div class="cb-title">Perspective & Composition</div>
+        <div class="cb-desc">Control the camera's relationship to the subject — from ground-level intimacy to an aerial god's-eye view of the world below.</div>
+        <div class="cb-pills">
+          <span class="cb-pill">Eye Level</span>
+          <span class="cb-pill">Low Angle</span>
+          <span class="cb-pill">High Angle</span>
+          <span class="cb-pill">Dutch Tilt</span>
+          <span class="cb-pill">POV</span>
+          <span class="cb-pill">Bird's Eye</span>
+          <span class="cb-pill">Worm's Eye</span>
+          <span class="cb-pill">Over Shoulder</span>
+        </div>
+      </div>
+
+      <div class="cb wide">
+        <div>
+          <div class="cb-tag">Camera Movement</div>
+          <div class="cb-title">Motion & Momentum</div>
+          <div class="cb-desc">Describe the energy of the camera itself. A locked frame communicates stillness. A handheld push-in communicates urgency. The movement is the emotion.</div>
+          <div class="cb-pills">
+            <span class="cb-pill">Static</span>
+            <span class="cb-pill">Handheld</span>
+            <span class="cb-pill">Dolly In</span>
+            <span class="cb-pill">Dolly Out</span>
+            <span class="cb-pill">Pan</span>
+            <span class="cb-pill">Tilt</span>
+            <span class="cb-pill">Tracking</span>
+            <span class="cb-pill">Steadicam</span>
+            <span class="cb-pill">Crane</span>
+            <span class="cb-pill">Whip Pan</span>
+          </div>
+        </div>
+        <div class="cb-visual">
+          <div class="ph"><span class="ph-label">Camera Control UI</span></div>
+        </div>
+      </div>
+
+      <div class="cb" style="border-radius: 0 0 0 16px;">
+        <div class="cb-tag">Lighting</div>
+        <div class="cb-title">Light Setup & Mood</div>
+        <div class="cb-desc">From natural golden hour to a three-point studio rig. Describe the light and ImagineArt matches the cinematography.</div>
+        <div class="cb-pills">
+          <span class="cb-pill">Golden Hour</span>
+          <span class="cb-pill">Practical</span>
+          <span class="cb-pill">Hard Light</span>
+          <span class="cb-pill">Soft Box</span>
+          <span class="cb-pill">Rembrandt</span>
+          <span class="cb-pill">Silhouette</span>
+          <span class="cb-pill">Neon</span>
+          <span class="cb-pill">Candlelight</span>
+        </div>
+      </div>
+
+      <div class="cb" style="border-radius: 0 0 16px 0;">
+        <div class="cb-tag">Color & Grade</div>
+        <div class="cb-title">Visual Tone & Grade</div>
+        <div class="cb-desc">Reference the color science of cinema's most iconic films. Apply tungsten warmth, desaturated grit, or high-contrast noir to every frame.</div>
+        <div class="cb-pills">
+          <span class="cb-pill">Natural</span>
+          <span class="cb-pill">Teal & Orange</span>
+          <span class="cb-pill">Bleach Bypass</span>
+          <span class="cb-pill">Film Noir</span>
+          <span class="cb-pill">Warm Tungsten</span>
+          <span class="cb-pill">Desaturated</span>
+          <span class="cb-pill">High Contrast</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ STATS ═══════ -->
+  <section class="stats-section">
+    <div class="stats-eyebrow">The difference is everything</div>
+    <h2 class="display stats-headline">Built for the<br>language of cinema.</h2>
+
+    <div class="stats-row">
+      <div class="stat-cell">
+        <div class="stat-number">6</div>
+        <div class="stat-desc">Professional shot<br>coverage types</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-number">360°</div>
+        <div class="stat-desc">Full camera angle<br>control</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-number">&lt;30s</div>
+        <div class="stat-desc">From prompt to<br>cinematic frame</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-number">∞</div>
+        <div class="stat-desc">Unique scenes,<br>unlimited stories</div>
+      </div>
+    </div>
+
+    <div class="stats-features">
+      <div class="sf-card">
+        <div class="sf-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+        </div>
+        <div class="sf-title">AI Concept Generation</div>
+        <div class="sf-desc">Turn a single script line into a visual reference in seconds. No storyboard artist required.</div>
+      </div>
+      <div class="sf-card">
+        <div class="sf-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" stroke-linecap="round"><path d="M15 10l4.553-2.369A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
+        </div>
+        <div class="sf-title">Six Shot Types</div>
+        <div class="sf-desc">The complete grammar of cinema. Every coverage type trained on decades of professional cinematography.</div>
+      </div>
+      <div class="sf-card">
+        <div class="sf-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" stroke-linecap="round"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2z"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div class="sf-title">Full Camera Control</div>
+        <div class="sf-desc">Lens, angle, movement, light. Direct with the precision of a DP on set — without the crew.</div>
+      </div>
+      <div class="sf-card">
+        <div class="sf-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="sf-title">Visual Continuity</div>
+        <div class="sf-desc">Maintain consistent look, tone, and character across every frame and sequence of your production.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ GALLERY ═══════ -->
+  <section class="gallery-section">
+    <div class="gallery-header">
+      <span class="overline">Output</span>
+      <h2 class="display section-headline">Every frame,<br>cinema-ready.</h2>
+    </div>
+    <div class="gallery-pin-wrap">
+      <div class="gallery-pin">
+        <div class="gallery-grid" id="film-gallery">
+          <div class="gi"><div class="ph"><span class="ph-label">Character Action</span></div><div class="gi-overlay"></div><span class="gi-label">Character Action</span></div>
+          <div class="gi"><div class="ph"><span class="ph-label">Dialogue Coverage</span></div><div class="gi-overlay"></div><span class="gi-label">Dialogue Coverage</span></div>
+          <div class="gi"><div class="ph"><span class="ph-label">Scene Coverage</span></div><div class="gi-overlay"></div><span class="gi-label">Scene Coverage</span></div>
+          <div class="gi"><div class="ph"><span class="ph-label">B-Roll Coverage</span></div><div class="gi-overlay"></div><span class="gi-label">B-Roll Coverage</span></div>
+          <div class="gi"><div class="ph"><span class="ph-label">Time Jump</span></div><div class="gi-overlay"></div><span class="gi-label">Time Jump</span></div>
+          <div class="gi"><div class="ph"><span class="ph-label">Scene Jump</span></div><div class="gi-overlay"></div><span class="gi-label">Scene Jump</span></div>
+          <div class="gi"><div class="ph"><span class="ph-label">Character Action</span></div><div class="gi-overlay"></div><span class="gi-label">Character Action</span></div>
+          <div class="gi"><div class="ph"><span class="ph-label">Dialogue Coverage</span></div><div class="gi-overlay"></div><span class="gi-label">Dialogue Coverage</span></div>
+          <div class="gi"><div class="ph"><span class="ph-label">Scene Coverage</span></div><div class="gi-overlay"></div><span class="gi-label">Scene Coverage</span></div>
+          <div class="gi"><div class="ph"><span class="ph-label">B-Roll</span></div><div class="gi-overlay"></div><span class="gi-label">B-Roll</span></div>
+          <div class="gi"><div class="ph"><span class="ph-label">Time Jump</span></div><div class="gi-overlay"></div><span class="gi-label">Time Jump</span></div>
+          <div class="gi"><div class="ph"><span class="ph-label">Scene Jump</span></div><div class="gi-overlay"></div><span class="gi-label">Scene Jump</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ CTA ═══════ -->
+  <section class="film-cta grain">
+    <span class="overline">Start Now</span>
+    <h2 class="display cta-headline">Your story<br>starts here.</h2>
+    <div class="cta-btns">
+      <a href="#" class="btn-primary">
+        Start Creating
+        <svg class="arrow-icon" width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#" class="btn-ghost">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        Watch a Film
+      </a>
+    </div>
+  </section>
+
+  <div id="site-footer"></div>
+
+  <script src="navbar.js"></script>
+  <script src="footer.js"></script>
+  <script>
+    // Gallery zoom on scroll
+    const grid = document.getElementById('film-gallery');
+    const SCALE_START = 1.18, SCALE_END = 1.0;
+
+    function updateGallery() {
+      if (!grid) return;
+      if (window.innerWidth <= 768) { grid.style.transform = ''; return; }
+      const wrap = grid.closest('.gallery-pin-wrap');
+      if (!wrap) return;
+      const rect = wrap.getBoundingClientRect();
+      const scrollable = wrap.offsetHeight - window.innerHeight;
+      const progress = Math.max(0, Math.min(1, -rect.top / scrollable));
+      const scale = SCALE_START + (SCALE_END - SCALE_START) * progress;
+      grid.style.transform = `scale(${scale})`;
+    }
+
+    window.addEventListener('scroll', updateGallery, { passive: true });
+    window.addEventListener('resize', updateGallery);
+    updateGallery();
+  </script>
+</body>
+</html>
