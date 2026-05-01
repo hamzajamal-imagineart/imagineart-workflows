@@ -117,7 +117,7 @@
         max-width: 1240px;
         height: auto;
         display: inline-block;
-        opacity: 0.045;
+        opacity: 1;
       }
 
       /* ── Bottom bar ── */
@@ -182,7 +182,7 @@
         <!-- Brand -->
         <div class="sf-brand">
           <!-- Logo -->
-          <img src="./assets/logo-imagine-white.svg" alt="ImagineArt Workflows" width="158" height="39" style="display:block;opacity:0.9;">
+          <img src="./assets/logo-icon.svg" alt="ImagineArt" width="40" height="40" style="display:block;">
 
           <!-- App stores -->
           <div class="sf-app">
