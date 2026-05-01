@@ -182,7 +182,7 @@
         <!-- Brand -->
         <div class="sf-brand">
           <!-- Logo -->
-          <img src="./assets/logo-icon.svg" alt="ImagineArt" width="40" height="40" style="display:block;">
+          <img src="./assets/logo-icon.svg" alt="ImagineArt" width="28" height="28" style="display:block;">
 
           <!-- App stores -->
           <div class="sf-app">
