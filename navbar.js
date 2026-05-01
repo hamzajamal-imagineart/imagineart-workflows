@@ -97,10 +97,9 @@
     transition: transform 0.25s ease, opacity 0.2s ease;
     transform-origin: center;
   }
-  .nav-hamburger .bars { display: flex; flex-direction: column; gap: 4.5px; }
-  .nav-hamburger.open .bar:nth-child(1) { transform: translateY(6px) rotate(45deg); }
-  .nav-hamburger.open .bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
-  .nav-hamburger.open .bar:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+  .nav-hamburger .bars { display: flex; flex-direction: column; gap: 5px; }
+  .nav-hamburger.open .bar:nth-child(1) { transform: translateY(3.25px) rotate(45deg); }
+  .nav-hamburger.open .bar:nth-child(2) { transform: translateY(-3.25px) rotate(-45deg); }
 
   /* ─── Mobile menu panel ──────────────────────────────── */
   .nav-mobile-menu {
@@ -321,7 +320,6 @@
       </div>
       <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu">
         <span class="bars">
-          <span class="bar"></span>
           <span class="bar"></span>
           <span class="bar"></span>
         </span>
