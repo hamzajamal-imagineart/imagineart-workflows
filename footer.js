@@ -8,6 +8,7 @@
         background: #070707;
         border-top: 1px solid rgba(255,255,255,0.06);
         font-family: 'Inter', sans-serif;
+        overflow: hidden;
       }
       .sf-inner {
         max-width: 1240px;
@@ -98,12 +99,12 @@
       .sf-wordmark {
         font-size: 17vw; font-weight: 900;
         color: rgba(255,255,255,0.04);
-        text-align: center; line-height: 0.85;
+        text-align: center; line-height: 1;
         letter-spacing: -0.04em;
         user-select: none; pointer-events: none;
         padding: 48px 0 0;
         font-family: 'Inter', sans-serif;
-        overflow: hidden;
+        overflow: visible;
       }
 
       /* ── Bottom bar ── */
