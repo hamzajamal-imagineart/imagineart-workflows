@@ -97,14 +97,14 @@
 
       /* ── Big wordmark ── */
       .sf-wordmark {
-        font-size: 17vw; font-weight: 900;
+        font-size: clamp(60px, 17vw, 215px);
+        font-weight: 900;
         color: rgba(255,255,255,0.04);
         text-align: center; line-height: 1;
         letter-spacing: -0.04em;
         user-select: none; pointer-events: none;
-        padding: 48px 0 0;
+        padding: 24px 0 0;
         font-family: 'Inter', sans-serif;
-        overflow: visible;
       }
 
       /* ── Bottom bar ── */
@@ -141,7 +141,6 @@
         .sf-top { flex-direction: column; gap: 32px; }
         .sf-brand { width: 100%; flex-direction: row; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
         .sf-cols { grid-template-columns: repeat(2, 1fr); }
-        .sf-wordmark { font-size: 22vw; }
       }
       @media (max-width: 480px) {
         .sf-cols { grid-template-columns: repeat(2, 1fr); gap: 24px; }
@@ -267,9 +266,6 @@
         </div>
       </div>
 
-      <!-- Big wordmark -->
-      <div class="sf-wordmark">ImagineArt</div>
-
       <!-- Bottom bar -->
       <div class="sf-bar">
         <div class="sf-bar-l">
@@ -299,6 +295,8 @@
       </div>
 
     </div>
+    <!-- Big wordmark — full footer width -->
+    <div class="sf-wordmark">ImagineArt</div>
   </footer>
   `;
 
