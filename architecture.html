@@ -2209,67 +2209,7 @@
         ).join('');
 
         // Replace mobile menu links with section links
-        const mobileInner = document.querySelector('.nav-mobile-inner');
+        const mobileInner = document.getElementById('nav-mobile-inner');
         if (mobileInner) {
           mobileInner.innerHTML =
             NAV_LINKS.map(l => `<a href="${l.href}" class="nav-mobile-link" data-sec="${l.href.slice(1)}">${l.label}</a>`).join('') +
-            `<div class="nav-mobile-divider"></div>
-            <div class="nav-mobile-actions">
-              <a href="https://www.imagine.art/flow" target="_blank" rel="noopener" class="navbar-btn navbar-btn-dark">Get Started</a>
-            </div>`;
-          mobileInner.querySelectorAll('.nav-mobile-link[data-sec]').forEach(a => {
-            a.addEventListener('click', e => {
-              e.preventDefault();
-              const t = document.getElementById(a.dataset.sec);
-              if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              document.getElementById('nav-mobile-menu').classList.remove('open');
-              document.getElementById('nav-hamburger').classList.remove('open');
-              document.body.style.overflow = '';
-            });
-          });
-        }
-
-        // Smooth scroll
-        navLinksEl.addEventListener('click', function (e) {
-          const a = e.target.closest('.nav-link[data-sec]');
-          if (!a) return;
-          e.preventDefault();
-          const target = document.getElementById(a.dataset.sec);
-          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-
-        // Active state on scroll
-        const sections = NAV_LINKS.map(l => document.getElementById(l.href.slice(1))).filter(Boolean);
-        const links    = navLinksEl.querySelectorAll('.nav-link[data-sec]');
-
-        function setActive() {
-          const scrollY = window.scrollY + window.innerHeight * 0.35;
-          let active = sections[0];
-          sections.forEach(sec => { if (sec.offsetTop <= scrollY) active = sec; });
-          links.forEach(a => {
-            a.classList.toggle('nav-link-active', a.dataset.sec === active.id);
-          });
-        }
-
-        window.addEventListener('scroll', setActive, { passive: true });
-        setActive();
-      }
-
-      // Inject active link CSS + hide sign in
-      const s = document.createElement('style');
-      s.textContent = `
-        .navbar:not(.scrolled) .nav-link-active { color: #fff !important; background: rgba(255,255,255,0.12) !important; }
-        .navbar.scrolled .nav-link-active { color: #fff !important; background: #0f0f0f !important; }
-        .navbar-btn-ghost { display: none !important; }
-        .nav-link-active { color: #0f0f0f !important; background: rgba(15,15,15,0.09) !important; font-weight: 500 !important; }
-        .navbar:not(.scrolled) .nav-link-active { color: #fff !important; background: rgba(255,255,255,0.18) !important; }
-        .navbar.scrolled .nav-link-active { color: #0f0f0f !important; background: rgba(15,15,15,0.09) !important; }
-        .nav-link { font-weight: 400 !important; }
-      `;
-      document.head.appendChild(s);
-
-      init();
-    })();
-  </script>
-</body>
-</html>
