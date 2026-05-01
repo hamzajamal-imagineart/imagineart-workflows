@@ -102,6 +102,10 @@
   .nav-hamburger.open .bar:nth-child(2) { transform: translateY(-3.25px) rotate(-45deg); }
 
   /* ─── Mobile menu — full-screen dark overlay ─────────── */
+  @keyframes mobileMenuIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
   .nav-mobile-menu {
     display: none;
     position: fixed; inset: 0; z-index: 101;
@@ -110,6 +114,7 @@
   }
   .nav-mobile-menu.open {
     display: flex;
+    animation: mobileMenuIn 0.22s cubic-bezier(0.4,0,0.2,1) forwards;
   }
   /* Top bar inside overlay */
   .nav-mobile-topbar {
@@ -123,11 +128,15 @@
     transition: color 0.15s;
   }
   .nav-mobile-close:hover { color: #fff; }
-  /* Centered links */
+  /* Vertically centered body */
+  .nav-mobile-body {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding-bottom: 40px;
+  }
   .nav-mobile-inner {
     display: flex; flex-direction: column;
     align-items: center; gap: 4px;
-    padding-top: 32px;
   }
   .nav-mobile-link {
     display: block; text-align: center;
@@ -137,14 +146,13 @@
     transition: color 0.15s, background 0.15s;
   }
   .nav-mobile-link:hover { color: #fff; background: rgba(255,255,255,0.05); }
-  /* Bottom CTA */
   .nav-mobile-divider {
     display: block;
     height: 1px; background: rgba(255,255,255,0.08);
-    margin: 16px 24px;
+    width: calc(100% - 48px); margin: 16px 0;
   }
   .nav-mobile-actions {
-    padding: 0 24px 8px; display: flex; justify-content: center;
+    padding: 0 24px; display: flex; justify-content: center;
   }
   .nav-mobile-actions .navbar-btn {
     height: 44px; padding: 0 32px; font-size: 14px;
@@ -345,10 +353,12 @@
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 3l12 12M15 3L3 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
       </button>
     </div>
-    <div class="nav-mobile-inner" id="nav-mobile-inner"></div>
-    <div class="nav-mobile-divider"></div>
-    <div class="nav-mobile-actions">
-      <a href="https://www.imagine.art/flow" target="_blank" rel="noopener" class="navbar-btn navbar-btn-dark">Get Started →</a>
+    <div class="nav-mobile-body">
+      <div class="nav-mobile-inner" id="nav-mobile-inner"></div>
+      <div class="nav-mobile-divider"></div>
+      <div class="nav-mobile-actions">
+        <a href="https://www.imagine.art/flow" target="_blank" rel="noopener" class="navbar-btn navbar-btn-dark">Get Started →</a>
+      </div>
     </div>
   </div>`;
 
