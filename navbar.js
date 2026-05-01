@@ -371,12 +371,10 @@
   function openMenu() {
     mobileMenu.classList.add('open');
     hamburger.classList.add('open');
-    document.body.style.overflow = 'hidden';
   }
   function closeMenu() {
     mobileMenu.classList.remove('open');
     hamburger.classList.remove('open');
-    document.body.style.overflow = '';
   }
 
   if (hamburger)  hamburger.addEventListener('click', function () {
