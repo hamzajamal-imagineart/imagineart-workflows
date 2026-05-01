@@ -114,7 +114,7 @@
       }
       .sf-wordmark img {
         width: 100%;
-        max-width: 960px;
+        max-width: 1240px;
         height: auto;
         display: inline-block;
         opacity: 0.045;
