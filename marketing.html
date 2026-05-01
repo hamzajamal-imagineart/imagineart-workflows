@@ -399,23 +399,24 @@
     /* ─── Ads Section ───────────────────────────────────── */
     /* ── How it works ── */
     .mkt-hiw { background: #0b0b0b; padding: 120px 0; }
-    .mkt-hiw-inner { max-width: 1240px; margin: 0 auto; padding: 0 40px; display: flex; flex-direction: column; gap: 56px; }
+    .mkt-hiw-inner { max-width: 1240px; margin: 0 auto; padding: 0 40px; display: flex; flex-direction: column; gap: 64px; }
     .mkt-hiw-head { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px; }
     .mkt-hiw-head h2 { font-size: clamp(32px, 3.5vw, 52px); font-weight: 700; letter-spacing: -1.2px; color: #fff; line-height: 1.08; }
     .mkt-hiw-head p { font-size: 15px; color: rgba(255,255,255,0.4); max-width: 460px; line-height: 1.65; }
-    .mkt-hiw-ui { display: grid; grid-template-columns: 1fr 380px; gap: 40px; align-items: center; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; overflow: hidden; }
-    .mkt-hiw-ui img { width: 100%; height: 100%; object-fit: cover; display: block; min-height: 420px; }
-    .mkt-hiw-steps { display: flex; flex-direction: column; gap: 32px; padding: 40px 40px 40px 0; }
-    .mkt-hiw-step { display: flex; gap: 16px; align-items: flex-start; }
-    .mkt-hiw-num { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.06); border-radius: 6px; padding: 4px 8px; flex-shrink: 0; margin-top: 2px; }
-    .mkt-hiw-step strong { display: block; font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 5px; }
-    .mkt-hiw-step p { font-size: 13.5px; color: rgba(255,255,255,0.4); line-height: 1.6; margin: 0; }
+    .mkt-hiw-img { width: 100%; border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.07); }
+    .mkt-hiw-img img { width: 100%; display: block; object-fit: cover; max-height: 560px; }
+    .mkt-hiw-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; overflow: hidden; }
+    .mkt-hiw-step { padding: 36px 36px; border-right: 1px solid rgba(255,255,255,0.07); display: flex; flex-direction: column; gap: 16px; }
+    .mkt-hiw-step:last-child { border-right: none; }
+    .mkt-hiw-num { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: rgba(255,255,255,0.22); }
+    .mkt-hiw-step strong { font-size: 17px; font-weight: 600; color: #fff; letter-spacing: -0.3px; line-height: 1.3; }
+    .mkt-hiw-step p { font-size: 13.5px; color: rgba(255,255,255,0.38); line-height: 1.65; margin: 0; }
     @media (max-width: 820px) {
       .mkt-hiw { padding: 80px 0; }
-      .mkt-hiw-inner { padding: 0 20px; gap: 36px; }
-      .mkt-hiw-ui { grid-template-columns: 1fr; }
-      .mkt-hiw-ui img { min-height: 240px; }
-      .mkt-hiw-steps { padding: 0 24px 32px; }
+      .mkt-hiw-inner { padding: 0 20px; gap: 40px; }
+      .mkt-hiw-steps { grid-template-columns: 1fr; }
+      .mkt-hiw-step { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
+      .mkt-hiw-step:last-child { border-bottom: none; }
     }
 
     .mkt-ads { background: #fff; padding: 120px 0; }
@@ -872,30 +873,25 @@
         <p>Build once, run forever. Connect your brief, brand assets, and channels into a single workflow — no manual handoffs, no bottlenecks.</p>
       </div>
 
-      <div class="mkt-hiw-ui reveal-blur">
+      <div class="mkt-hiw-img reveal-blur">
         <img src="/assets/marketing/Frame 2147234242 Large.jpeg" alt="ImagineArt Workflows for marketing" />
-        <div class="mkt-hiw-steps">
-          <div class="mkt-hiw-step">
-            <span class="mkt-hiw-num">01</span>
-            <div>
-              <strong>Drop in your brief</strong>
-              <p>Upload brand assets, copy direction, and reference visuals — the workflow picks it up from there.</p>
-            </div>
-          </div>
-          <div class="mkt-hiw-step">
-            <span class="mkt-hiw-num">02</span>
-            <div>
-              <strong>Build your campaign pipeline</strong>
-              <p>Chain nodes for image generation, resizing, copy overlay, and format adaption — all in one canvas.</p>
-            </div>
-          </div>
-          <div class="mkt-hiw-step">
-            <span class="mkt-hiw-num">03</span>
-            <div>
-              <strong>Ship across every channel</strong>
-              <p>Export campaign-ready assets for social, display, and print — all on-brand, all at once.</p>
-            </div>
-          </div>
+      </div>
+
+      <div class="mkt-hiw-steps reveal-blur">
+        <div class="mkt-hiw-step">
+          <span class="mkt-hiw-num">01</span>
+          <strong>Brief to visual in minutes</strong>
+          <p>Upload your brand kit, copy direction, and reference images. The workflow handles the rest.</p>
+        </div>
+        <div class="mkt-hiw-step">
+          <span class="mkt-hiw-num">02</span>
+          <strong>One pipeline, every format</strong>
+          <p>Generate, resize, overlay, and adapt — social, display, OOH — from a single connected canvas.</p>
+        </div>
+        <div class="mkt-hiw-step">
+          <span class="mkt-hiw-num">03</span>
+          <strong>Ship faster than the brief</strong>
+          <p>Campaign-ready assets, on-brand, across every channel — before the next stand-up.</p>
         </div>
       </div>
 
