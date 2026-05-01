@@ -945,8 +945,9 @@
       .hero-left { padding: 96px 24px 48px; }
       .hero-headline { font-size: clamp(38px, 10vw, 56px); letter-spacing: -2px; }
       .hero-body { font-size: 15px; }
-      .hero-ctas { flex-direction: column; align-items: flex-start; gap: 10px; }
-      .hero-cta-primary, .hero-cta-ghost { width: 100%; justify-content: center; }
+      .hero-ctas { flex-direction: row; align-items: center; gap: 8px; flex-wrap: nowrap; }
+      .hero-cta-primary, .hero-cta-ghost { width: auto; }
+      .btn-hero { height: 40px; padding: 8px 14px; font-size: 14px; border-radius: 14px; }
       .hero-right { height: 72vw; min-height: 260px; max-height: 360px; padding: 8px 12px 12px; }
 
       /* Marquee items — smaller */
@@ -1232,7 +1233,7 @@
 
       <!-- CTAs -->
       <div class="hero-ctas reveal reveal-d2">
-        <a href="#" class="btn-hero btn-demo">Book a demo</a>
+        <a href="https://www.imagine.art/flow?tab=discover" class="btn-hero btn-demo">Explore templates</a>
         <a href="https://www.imagine.art/flow" class="btn-hero btn-get-started">
           Get Started
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M16 10l-4.5-4.5M16 10l-4.5 4.5" stroke="#0f0f0f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1261,7 +1262,7 @@
           <div class="hero-slide">
             <img src="/assets/architecture/arch-render-living-room-2.jpeg" alt="Bold architectural exterior">
           </div>
-        </div>
+        </a>
 
         <!-- Arc loader + counter — bottom right -->
         <div class="hero-loader">
@@ -1272,7 +1273,7 @@
           <div class="hero-loader-count">
             <strong id="slideCurrentNum">1</strong> / 4
           </div>
-        </div>
+        </a>
 
         <!-- Slide label -->
         <div class="hero-slide-label" id="slideLabel">Chalet Interior</div>
@@ -1300,7 +1301,7 @@
       <div class="styles-bento">
 
         <!-- 1 — Minimalist -->
-        <div class="s-card">
+        <a class="s-card" href="https://www.imagine.art/flow?tab=discover">
           <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80" alt="Minimalist">
           <div class="s-card-overlay"></div>
           <span class="s-card-tag">Minimalist</span>
@@ -1312,10 +1313,10 @@
             <div class="s-card-sub">Clean, calm, intentional</div>
             <div class="s-card-prompt">White walls, polished concrete, floor-to-ceiling windows, warm oak accents, diffused natural light.</div>
           </div>
-        </div>
+        </a>
 
         <!-- 2 — Japandi -->
-        <div class="s-card">
+        <a class="s-card" href="https://www.imagine.art/flow?tab=discover">
           <img src="https://images.unsplash.com/photo-1598928636135-d146006ff4be?auto=format&fit=crop&w=800&q=80" alt="Japandi">
           <div class="s-card-overlay"></div>
           <span class="s-card-tag">Japandi</span>
@@ -1327,10 +1328,10 @@
             <div class="s-card-sub">East meets Scandinavian</div>
             <div class="s-card-prompt">Natural wood, wabi-sabi textures, muted earthy tones, soft shoji light, low furniture.</div>
           </div>
-        </div>
+        </a>
 
         <!-- 3 — Brutalist -->
-        <div class="s-card">
+        <a class="s-card" href="https://www.imagine.art/flow?tab=discover">
           <img src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=700&q=80" alt="Brutalist">
           <div class="s-card-overlay"></div>
           <span class="s-card-tag">Brutalist</span>
@@ -1342,10 +1343,10 @@
             <div class="s-card-sub">Bold, raw, unapologetic</div>
             <div class="s-card-prompt">Raw concrete, monolithic volumes, geometric shadows, heavy materiality, dramatic side lighting.</div>
           </div>
-        </div>
+        </a>
 
         <!-- 4 — Industrial -->
-        <div class="s-card">
+        <a class="s-card" href="https://www.imagine.art/flow?tab=discover">
           <img src="https://images.unsplash.com/photo-1542621334-a254cf47733d?auto=format&fit=crop&w=700&q=80" alt="Industrial">
           <div class="s-card-overlay"></div>
           <span class="s-card-tag">Industrial</span>
@@ -1357,10 +1358,10 @@
             <div class="s-card-sub">Raw materials, urban soul</div>
             <div class="s-card-prompt">Exposed brick, steel beams, Edison lighting, open ceilings, reclaimed wood.</div>
           </div>
-        </div>
+        </a>
 
         <!-- 5 — Art Deco -->
-        <div class="s-card">
+        <a class="s-card" href="https://www.imagine.art/flow?tab=discover">
           <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=900&q=80" alt="Art Deco">
           <div class="s-card-overlay"></div>
           <span class="s-card-tag">Art Deco</span>
@@ -1372,10 +1373,10 @@
             <div class="s-card-sub">Glamour, geometry, gold</div>
             <div class="s-card-prompt">Geometric gold details, marble floors, rich jewel tones, symmetrical grandeur, statement fixtures.</div>
           </div>
-        </div>
+        </a>
 
         <!-- 6 — Biophilic -->
-        <div class="s-card">
+        <a class="s-card" href="https://www.imagine.art/flow?tab=discover">
           <img src="https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=800&q=80" alt="Biophilic">
           <div class="s-card-overlay"></div>
           <span class="s-card-tag">Biophilic</span>
@@ -1387,10 +1388,10 @@
             <div class="s-card-sub">Nature inside the walls</div>
             <div class="s-card-prompt">Living walls, natural stone, wood ceilings, abundant greenery, organic forms, soft daylight.</div>
           </div>
-        </div>
+        </a>
 
         <!-- 7 — Contemporary -->
-        <div class="s-card">
+        <a class="s-card" href="https://www.imagine.art/flow?tab=discover">
           <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1100&q=80" alt="Contemporary">
           <div class="s-card-overlay"></div>
           <span class="s-card-tag">Contemporary</span>
@@ -1402,10 +1403,10 @@
             <div class="s-card-sub">Modern luxury, refined</div>
             <div class="s-card-prompt">Neutral palette, sculptural furniture, recessed lighting, seamless surfaces, quiet opulence.</div>
           </div>
-        </div>
+        </a>
 
         <!-- 8 — Mediterranean -->
-        <div class="s-card">
+        <a class="s-card" href="https://www.imagine.art/flow?tab=discover">
           <img src="https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&w=900&q=80" alt="Mediterranean">
           <div class="s-card-overlay"></div>
           <span class="s-card-tag">Mediterranean</span>
@@ -1423,7 +1424,7 @@
 
       <!-- CTA -->
       <div class="styles-cta-row reveal reveal-d3">
-        <a href="#" class="styles-cta-btn">
+        <a href="https://www.imagine.art/flow?tab=discover" class="styles-cta-btn">
           Explore all templates
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
@@ -1722,7 +1723,7 @@
     <div class="gallery-pin-wrap">
       <div class="gallery-pin">
         <div class="gallery-masonry" id="archGalleryGrid">
-          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
+          <div class="gallery-item"><img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></a>
           <div class="gallery-item"><img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
           <div class="gallery-item"><img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
           <div class="gallery-item"><img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=600&q=80" alt=""><div class="gallery-overlay"></div></div>
