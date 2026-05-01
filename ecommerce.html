@@ -48,7 +48,7 @@
       opacity: 0.45;
     }
     .hero-h1 {
-      font-size: clamp(48px, 6vw, 72px); font-weight: 600;
+      font-size: clamp(42px, 5vw, 64px); font-weight: 600;
       line-height: 1.06; letter-spacing: -3px; color: #fff;
       max-width: 760px;
     }
@@ -174,10 +174,10 @@
        STATEMENT
     ══════════════════════════════════════ */
     .statement { background: var(--white); padding: 140px var(--px); text-align: center; }
-    .statement-inner { max-width: 800px; margin: 0 auto; }
+    .statement-inner { max-width: 1100px; margin: 0 auto; }
     .statement h2 {
-      font-size: clamp(24px, 2.5vw, 36px); font-weight: 600;
-      line-height: 1.32; letter-spacing: -0.8px; color: var(--ink);
+      font-size: clamp(32px, 4vw, 56px); font-weight: 600;
+      line-height: 1.2; letter-spacing: -1.5px; color: var(--ink);
     }
     /* Word-by-word scroll highlight */
     .statement h2 .w {
@@ -474,14 +474,12 @@
     .stagger.in > *:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.15s; }
     .stagger.in > *:nth-child(4) { opacity: 1; transform: none; transition-delay: 0.21s; }
     .stagger.in > *:nth-child(5) { opacity: 1; transform: none; transition-delay: 0.27s; }
-    .hw { display: inline-block; opacity: 0; transform: translateY(22px); animation: hwUp 0.75s cubic-bezier(0.16,1,0.3,1) forwards; }
-    .hw-1 { animation-delay: 0.05s; }
-    .hw-2 { animation-delay: 0.16s; }
-    .hw-3 { animation-delay: 0.27s; }
-    .hw-4 { animation-delay: 0.38s; }
-    .hw em { font-style: italic; font-weight: inherit; color: #fff; }
     em { color: rgba(255,255,255,0.42); }
-    @keyframes hwUp { to { opacity: 1; transform: none; } }
+    @keyframes charReveal {
+      from { opacity: 0; transform: translateY(18px); filter: blur(5px); }
+      to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+    }
+    .char-anim { display: inline-block; opacity: 0; animation: charReveal 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
     /* ── Preloader ──────────────────────────────────────────── */
     #preloader {
@@ -1184,6 +1182,44 @@
         setActive();
       }
       init();
+    })();
+  </script>
+  <script>
+    // ── Character-by-character hero animation ──
+    (function () {
+      function splitChars(node, counter) {
+        const frag = document.createDocumentFragment();
+        node.childNodes.forEach(function (child) {
+          if (child.nodeType === Node.TEXT_NODE) {
+            child.textContent.split('').forEach(function (ch) {
+              if (/\s/.test(ch)) {
+                frag.appendChild(document.createTextNode(ch));
+              } else {
+                const s = document.createElement('span');
+                s.className = 'char-anim';
+                s.style.animationDelay = (100 + counter.i * 28) + 'ms';
+                s.textContent = ch;
+                frag.appendChild(s);
+                counter.i++;
+              }
+            });
+          } else if (child.nodeName === 'BR') {
+            frag.appendChild(child.cloneNode());
+          } else if (child.nodeType === Node.ELEMENT_NODE) {
+            const clone = child.cloneNode(false);
+            clone.appendChild(splitChars(child, counter));
+            frag.appendChild(clone);
+          }
+        });
+        return frag;
+      }
+      const h1 = document.querySelector('.hero-h1');
+      if (h1) {
+        const counter = { i: 0 };
+        const frag = splitChars(h1, counter);
+        h1.innerHTML = '';
+        h1.appendChild(frag);
+      }
     })();
   </script>
 </body>

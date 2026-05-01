@@ -258,7 +258,7 @@
     .arch-hiw-head h2 { font-size: clamp(32px, 4vw, 48px); font-weight: 600; letter-spacing: -1.2px; color: #fff; line-height: 1.08; }
     .arch-hiw-head p { font-size: 18px; color: rgba(255,255,255,0.4); max-width: 460px; line-height: 1.65; }
     .arch-hiw-ui { display: grid; grid-template-columns: 1fr 380px; gap: 40px; align-items: center; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; overflow: hidden; }
-    .arch-hiw-img { background-color: #000; background-image: radial-gradient(rgba(255,255,255,0.12) 1px, transparent 1px); background-size: 22px 22px; display: flex; align-items: center; justify-content: center; padding: 0; position: relative; }
+    .arch-hiw-img { background-color: #000; background-image: radial-gradient(rgba(255,255,255,0.12) 1px, transparent 1px); background-size: 22px 22px; display: flex; align-items: center; justify-content: center; padding: 32px; position: relative; }
     .arch-hiw-img::after { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(rgba(255,255,255,0.55) 1px, transparent 1px); background-size: 22px 22px; -webkit-mask-image: radial-gradient(circle 200px at var(--mx, -9999px) var(--my, -9999px), black 0%, transparent 100%); mask-image: radial-gradient(circle 200px at var(--mx, -9999px) var(--my, -9999px), black 0%, transparent 100%); }
     .arch-hiw-img img { width: 100%; height: 100%; object-fit: contain; display: block; position: relative; z-index: 1; }
     .arch-hiw-steps { display: flex; flex-direction: column; gap: 32px; padding: 40px 40px 40px 0; }
@@ -863,18 +863,15 @@
       pointer-events: none;
     }
 
-    /* 4. Hero word reveal — CSS animation, no JS manipulation */
-    .hw {
+    /* 4. Hero character reveal */
+    @keyframes charReveal {
+      from { opacity: 0; transform: translateY(18px); filter: blur(5px); }
+      to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+    }
+    .char-anim {
       display: inline-block;
       opacity: 0;
-      transform: translateY(32px);
-      animation: hwReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-    .hw-1 { animation-delay: 0.15s; }
-    .hw-2 { animation-delay: 0.28s; }
-    .hw-3 { animation-delay: 0.42s; }
-    @keyframes hwReveal {
-      to { opacity: 1; transform: translateY(0); }
+      animation: charReveal 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     /* 5. Section heading line-wipe — removed (reveal-blur handles headings) */
@@ -2330,6 +2327,45 @@
       document.head.appendChild(s);
 
       init();
+
+      // Character-by-character hero reveal
+      (function() {
+        const el = document.querySelector('.hero-headline');
+        if (!el) return;
+        function splitChars(node, counter) {
+          const children = Array.from(node.childNodes);
+          node.innerHTML = '';
+          children.forEach(child => {
+            if (child.nodeType === 3) {
+              [...child.textContent].forEach(ch => {
+                if (ch.trim() === '') { node.appendChild(document.createTextNode(ch)); return; }
+                const s = document.createElement('span');
+                s.className = 'char-anim';
+                s.style.animationDelay = (100 + counter.i * 28) + 'ms';
+                s.textContent = ch;
+                counter.i++;
+                node.appendChild(s);
+              });
+            } else if (child.nodeName === 'BR') {
+              node.appendChild(document.createElement('br'));
+            } else if (child.nodeType === 1) {
+              const wrap = document.createElement(child.tagName.toLowerCase());
+              wrap.className = child.className;
+              [...child.textContent].forEach(ch => {
+                if (ch.trim() === '') { wrap.appendChild(document.createTextNode(ch)); return; }
+                const s = document.createElement('span');
+                s.className = 'char-anim';
+                s.style.animationDelay = (100 + counter.i * 28) + 'ms';
+                s.textContent = ch;
+                counter.i++;
+                wrap.appendChild(s);
+              });
+              node.appendChild(wrap);
+            }
+          });
+        }
+        splitChars(el, { i: 0 });
+      })();
 
       // Dot grid glow on hiw image
       const hiwImg = document.querySelector('.arch-hiw-img');
