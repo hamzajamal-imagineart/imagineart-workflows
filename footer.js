@@ -1,5 +1,13 @@
 (function () {
   /* ── 1. Inject CSS ─────────────────────────────────────────────── */
+  if (!document.getElementById('sf-font')) {
+    const link = document.createElement('link');
+    link.id = 'sf-font';
+    link.rel = 'stylesheet';
+    link.href = 'https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@100..900&family=Google+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap';
+    document.head.appendChild(link);
+  }
+
   if (!document.getElementById('sf-styles')) {
     const style = document.createElement('style');
     style.id = 'sf-styles';
@@ -7,7 +15,7 @@
       .sf {
         background: #070707;
         border-top: 1px solid rgba(255,255,255,0.06);
-        font-family: 'Inter', sans-serif;
+        font-family: 'Google Sans Flex', 'Google Sans', sans-serif;
         overflow-x: hidden;
       }
       .sf-inner {
@@ -99,15 +107,16 @@
       .sf-wordmark {
         text-align: center;
         user-select: none; pointer-events: none;
-        padding: 16px 0 0;
+        padding: 16px 40px 0;
         line-height: 0;
-        width: 100%;
+        max-width: 1240px;
+        margin: 0 auto;
       }
       .sf-wordmark img {
         width: 100%;
-        max-width: 100%;
+        max-width: 960px;
         height: auto;
-        display: block;
+        display: inline-block;
         opacity: 0.045;
       }
 
