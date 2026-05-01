@@ -104,7 +104,7 @@
   /* ─── Mobile menu — full-screen dark overlay ─────────── */
   .nav-mobile-menu {
     display: none;
-    position: fixed; inset: 0; z-index: 99;
+    position: fixed; inset: 0; z-index: 101;
     background: #0a0a0a;
     flex-direction: column;
   }
