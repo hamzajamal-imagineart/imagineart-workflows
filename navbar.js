@@ -103,14 +103,13 @@
 
   /* ─── Mobile menu — full-screen dark overlay ─────────── */
   .nav-mobile-menu {
+    display: none;
     position: fixed; inset: 0; z-index: 99;
     background: #0a0a0a;
-    display: flex; flex-direction: column;
-    opacity: 0; visibility: hidden; pointer-events: none;
-    transition: opacity 0.25s ease, visibility 0.25s ease;
+    flex-direction: column;
   }
   .nav-mobile-menu.open {
-    opacity: 1; visibility: visible; pointer-events: auto;
+    display: flex;
   }
   /* Top bar inside overlay */
   .nav-mobile-topbar {
