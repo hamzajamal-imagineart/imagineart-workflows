@@ -125,8 +125,9 @@
   .nav-mobile-close:hover { color: #fff; }
   /* Centered links */
   .nav-mobile-inner {
-    flex: 1; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 4px;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 4px;
+    padding-top: 32px;
   }
   .nav-mobile-link {
     display: block; text-align: center;
@@ -140,11 +141,10 @@
   .nav-mobile-divider {
     display: block;
     height: 1px; background: rgba(255,255,255,0.08);
-    margin: 0 24px;
-    flex-shrink: 0;
+    margin: 16px 24px;
   }
   .nav-mobile-actions {
-    padding: 20px 24px; display: flex; justify-content: center; flex-shrink: 0;
+    padding: 0 24px 8px; display: flex; justify-content: center;
   }
   .nav-mobile-actions .navbar-btn {
     height: 44px; padding: 0 32px; font-size: 14px;
