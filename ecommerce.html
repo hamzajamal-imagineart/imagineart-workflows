@@ -1176,9 +1176,9 @@
         const links = navLinksEl.querySelectorAll('.nav-link[data-sec]');
         function setActive() {
           const scrollY = window.scrollY + window.innerHeight * 0.35;
-          let active = sections[0];
+          let active = null;
           sections.forEach(sec => { if (sec.offsetTop <= scrollY) active = sec; });
-          links.forEach(a => a.classList.toggle('nav-link-active', a.dataset.sec === active.id));
+          links.forEach(a => a.classList.toggle('nav-link-active', active && a.dataset.sec === active.id));
         }
         window.addEventListener('scroll', setActive, { passive: true });
         setActive();
