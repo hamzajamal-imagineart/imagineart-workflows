@@ -251,6 +251,27 @@
     .mq-lbl { position: absolute; bottom: 10px; left: 10px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.4px; color: rgba(255,255,255,0.75); background: rgba(8,8,8,0.65); backdrop-filter: blur(6px); padding: 4px 10px; border-radius: 6px; }
 
     /* ─── Capabilities (4-card full-bleed grid) ─────────── */
+    /* ── How it works ── */
+    .arch-hiw { background: #0b0b0b; padding: 120px 0; }
+    .arch-hiw-inner { max-width: 1240px; margin: 0 auto; padding: 0 40px; display: flex; flex-direction: column; gap: 56px; }
+    .arch-hiw-head { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px; }
+    .arch-hiw-head h2 { font-size: clamp(32px, 3.5vw, 52px); font-weight: 700; letter-spacing: -1.2px; color: #fff; line-height: 1.08; }
+    .arch-hiw-head p { font-size: 15px; color: rgba(255,255,255,0.4); max-width: 460px; line-height: 1.65; }
+    .arch-hiw-ui { display: grid; grid-template-columns: 1fr 380px; gap: 40px; align-items: center; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; overflow: hidden; }
+    .arch-hiw-ui img { width: 100%; height: 100%; object-fit: cover; display: block; min-height: 420px; }
+    .arch-hiw-steps { display: flex; flex-direction: column; gap: 32px; padding: 40px 40px 40px 0; }
+    .arch-hiw-step { display: flex; gap: 16px; align-items: flex-start; }
+    .arch-hiw-num { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.06); border-radius: 6px; padding: 4px 8px; flex-shrink: 0; margin-top: 2px; }
+    .arch-hiw-step strong { display: block; font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 5px; }
+    .arch-hiw-step p { font-size: 13.5px; color: rgba(255,255,255,0.4); line-height: 1.6; margin: 0; }
+    @media (max-width: 820px) {
+      .arch-hiw { padding: 80px 0; }
+      .arch-hiw-inner { padding: 0 20px; gap: 36px; }
+      .arch-hiw-ui { grid-template-columns: 1fr; }
+      .arch-hiw-ui img { min-height: 240px; }
+      .arch-hiw-steps { padding: 0 24px 32px; }
+    }
+
     .arch-caps { background: #0b0b0b; padding: 120px 0 0; overflow: hidden; }
     .arch-caps-header {
       text-align: center;
@@ -1429,6 +1450,46 @@
           Explore all templates
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── How it Works ────────────────────────────────── -->
+  <section class="arch-hiw">
+    <div class="arch-hiw-inner">
+
+      <div class="arch-hiw-head reveal-blur">
+        <div class="s-label" style="color:rgba(255,255,255,0.45);border-color:rgba(255,255,255,0.12)">How it works</div>
+        <h2>A workflow built for architects</h2>
+        <p>Connect nodes, set your parameters, and let the pipeline do the work — from sketch to presentation in seconds.</p>
+      </div>
+
+      <div class="arch-hiw-ui reveal-blur">
+        <img src="/assets/architecture/nodes.jpeg" alt="ImagineArt Workflows node canvas" />
+        <div class="arch-hiw-steps">
+          <div class="arch-hiw-step">
+            <span class="arch-hiw-num">01</span>
+            <div>
+              <strong>Upload your input</strong>
+              <p>Drop in a sketch, floor plan, CAD export, or reference photo.</p>
+            </div>
+          </div>
+          <div class="arch-hiw-step">
+            <span class="arch-hiw-num">02</span>
+            <div>
+              <strong>Build your workflow</strong>
+              <p>Chain nodes — style transfer, material swap, lighting, upscale — in any order.</p>
+            </div>
+          </div>
+          <div class="arch-hiw-step">
+            <span class="arch-hiw-num">03</span>
+            <div>
+              <strong>Export & present</strong>
+              <p>Get print-quality renders, multiple variations, ready to share in the same meeting.</p>
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>
