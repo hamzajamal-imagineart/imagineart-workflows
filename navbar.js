@@ -17,7 +17,7 @@
   .navbar-inner {
     width: 100%;
     max-width: 100%;
-    margin: 0;
+    margin: 0 auto;
     padding: 10px clamp(40px, 12vw, 220px);
     display: flex;
     align-items: center;
