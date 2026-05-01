@@ -1331,7 +1331,7 @@
         });
 
         // Replace mobile menu links with section links
-        const mobileInner = document.querySelector('.nav-mobile-inner');
+        const mobileInner = document.getElementById('nav-mobile-inner');
         if (mobileInner) {
           mobileInner.innerHTML =
             NAV_LINKS.map(l => `<a href="${l.href}" class="nav-mobile-link" data-sec="${l.href.slice(1)}">${l.label}</a>`).join('') +
