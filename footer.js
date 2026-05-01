@@ -112,6 +112,11 @@
       }
 
       /* ── Bottom bar ── */
+      .sf-inner-bar {
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: 0 40px 32px;
+      }
       .sf-bar {
         display: flex; justify-content: space-between; align-items: center;
         padding: 20px 0 8px;
@@ -142,6 +147,7 @@
       }
       @media (max-width: 768px) {
         .sf-inner { padding: 40px 20px 24px; }
+        .sf-inner-bar { padding: 0 20px 24px; }
         .sf-top { flex-direction: column; gap: 32px; }
         .sf-brand { width: 100%; flex-direction: row; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
         .sf-cols { grid-template-columns: repeat(2, 1fr); }
@@ -258,6 +264,10 @@
         </div>
       </div>
 
+    </div>
+    <!-- Big watermark — full footer width, above bottom bar -->
+    <div class="sf-wordmark"><img src="./assets/watermark.svg" alt="" aria-hidden="true"></div>
+    <div class="sf-inner-bar">
       <!-- Bottom bar -->
       <div class="sf-bar">
         <div class="sf-bar-l">
@@ -285,10 +295,7 @@
           </a>
         </div>
       </div>
-
     </div>
-    <!-- Big wordmark — full footer width -->
-    <div class="sf-wordmark"><img src="./assets/watermark.svg" alt="" aria-hidden="true"></div>
   </footer>
   `;
 
