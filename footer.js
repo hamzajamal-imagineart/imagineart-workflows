@@ -97,14 +97,16 @@
 
       /* ── Big wordmark ── */
       .sf-wordmark {
-        font-size: clamp(60px, 17vw, 215px);
-        font-weight: 900;
-        color: rgba(255,255,255,0.04);
-        text-align: center; line-height: 1;
-        letter-spacing: -0.04em;
+        text-align: center;
         user-select: none; pointer-events: none;
         padding: 24px 0 0;
-        font-family: 'Inter', sans-serif;
+        line-height: 0;
+      }
+      .sf-wordmark img {
+        width: clamp(300px, 80vw, 1100px);
+        height: auto;
+        opacity: 0.045;
+        display: inline-block;
       }
 
       /* ── Bottom bar ── */
@@ -284,7 +286,7 @@
 
     </div>
     <!-- Big wordmark — full footer width -->
-    <div class="sf-wordmark">ImagineArt</div>
+    <div class="sf-wordmark"><img src="./assets/watermark.svg" alt="" aria-hidden="true"></div>
   </footer>
   `;
 
