@@ -131,19 +131,24 @@
   }
   .nav-mobile-link {
     display: block; text-align: center;
-    padding: 12px 32px; border-radius: 10px;
-    font-size: 22px; font-weight: 500; letter-spacing: -0.2px;
-    color: rgba(255,255,255,0.5); text-decoration: none;
+    padding: 10px 32px; border-radius: 10px;
+    font-size: 22px; font-weight: 300; letter-spacing: -0.2px;
+    color: rgba(255,255,255,0.55); text-decoration: none;
     transition: color 0.15s, background 0.15s;
   }
   .nav-mobile-link:hover { color: #fff; background: rgba(255,255,255,0.05); }
   /* Bottom CTA */
-  .nav-mobile-divider { display: none; }
+  .nav-mobile-divider {
+    display: block;
+    height: 1px; background: rgba(255,255,255,0.08);
+    margin: 0 24px;
+    flex-shrink: 0;
+  }
   .nav-mobile-actions {
-    padding: 24px; display: flex; justify-content: center; flex-shrink: 0;
+    padding: 20px 24px; display: flex; justify-content: center; flex-shrink: 0;
   }
   .nav-mobile-actions .navbar-btn {
-    height: 46px; padding: 0 32px; font-size: 15px;
+    height: 44px; padding: 0 32px; font-size: 14px;
     font-weight: 500; border-radius: 14px;
   }
   .nav-mobile-actions .navbar-btn-dark { background: #fff; color: #0f0f0f; border: none; }
@@ -342,6 +347,7 @@
       </button>
     </div>
     <div class="nav-mobile-inner" id="nav-mobile-inner"></div>
+    <div class="nav-mobile-divider"></div>
     <div class="nav-mobile-actions">
       <a href="https://www.imagine.art/flow" target="_blank" rel="noopener" class="navbar-btn navbar-btn-dark">Get Started →</a>
     </div>
