@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <link rel="icon" href="https://www.imagine.art/favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI for Marketing Agencies — ImagineArt</title>
+  <title>AI for Marketing Agencies - ImagineArt</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@100..900&family=Google+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
@@ -372,8 +372,9 @@
     .s-card:nth-child(4) { grid-column: span 3; height: 330px; }
     .s-card:nth-child(5) { grid-column: span 5; height: 330px; }
     .s-card:nth-child(6) { grid-column: span 4; height: 330px; }
-    .s-card:nth-child(7) { grid-column: span 7; height: 220px; }
-    .s-card:nth-child(8) { grid-column: span 5; height: 220px; }
+    .s-card:nth-child(7) { grid-column: span 4; height: 220px; }
+    .s-card:nth-child(8) { grid-column: span 4; height: 220px; }
+    .s-card:nth-child(9) { grid-column: span 4; height: 220px; }
     .styles-bento .s-card { opacity: 0; transform: translateY(32px) scale(0.97); transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1), transform 0.65s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s; }
     .styles-bento.in .s-card { opacity: 1; transform: none; }
     .styles-bento.in .s-card:nth-child(1) { transition-delay: 0.04s; }
@@ -384,6 +385,7 @@
     .styles-bento.in .s-card:nth-child(6) { transition-delay: 0.29s; }
     .styles-bento.in .s-card:nth-child(7) { transition-delay: 0.34s; }
     .styles-bento.in .s-card:nth-child(8) { transition-delay: 0.39s; }
+    .styles-bento.in .s-card:nth-child(9) { transition-delay: 0.44s; }
 
     .tmpl-cta { display: flex; justify-content: center; }
     .btn-outline-light {
@@ -404,7 +406,9 @@
     .mkt-hiw-head h2 { font-size: clamp(32px, 4vw, 48px); font-weight: 600; letter-spacing: -1.2px; color: #fff; line-height: 1.08; }
     .mkt-hiw-head p { font-size: 18px; color: rgba(255,255,255,0.4); max-width: 460px; line-height: 1.65; }
     .mkt-hiw-ui { display: grid; grid-template-columns: 1fr 380px; gap: 40px; align-items: center; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; overflow: hidden; }
-    .mkt-hiw-ui img { width: 100%; height: 100%; object-fit: cover; display: block; min-height: 600px; max-height: 600px; }
+    .mkt-hiw-img { background-color: #000; background-image: radial-gradient(rgba(255,255,255,0.12) 1px, transparent 1px); background-size: 22px 22px; display: flex; align-items: center; justify-content: center; padding: 0; position: relative; }
+    .mkt-hiw-img::after { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(rgba(255,255,255,0.55) 1px, transparent 1px); background-size: 22px 22px; -webkit-mask-image: radial-gradient(circle 200px at var(--mx, -9999px) var(--my, -9999px), black 0%, transparent 100%); mask-image: radial-gradient(circle 200px at var(--mx, -9999px) var(--my, -9999px), black 0%, transparent 100%); }
+    .mkt-hiw-img img { width: 100%; height: 100%; object-fit: contain; display: block; position: relative; z-index: 1; }
     .mkt-hiw-steps { display: flex; flex-direction: column; gap: 28px; padding: 36px 36px 36px 0; }
     .mkt-hiw-step { display: flex; gap: 16px; align-items: flex-start; }
     .mkt-hiw-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.06); border-radius: 6px; padding: 4px 8px; flex-shrink: 0; margin-top: 2px; }
@@ -414,7 +418,7 @@
       .mkt-hiw { padding: 80px 0; }
       .mkt-hiw-inner { padding: 0 20px; gap: 36px; }
       .mkt-hiw-ui { grid-template-columns: 1fr; }
-      .mkt-hiw-ui img { min-height: 240px; }
+      .mkt-hiw-img { min-height: 240px; padding: 24px; }
       .mkt-hiw-steps { padding: 0 24px 32px; }
     }
 
@@ -641,7 +645,7 @@
     /* Footer injected via footer.js */
 
     /* ═══════════════════════════════════════════════════════
-       RESPONSIVE — tablet ≤ 1024px
+       RESPONSIVE - tablet ≤ 1024px
        ═══════════════════════════════════════════════════════ */
     @media (max-width: 1024px) {
       .mkt-hero { grid-template-columns: 1fr 1fr; }
@@ -662,7 +666,7 @@
     }
 
     /* ═══════════════════════════════════════════════════════
-       RESPONSIVE — mobile ≤ 768px
+       RESPONSIVE - mobile ≤ 768px
        ═══════════════════════════════════════════════════════ */
     @media (max-width: 768px) {
 
@@ -825,8 +829,8 @@
           <div class="hero-stat-lbl">lower production<br>cost per campaign</div>
         </div>
         <div class="hero-stat">
-          <div class="hero-stat-num">500+</div>
-          <div class="hero-stat-lbl">agencies trust<br>ImagineArt</div>
+          <div class="hero-stat-num">30M+</div>
+          <div class="hero-stat-lbl">creators on<br>ImagineArt</div>
         </div>
       </div>
 
@@ -838,22 +842,22 @@
       <div class="hero-imgs">
 
         <div class="hi">
-          <img src="assets/marketing/Hamza_Jamal_Untitled%20(4)%202%20Large.jpeg" alt="">
+          <img src="assets/marketing/mkt-gallery-portrait-1.webp" alt="">
           <span class="hi-tag">Brand Campaign</span>
         </div>
 
         <div class="hi">
-          <img src="assets/marketing/Hamza_Jamal_Untitled%20(5).jpeg" alt="">
+          <img src="assets/marketing/mkt-gallery-portrait-2.webp" alt="">
           <span class="hi-tag">Editorial</span>
         </div>
 
         <div class="hi">
-          <img src="assets/marketing/mkt-gallery-9.jpg" alt="">
+          <img src="assets/marketing/mkt-gallery-9.webp" alt="">
           <span class="hi-tag">Lifestyle</span>
         </div>
 
         <div class="hi">
-          <img src="assets/marketing/Hamza_Jamal_change_her_cap_and_tied_shirt_to_the_blue_in_image_2_6e0121ec-452c-416f-a2fd-9174bb662f3e%20Large.jpeg" alt="">
+          <img src="assets/marketing/mkt-gallery-fashion.webp" alt="">
           <span class="hi-tag">Out-of-Home</span>
         </div>
 
@@ -869,31 +873,33 @@
       <div class="mkt-hiw-head reveal-blur">
         <div class="s-label" style="color:rgba(255,255,255,0.45);border-color:rgba(255,255,255,0.12)">How it works</div>
         <h2>Your creative pipeline, automated</h2>
-        <p>Build once, run forever. Connect your brief, brand assets, and channels into a single workflow — no manual handoffs, no bottlenecks.</p>
+        <p>Connect your brief, assets, and channels into one workflow. No handoffs, no bottlenecks.</p>
       </div>
 
       <div class="mkt-hiw-ui reveal-blur">
-        <img src="/assets/marketing/Frame 2147234242 Large.jpeg" alt="ImagineArt Workflows for marketing" />
+        <div class="mkt-hiw-img">
+          <img src="assets/marketing/mkt-nodes-workflow.webp" alt="ImagineArt Workflows for marketing" />
+        </div>
         <div class="mkt-hiw-steps">
           <div class="mkt-hiw-step">
             <span class="mkt-hiw-num">01</span>
             <div>
               <strong>Drop in your brief</strong>
-              <p>Upload brand assets, copy direction, and reference visuals — the workflow picks it up from there.</p>
+              <p>Upload brand assets, copy direction, and reference visuals - the workflow picks it up from there.</p>
             </div>
           </div>
           <div class="mkt-hiw-step">
             <span class="mkt-hiw-num">02</span>
             <div>
               <strong>Build your campaign pipeline</strong>
-              <p>Chain nodes for image generation, resizing, copy overlay, and format adaption — all in one canvas.</p>
+              <p>Chain nodes for image generation, resizing, copy overlay, and format adaption - all in one canvas.</p>
             </div>
           </div>
           <div class="mkt-hiw-step">
             <span class="mkt-hiw-num">03</span>
             <div>
               <strong>Ship across every channel</strong>
-              <p>Export campaign-ready assets for social, display, and print — all on-brand, all at once.</p>
+              <p>Export campaign-ready assets for social, display, and print - all on-brand, all at once.</p>
             </div>
           </div>
         </div>
@@ -909,7 +915,7 @@
       <div class="ads-head reveal-blur">
         <span class="tmpl-label">Ad Creative</span>
         <h2>Ads that stop the scroll.<br><em>Built in minutes.</em></h2>
-        <p>Generate campaign-ready visuals for every platform — Meta, TikTok, Google, OOH — straight from one brief. No shoot. No wait.</p>
+        <p>Generate campaign-ready visuals for every platform - Meta, TikTok, Google, OOH - straight from one brief. No shoot. No wait.</p>
       </div>
 
       <div class="ads-grid reveal">
@@ -938,7 +944,7 @@
             </div>
             <div class="ads-main-text">
               <h3>Every platform.<br>One brief.</h3>
-              <p>Generate brand-consistent creatives across every ad placement — sized, formatted, and campaign-ready from a single prompt.</p>
+              <p>Generate brand-consistent creatives across every ad placement - sized, formatted, and campaign-ready from a single prompt.</p>
             </div>
           </div>
         </div>
@@ -957,7 +963,7 @@
             <div class="ads-card-gradient"></div>
             <div class="ads-card-secondary-content">
               <h3>50 variants. One prompt.</h3>
-              <p>A/B test at scale — generate dozens of creative variations instantly and find what converts fastest.</p>
+              <p>A/B test at scale - generate dozens of creative variations instantly and find what converts fastest.</p>
             </div>
           </div>
         </div>
@@ -968,7 +974,7 @@
         <div class="ads-feat">
           <span class="ads-feat-number">01</span>
           <h4>Multi-format export</h4>
-          <p>Auto-resize to every ad spec — Stories, Feed, Banner, Billboard — without touching a single setting.</p>
+          <p>Auto-resize to every ad spec - Stories, Feed, Banner, Billboard - without touching a single setting.</p>
           <div class="ads-feat-arrow">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
@@ -1001,18 +1007,18 @@
           <span class="tmpl-label">Templates</span>
           <h2>Every campaign. <em>Every aesthetic.</em></h2>
         </div>
-        <p>From bold brand campaigns to intimate lifestyle storytelling — any style, instantly.</p>
+        <p>From bold brand campaigns to intimate lifestyle storytelling - any style, instantly.</p>
       </div>
       <div class="styles-bento">
         <a class="s-card" href="https://www.imagine.art/flow?tab=discover" target="_blank" rel="noopener"><video src="assets/marketing/mkt-hero-1.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Brand</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Brand Campaign</div><div class="s-card-prompt">Hero imagery, mood boards, and brand visuals in one brief</div></div></a>
         <a class="s-card" href="https://www.imagine.art/flow?tab=discover" target="_blank" rel="noopener"><video src="assets/marketing/mkt-hero-2.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Editorial</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Editorial Spread</div><div class="s-card-prompt">Magazine-quality editorial visuals for luxury and fashion clients</div></div></a>
-        <a class="s-card" href="https://www.imagine.art/flow?tab=discover" target="_blank" rel="noopener"><video src="assets/marketing/mkt-hero-3.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Social</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Social Media Pack</div><div class="s-card-prompt">Grid posts, stories, and reels — every format, one session</div></div></a>
+        <a class="s-card" href="https://www.imagine.art/flow?tab=discover" target="_blank" rel="noopener"><video src="assets/marketing/mkt-hero-3.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Social</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Social Media Pack</div><div class="s-card-prompt">Grid posts, stories, and reels - every format, one session</div></div></a>
         <a class="s-card" href="https://www.imagine.art/flow?tab=discover" target="_blank" rel="noopener"><video src="assets/marketing/mkt-hero-4.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Lifestyle</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Lifestyle Scene</div><div class="s-card-prompt">Authentic contextual imagery, warm tones, real-world settings</div></div></a>
         <a class="s-card" href="https://www.imagine.art/flow?tab=discover" target="_blank" rel="noopener"><video src="assets/marketing/mkt-hero-5.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Product</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Product Studio</div><div class="s-card-prompt">Clean product shots on any background, without a single booking</div></div></a>
-        <a class="s-card" href="https://www.imagine.art/flow?tab=discover" target="_blank" rel="noopener"><video src="assets/marketing/mkt-hero-6.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Luxury</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Luxury & Premium</div><div class="s-card-prompt">High-end aesthetics — marble, gold, dramatic studio light</div></div></a>
+        <a class="s-card" href="https://www.imagine.art/flow?tab=discover" target="_blank" rel="noopener"><video src="assets/marketing/mkt-hero-6.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Luxury</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Luxury & Premium</div><div class="s-card-prompt">High-end aesthetics - marble, gold, dramatic studio light</div></div></a>
         <a class="s-card" href="https://www.imagine.art/flow?tab=discover" target="_blank" rel="noopener"><video src="assets/marketing/mkt-hero-7.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Outdoor</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Outdoor Campaign</div><div class="s-card-prompt">Natural light, sun flare, OOH-ready imagery for active brands</div></div></a>
         <a class="s-card" href="https://www.imagine.art/flow?tab=discover" target="_blank" rel="noopener"><video src="assets/marketing/mkt-hero-8.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Bold</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Bold Color</div><div class="s-card-prompt">Saturated backgrounds, high contrast shadows, editorial energy</div></div></a>
-        <a class="s-card" href="https://www.imagine.art/flow?tab=discover" target="_blank" rel="noopener"><video src="assets/marketing/sc-full-campaign.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Campaign</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Full Campaign</div><div class="s-card-prompt">Complete creative — visuals, copy placement, and finished ad layout in one pass</div></div></a>
+        <a class="s-card" href="https://www.imagine.art/flow?tab=discover" target="_blank" rel="noopener"><video src="assets/marketing/sc-full-campaign.mp4" autoplay loop muted playsinline></video><div class="s-card-overlay"></div><span class="s-card-tag">Campaign</span><div class="s-card-arrow"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="s-card-body"><div class="s-card-name">Full Campaign</div><div class="s-card-prompt">Complete creative - visuals, copy placement, and finished ad layout in one pass</div></div></a>
       </div>
       <div class="tmpl-cta reveal">
         <a href="https://www.imagine.art/flow?tab=discover" target="_blank" rel="noopener" class="btn-outline-light">Explore Templates <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 7.5h9M8 4l4 3.5L8 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
@@ -1040,25 +1046,25 @@
           <div class="sc-slide active" data-index="0">
             <div class="sc-counter">01</div>
             <h2>Brand Identity.<br><em>Instant.</em></h2>
-            <p>Generate complete brand kits — packaging, stationery, merch — all visually consistent and campaign-ready from a single brief.</p>
+            <p>Generate complete brand kits - packaging, stationery, merch - all visually consistent and campaign-ready from a single brief.</p>
           </div>
 
           <div class="sc-slide" data-index="1">
             <div class="sc-counter">02</div>
             <h2>Out-of-Home.<br><em>No location scout.</em></h2>
-            <p>Billboard-scale visuals that stop traffic. No permit, no photographer, no travel budget — just your brief and ImagineArt.</p>
+            <p>Billboard-scale visuals that stop traffic. No permit, no photographer, no travel budget - just your brief and ImagineArt.</p>
           </div>
 
           <div class="sc-slide" data-index="2">
             <div class="sc-counter">03</div>
             <h2>Lifestyle Campaigns.<br><em>Any setting.</em></h2>
-            <p>Place your product in any environment, any mood, any season — without leaving your desk or booking a single shoot.</p>
+            <p>Place your product in any environment, any mood, any season - without leaving your desk or booking a single shoot.</p>
           </div>
 
           <div class="sc-slide" data-index="3">
             <div class="sc-counter">04</div>
             <h2>Product Launch.<br><em>Studio quality.</em></h2>
-            <p>Hero shots for launch day. Dramatic lighting, infinite backgrounds, zero setup time — ready for every platform and format.</p>
+            <p>Hero shots for launch day. Dramatic lighting, infinite backgrounds, zero setup time - ready for every platform and format.</p>
           </div>
 
           <!-- 4-segment progress -->
@@ -1085,18 +1091,18 @@
     <div class="gallery-pin-wrap">
       <div class="gallery-pin">
         <div class="gallery-grid" id="galleryGrid">
-          <div class="gallery-item"><img src="assets/marketing/mkt-gallery-1.jpg" alt="Campaign Visual"><div class="gallery-item-overlay"></div><span class="gallery-item-label">Campaign Visual</span></div>
-          <div class="gallery-item"><img src="assets/marketing/mkt-gallery-2.jpg" alt="Social Media"><div class="gallery-item-overlay"></div><span class="gallery-item-label">Social Media</span></div>
-          <div class="gallery-item"><img src="assets/marketing/mkt-gallery-3.jpg" alt="Brand Story"><div class="gallery-item-overlay"></div><span class="gallery-item-label">Brand Story</span></div>
-          <div class="gallery-item"><img src="assets/marketing/mkt-gallery-4.jpg" alt="Editorial"><div class="gallery-item-overlay"></div><span class="gallery-item-label">Editorial</span></div>
-          <div class="gallery-item"><img src="assets/marketing/mkt-gallery-5.jpg" alt="Out-of-Home"><div class="gallery-item-overlay"></div><span class="gallery-item-label">Out-of-Home</span></div>
-          <div class="gallery-item"><img src="assets/marketing/mkt-gallery-6.jpg" alt="Product Launch"><div class="gallery-item-overlay"></div><span class="gallery-item-label">Product Launch</span></div>
-          <div class="gallery-item"><img src="assets/marketing/mkt-gallery-8.jpg" alt="Content Series"><div class="gallery-item-overlay"></div><span class="gallery-item-label">Content Series</span></div>
-          <div class="gallery-item"><img src="assets/marketing/mkt-gallery-9.jpg" alt="Campaign"><div class="gallery-item-overlay"></div><span class="gallery-item-label">Campaign</span></div>
-          <div class="gallery-item"><img src="assets/marketing/Hamza_Jamal_Untitled%20(5).jpeg" alt="Street Style"><div class="gallery-item-overlay"></div><span class="gallery-item-label">Street Style</span></div>
-          <div class="gallery-item"><img src="assets/marketing/Hamza_Jamal_A_candid_street_photography_shot_of_a_person_sitting_on_a_public_c2ac3b9c-6a28-4ca7-bb9e-b9e89369f802%20Large.jpeg" alt="Street Photography"><div class="gallery-item-overlay"></div><span class="gallery-item-label">Street Photography</span></div>
-          <div class="gallery-item"><img src="assets/marketing/Hamza_Jamal_recreate_the_given_mage_in_16_9_ratio_and_change_the_bacground_65c39ae3-5b46-4622-b52c-bb43a1bf60f1%20Large.jpeg" alt="Lifestyle"><div class="gallery-item-overlay"></div><span class="gallery-item-label">Lifestyle</span></div>
-          <div class="gallery-item"><img src="assets/marketing/Hamza_Jamal_change_her_cap_and_tied_shirt_to_the_blue_in_image_2_6e0121ec-452c-416f-a2fd-9174bb662f3e%20Large.jpeg" alt="Fashion"><div class="gallery-item-overlay"></div><span class="gallery-item-label">Fashion</span></div>
+          <div class="gallery-item"><img src="assets/marketing/mkt-gallery-1.webp" alt="Campaign Visual"><div class="gallery-item-overlay"></div><span class="gallery-item-label">Campaign Visual</span></div>
+          <div class="gallery-item"><img src="assets/marketing/mkt-gallery-2.webp" alt="Social Media"><div class="gallery-item-overlay"></div><span class="gallery-item-label">Social Media</span></div>
+          <div class="gallery-item"><img src="assets/marketing/mkt-gallery-3.webp" alt="Brand Story"><div class="gallery-item-overlay"></div><span class="gallery-item-label">Brand Story</span></div>
+          <div class="gallery-item"><img src="assets/marketing/mkt-gallery-4.webp" alt="Editorial"><div class="gallery-item-overlay"></div><span class="gallery-item-label">Editorial</span></div>
+          <div class="gallery-item"><img src="assets/marketing/mkt-gallery-5.webp" alt="Out-of-Home"><div class="gallery-item-overlay"></div><span class="gallery-item-label">Out-of-Home</span></div>
+          <div class="gallery-item"><img src="assets/marketing/mkt-gallery-6.webp" alt="Product Launch"><div class="gallery-item-overlay"></div><span class="gallery-item-label">Product Launch</span></div>
+          <div class="gallery-item"><img src="assets/marketing/mkt-gallery-8.webp" alt="Content Series"><div class="gallery-item-overlay"></div><span class="gallery-item-label">Content Series</span></div>
+          <div class="gallery-item"><img src="assets/marketing/mkt-gallery-9.webp" alt="Campaign"><div class="gallery-item-overlay"></div><span class="gallery-item-label">Campaign</span></div>
+          <div class="gallery-item"><img src="assets/marketing/mkt-gallery-portrait-2.webp" alt="Street Style"><div class="gallery-item-overlay"></div><span class="gallery-item-label">Street Style</span></div>
+          <div class="gallery-item"><img src="assets/marketing/mkt-gallery-street.webp" alt="Street Photography"><div class="gallery-item-overlay"></div><span class="gallery-item-label">Street Photography</span></div>
+          <div class="gallery-item"><img src="assets/marketing/mkt-gallery-lifestyle.webp" alt="Lifestyle"><div class="gallery-item-overlay"></div><span class="gallery-item-label">Lifestyle</span></div>
+          <div class="gallery-item"><img src="assets/marketing/mkt-gallery-fashion.webp" alt="Fashion"><div class="gallery-item-overlay"></div><span class="gallery-item-label">Fashion</span></div>
         </div>
       </div>
     </div>
@@ -1110,7 +1116,7 @@
     <div class="mkt-final-noise"></div>
     <div class="mkt-final-inner reveal-blur">
       <h2 class="final-h2">The creative team<br><em>that never sleeps.</em></h2>
-      <p class="final-sub">From brief to campaign-ready visuals in minutes — not days. Join 500+ agencies who've stopped waiting on shoots.</p>
+      <p class="final-sub">From brief to campaign-ready visuals in minutes - not days. Join 500+ agencies who've stopped waiting on shoots.</p>
       <div class="final-btns">
         <a href="https://www.imagine.art/flow" class="btn-final-white">
           Start for free
@@ -1419,6 +1425,20 @@
         setActive();
       }
       init();
+
+      // Dot grid glow on hiw image
+      const hiwImg = document.querySelector('.mkt-hiw-img');
+      if (hiwImg) {
+        hiwImg.addEventListener('mousemove', e => {
+          const r = hiwImg.getBoundingClientRect();
+          hiwImg.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+          hiwImg.style.setProperty('--my', (e.clientY - r.top) + 'px');
+        });
+        hiwImg.addEventListener('mouseleave', () => {
+          hiwImg.style.setProperty('--mx', '-9999px');
+          hiwImg.style.setProperty('--my', '-9999px');
+        });
+      }
     })();
   </script>
 </body>

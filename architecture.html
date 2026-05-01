@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <link rel="icon" href="https://www.imagine.art/favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ImagineArt Workflows — ImagineArt</title>
+  <title>ImagineArt Workflows - ImagineArt</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap" rel="stylesheet">
@@ -258,7 +258,9 @@
     .arch-hiw-head h2 { font-size: clamp(32px, 4vw, 48px); font-weight: 600; letter-spacing: -1.2px; color: #fff; line-height: 1.08; }
     .arch-hiw-head p { font-size: 18px; color: rgba(255,255,255,0.4); max-width: 460px; line-height: 1.65; }
     .arch-hiw-ui { display: grid; grid-template-columns: 1fr 380px; gap: 40px; align-items: center; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; overflow: hidden; }
-    .arch-hiw-ui img { width: 100%; height: 100%; object-fit: cover; display: block; min-height: 420px; }
+    .arch-hiw-img { background-color: #000; background-image: radial-gradient(rgba(255,255,255,0.12) 1px, transparent 1px); background-size: 22px 22px; display: flex; align-items: center; justify-content: center; padding: 0; position: relative; }
+    .arch-hiw-img::after { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(rgba(255,255,255,0.55) 1px, transparent 1px); background-size: 22px 22px; -webkit-mask-image: radial-gradient(circle 200px at var(--mx, -9999px) var(--my, -9999px), black 0%, transparent 100%); mask-image: radial-gradient(circle 200px at var(--mx, -9999px) var(--my, -9999px), black 0%, transparent 100%); }
+    .arch-hiw-img img { width: 100%; height: 100%; object-fit: contain; display: block; position: relative; z-index: 1; }
     .arch-hiw-steps { display: flex; flex-direction: column; gap: 32px; padding: 40px 40px 40px 0; }
     .arch-hiw-step { display: flex; gap: 16px; align-items: flex-start; }
     .arch-hiw-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.06); border-radius: 6px; padding: 4px 8px; flex-shrink: 0; margin-top: 2px; }
@@ -268,7 +270,7 @@
       .arch-hiw { padding: 80px 0; }
       .arch-hiw-inner { padding: 0 20px; gap: 36px; }
       .arch-hiw-ui { grid-template-columns: 1fr; }
-      .arch-hiw-ui img { min-height: 240px; }
+      .arch-hiw-img { min-height: 240px; padding: 24px; }
       .arch-hiw-steps { padding: 0 24px 32px; }
     }
 
@@ -913,7 +915,7 @@
     /* 8. Hero glow — removed per user request */
 
     /* ══════════════════════════════════════════
-       RESPONSIVE — TABLET (≤ 1024px)
+       RESPONSIVE - TABLET (≤ 1024px)
     ══════════════════════════════════════════ */
     @media (max-width: 1024px) {
       /* Hero */
@@ -957,7 +959,7 @@
     }
 
     /* ══════════════════════════════════════════
-       RESPONSIVE — MOBILE (≤ 768px)
+       RESPONSIVE - MOBILE (≤ 768px)
     ══════════════════════════════════════════ */
     @media (max-width: 768px) {
       :root { --px: 20px; }
@@ -1273,16 +1275,16 @@
 
         <div class="hero-slides">
           <div class="hero-slide active">
-            <img src="/assets/architecture/arch-render-chalet-interior.jpeg" alt="Alpine chalet interior">
+            <img src="assets/architecture/arch-render-chalet-interior.webp" alt="Alpine chalet interior">
           </div>
           <div class="hero-slide">
-            <img src="/assets/architecture/arch-render-modern-living.jpg" alt="Textured wall interior">
+            <img src="assets/architecture/arch-render-modern-living.webp" alt="Textured wall interior">
           </div>
           <div class="hero-slide">
-            <img src="/assets/architecture/arch-render-building-exterior.jpeg" alt="Modern feature wall interior">
+            <img src="assets/architecture/arch-render-building-exterior.webp" alt="Modern feature wall interior">
           </div>
           <div class="hero-slide">
-            <img src="/assets/architecture/arch-render-living-room-2.jpeg" alt="Bold architectural exterior">
+            <img src="assets/architecture/arch-render-living-room-2.webp" alt="Bold architectural exterior">
           </div>
         </div>
 
@@ -1306,6 +1308,47 @@
 
   </section>
 
+  <section class="arch-hiw">
+    <div class="arch-hiw-inner">
+
+      <div class="arch-hiw-head reveal-blur">
+        <div class="s-label" style="color:rgba(255,255,255,0.45);border-color:rgba(255,255,255,0.12)">How it works</div>
+        <h2>A workflow built for architects</h2>
+        <p>Connect nodes, set your parameters, and let the pipeline do the work - from sketch to presentation in seconds.</p>
+      </div>
+
+      <div class="arch-hiw-ui reveal-blur">
+        <div class="arch-hiw-img">
+          <img src="assets/architecture/arch-nodes-workflow.webp" alt="ImagineArt Workflows node canvas" />
+        </div>
+        <div class="arch-hiw-steps">
+          <div class="arch-hiw-step">
+            <span class="arch-hiw-num">01</span>
+            <div>
+              <strong>Upload your input</strong>
+              <p>Drop in a sketch, floor plan, CAD export, or reference photo.</p>
+            </div>
+          </div>
+          <div class="arch-hiw-step">
+            <span class="arch-hiw-num">02</span>
+            <div>
+              <strong>Build your workflow</strong>
+              <p>Chain nodes - style transfer, material swap, lighting, upscale - in any order.</p>
+            </div>
+          </div>
+          <div class="arch-hiw-step">
+            <span class="arch-hiw-num">03</span>
+            <div>
+              <strong>Export & present</strong>
+              <p>Get print-quality renders, multiple variations, ready to share in the same meeting.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
   <!-- ─── Before / After ───────────────────────────────── -->
   <section class="arch-styles" id="sec-styles">
     <div class="arch-styles-inner">
@@ -1316,7 +1359,7 @@
           <span class="section-label" style="color:rgba(255,255,255,0.45);border-color:rgba(255,255,255,0.12);">Templates</span>
           <h2>One space.<br>Every aesthetic.</h2>
         </div>
-        <p class="reveal-right">From brutalist concrete to warm Japandi — render any style in seconds and show clients exactly what they're getting.</p>
+        <p class="reveal-right">From brutalist concrete to warm Japandi - render any style in seconds and show clients exactly what they're getting.</p>
       </div>
 
       <!-- Bento Grid -->
@@ -1456,45 +1499,6 @@
   </section>
 
   <!-- ─── How it Works ────────────────────────────────── -->
-  <section class="arch-hiw">
-    <div class="arch-hiw-inner">
-
-      <div class="arch-hiw-head reveal-blur">
-        <div class="s-label" style="color:rgba(255,255,255,0.45);border-color:rgba(255,255,255,0.12)">How it works</div>
-        <h2>A workflow built for architects</h2>
-        <p>Connect nodes, set your parameters, and let the pipeline do the work — from sketch to presentation in seconds.</p>
-      </div>
-
-      <div class="arch-hiw-ui reveal-blur">
-        <img src="/assets/architecture/nodes.jpeg" alt="ImagineArt Workflows node canvas" />
-        <div class="arch-hiw-steps">
-          <div class="arch-hiw-step">
-            <span class="arch-hiw-num">01</span>
-            <div>
-              <strong>Upload your input</strong>
-              <p>Drop in a sketch, floor plan, CAD export, or reference photo.</p>
-            </div>
-          </div>
-          <div class="arch-hiw-step">
-            <span class="arch-hiw-num">02</span>
-            <div>
-              <strong>Build your workflow</strong>
-              <p>Chain nodes — style transfer, material swap, lighting, upscale — in any order.</p>
-            </div>
-          </div>
-          <div class="arch-hiw-step">
-            <span class="arch-hiw-num">03</span>
-            <div>
-              <strong>Export & present</strong>
-              <p>Get print-quality renders, multiple variations, ready to share in the same meeting.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
   <!-- ─── Gallery ──────────────────────────────────────── -->
   <section class="arch-caps" id="sec-caps" style="position:relative;overflow:hidden;">
 
@@ -1575,14 +1579,14 @@
     <div class="arch-caps-header reveal-blur" style="position:relative;z-index:1;">
       <span class="caps-header-label">Capabilities</span>
       <h2 class="caps-header-h2">Four ways architects<br>use ImagineArt.</h2>
-      <p class="caps-header-p">From first sketch to final presentation — every stage of the design process, elevated by AI.</p>
+      <p class="caps-header-p">From first sketch to final presentation - every stage of the design process, elevated by AI.</p>
     </div>
 
     <!-- Full-bleed 4-card grid -->
     <div class="caps-grid" style="position:relative;z-index:1;">
 
       <div class="caps-card reveal-left">
-        <img src="/assets/architecture/arch-render-chalet-interior.jpeg" alt="Sketch to render">
+        <img src="assets/architecture/arch-render-chalet-interior.webp" alt="Sketch to render">
         <div class="caps-card-info">
           <div class="caps-card-num">Capability 01</div>
           <div class="caps-card-title">Sketch to Render</div>
@@ -1591,16 +1595,16 @@
       </div>
 
       <div class="caps-card reveal-right">
-        <img src="/assets/architecture/arch-render-modern-living.jpg" alt="Style transfer">
+        <img src="assets/architecture/arch-render-modern-living.webp" alt="Style transfer">
         <div class="caps-card-info">
           <div class="caps-card-num">Capability 02</div>
           <div class="caps-card-title">Style Transfer</div>
-          <div class="caps-card-desc">Apply any architectural style — minimalist, Japandi, brutalist, art deco — to any space instantly.</div>
+          <div class="caps-card-desc">Apply any architectural style - minimalist, Japandi, brutalist, art deco - to any space instantly.</div>
         </div>
       </div>
 
       <div class="caps-card reveal-left" style="transition-delay:0.12s">
-        <img src="/assets/architecture/Hamza_Jamal_Image_65_c138ea81-6e36-4a2d-8b73-90e0952c45c6_ba286e85-294a-4e51-ba3b-9106d039f531 Large.jpeg" alt="Material explorer">
+        <img src="assets/architecture/arch-cap-material-explorer.webp" alt="Material explorer">
         <div class="caps-card-info">
           <div class="caps-card-num">Capability 03</div>
           <div class="caps-card-title">Material Explorer</div>
@@ -1609,7 +1613,7 @@
       </div>
 
       <div class="caps-card reveal-right" style="transition-delay:0.12s">
-        <img src="/assets/architecture/Hamza_Jamal_Image_62_52cbc5b5-a792-495d-b41c-3ac85a1efd39_e7789141-dedd-4f9d-9565-00c8e832e59e Large.jpeg" alt="Client presentations">
+        <img src="assets/architecture/arch-cap-client-presentation.webp" alt="Client presentations">
         <div class="caps-card-info">
           <div class="caps-card-num">Capability 04</div>
           <div class="caps-card-title">Client Presentations</div>
@@ -1723,11 +1727,11 @@
       <!-- Slider 1: big full-width -->
       <div class="compare-wrap large reveal-scale">
         <div class="compare-before">
-          <img src="/assets/architecture/arch-compare-before.jpg" alt="Before — abandoned alpine chalet">
+          <img src="assets/architecture/arch-compare-before.webp" alt="Before - abandoned alpine chalet">
           <span class="compare-lbl left">Before</span>
         </div>
         <div class="compare-after">
-          <img src="/assets/architecture/arch-render-chalet-interior.jpeg" alt="After — AI Render">
+          <img src="assets/architecture/arch-render-chalet-interior.webp" alt="After - AI Render">
           <span class="compare-lbl right">AI Render</span>
         </div>
         <div class="compare-handle">
@@ -1740,11 +1744,11 @@
       <div class="compare-row">
         <div class="compare-wrap small reveal-left">
           <div class="compare-before">
-            <img src="/assets/architecture/arch-compare-2-before.jpeg" alt="Raw Reference">
+            <img src="assets/architecture/arch-compare-2-before.webp" alt="Raw Reference">
             <span class="compare-lbl left">Raw Reference</span>
           </div>
           <div class="compare-after">
-            <img src="/assets/architecture/arch-compare-2-after.jpeg" alt="AI Render">
+            <img src="assets/architecture/arch-compare-2-after.webp" alt="AI Render">
             <span class="compare-lbl right">AI Render</span>
           </div>
           <div class="compare-handle">
@@ -1755,11 +1759,11 @@
         </div>
         <div class="compare-wrap small reveal-right" style="transition-delay:0.1s">
           <div class="compare-before">
-            <img src="/assets/architecture/arch-compare-3-before.jpeg" alt="Hand Sketch">
+            <img src="assets/architecture/arch-compare-3-before.webp" alt="Hand Sketch">
             <span class="compare-lbl left">Hand Sketch</span>
           </div>
           <div class="compare-after">
-            <img src="/assets/architecture/arch-compare-3-after.jpeg" alt="AI Render">
+            <img src="assets/architecture/arch-compare-3-after.webp" alt="AI Render">
             <span class="compare-lbl right">AI Render</span>
           </div>
           <div class="compare-handle">
@@ -1813,9 +1817,9 @@
       </div>
       <div class="stat-item">
         <div class="stat-num-row">
-          <span class="stat-val" data-target="2">0</span><span class="stat-sfx">M+</span>
+          <span class="stat-val" data-target="30">0</span><span class="stat-sfx">M+</span>
         </div>
-        <p class="stat-lbl">renders generated by architects worldwide</p>
+        <p class="stat-lbl">creators using ImagineArt worldwide</p>
       </div>
       <div class="stat-item">
         <div class="stat-num-row">
@@ -1829,7 +1833,7 @@
   <!-- ─── CTA ──────────────────────────────────────────── -->
   <section class="arch-cta">
     <div class="arch-cta-bg">
-      <img src="/assets/architecture/arch-render-chalet-interior.jpeg" alt="Architectural render">
+      <img src="assets/architecture/arch-render-chalet-interior.webp" alt="Architectural render">
     </div>
     <div class="arch-cta-inner">
       <div class="cta-badge reveal">✦ ImagineArt Workflows</div>
@@ -2326,6 +2330,20 @@
       document.head.appendChild(s);
 
       init();
+
+      // Dot grid glow on hiw image
+      const hiwImg = document.querySelector('.arch-hiw-img');
+      if (hiwImg) {
+        hiwImg.addEventListener('mousemove', e => {
+          const r = hiwImg.getBoundingClientRect();
+          hiwImg.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+          hiwImg.style.setProperty('--my', (e.clientY - r.top) + 'px');
+        });
+        hiwImg.addEventListener('mouseleave', () => {
+          hiwImg.style.setProperty('--mx', '-9999px');
+          hiwImg.style.setProperty('--my', '-9999px');
+        });
+      }
     })();
   </script>
 </body>

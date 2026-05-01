@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body { margin: 0; background: #000; }
+.row { display: flex; gap: 4px; flex-wrap: wrap; padding: 4px; }
+video { width: 380px; height: 215px; object-fit: cover; }
+</style>
+</head>
+<body>
+<div class="row">
+  <video id="v1" src="/assets/film/website recording.mov" muted playsinline></video>
+  <video id="v2" src="/assets/film/website recording.mov" muted playsinline></video>
+  <video id="v3" src="/assets/film/website recording.mov" muted playsinline></video>
+  <video id="v4" src="/assets/film/website recording.mov" muted playsinline></video>
+  <video id="v5" src="/assets/film/website recording.mov" muted playsinline></video>
+  <video id="v6" src="/assets/film/website recording.mov" muted playsinline></video>
+</div>
+<script>
+const times = [1, 3, 5, 8, 11, 14];
+document.querySelectorAll('video').forEach((v,i) => {
+  v.addEventListener('loadedmetadata', () => { v.currentTime = times[i]; });
+});
+</script>
+</body>
+</html>

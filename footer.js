@@ -163,7 +163,7 @@
         <!-- Brand -->
         <div class="sf-brand">
           <!-- Logo -->
-          <img src="./assets/logo-imagine.svg" alt="ImagineArt Workflows" width="158" height="39" style="display:block;opacity:0.9;">
+          <img src="./assets/logo-imagine-white.svg" alt="ImagineArt Workflows" width="158" height="39" style="display:block;opacity:0.9;">
 
           <!-- App stores -->
           <div class="sf-app">

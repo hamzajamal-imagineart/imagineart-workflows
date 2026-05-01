@@ -1,0 +1,373 @@
+/*
+ * ═══════════════════════════════════════════════════════════════════════════
+ *  ImagineArt — Shared Typography System
+ *  type.css  ·  v1.0
+ *
+ *  Usage:
+ *    <link rel="stylesheet" href="type.css">
+ *
+ *  Requires:
+ *    Google Sans Flex + Google Sans from Google Fonts:
+ *    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@100..900&family=Google+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+ *
+ *  Contents:
+ *    1. Font face / base
+ *    2. CSS custom properties (tokens)
+ *    3. Base element resets
+ *    4. Utility classes — dark mode (default, dark bg)
+ *    5. Utility classes — light mode (.light-type context)
+ *    6. Component patterns (overline, display, body, label, caption)
+ *    7. Responsive scale
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+/* ─────────────────────────────────────────────────────────────────────────
+   1. FONT STACK
+   ───────────────────────────────────────────────────────────────────────── */
+
+:root {
+  --font-sans: 'Google Sans Flex', 'Google Sans', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', sans-serif;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   2. DESIGN TOKENS
+   ───────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* ── Font sizes ──────────────────────────────────────────────── */
+  --type-display-2xl : clamp(48px, 5.6vw, 88px);  /* hero / cinematic H1     */
+  --type-display-xl  : clamp(40px, 4.6vw, 68px);  /* page headline / CTA     */
+  --type-display-l   : clamp(34px, 3.8vw, 56px);  /* section lead heading    */
+  --type-display-m   : clamp(26px, 3vw,   44px);  /* section heading         */
+  --type-display-s   : clamp(20px, 2.4vw, 34px);  /* sub-section / feature   */
+  --type-body-xl     : 18px;                        /* hero / intro body       */
+  --type-body-l      : 16px;                        /* standard body           */
+  --type-body-m      : 15px;                        /* section body            */
+  --type-body-s      : 14px;                        /* secondary / captions    */
+  --type-body-xs     : 13px;                        /* labels / meta           */
+  --type-label       : 10px;                        /* overlines / badges      */
+  --type-micro       : 9.5px;                       /* tags / tiny labels      */
+
+  /* ── Font weights ───────────────────────────────────────────── */
+  --weight-regular    : 400;
+  --weight-medium     : 500;
+  --weight-semibold   : 600;
+  --weight-bold       : 700;
+
+  /* ── Letter spacing — headings ──────────────────────────────── */
+  --tracking-2xl      : -2.8px;   /* display-2xl */
+  --tracking-xl       : -2.4px;   /* display-xl  */
+  --tracking-l        : -2px;     /* display-l   */
+  --tracking-m        : -1.8px;   /* display-m   */
+  --tracking-s        : -1.2px;   /* display-s   */
+  --tracking-body     :  0.1px;   /* body text   */
+  --tracking-label    :  2px;     /* overlines   */
+  --tracking-micro    :  1.5px;   /* tiny labels */
+
+  /* ── Line heights ───────────────────────────────────────────── */
+  --leading-tight     : 1.07;     /* large display */
+  --leading-snug      : 1.1;      /* section heads */
+  --leading-normal    : 1.15;     /* smaller heads */
+  --leading-relaxed   : 1.55;     /* body text     */
+  --leading-loose     : 1.72;     /* long-form body */
+
+  /* ── Colors — dark context (default) ───────────────────────── */
+  --type-on-dark            : #ffffff;
+  --type-on-dark-secondary  : rgba(255, 255, 255, 0.42);
+  --type-on-dark-tertiary   : rgba(255, 255, 255, 0.28);
+  --type-on-dark-muted      : rgba(255, 255, 255, 0.18);
+  --type-on-dark-em         : rgba(255, 255, 255, 0.28); /* italic key words */
+  --type-on-dark-label      : rgba(255, 255, 255, 0.35);
+
+  /* ── Colors — light context ─────────────────────────────────── */
+  --type-on-light           : #0f0f0f;
+  --type-on-light-secondary : #525252;
+  --type-on-light-tertiary  : #6b6b6b;
+  --type-on-light-muted     : rgba(15, 15, 15, 0.38);
+  --type-on-light-em        : rgba(0,   0,   0, 0.22); /* italic key words */
+  --type-on-light-label     : rgba(15, 15, 15, 0.50);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   3. BASE ELEMENT RESETS
+   ───────────────────────────────────────────────────────────────────────── */
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--type-body-m);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-relaxed);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-bold);
+  font-style: normal;
+  line-height: var(--leading-snug);
+  margin: 0;
+}
+
+p { margin: 0; }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   4. UTILITY CLASSES — DARK MODE (default)
+   All classes work on dark backgrounds out of the box.
+   Wrap a section in .light-type to flip to the light palette.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* ── Overline — the ImagineArt section label ──────────────────── */
+/*
+ * Usage: <span class="ia-overline">Equipment</span>
+ * Renders: ── EQUIPMENT  (10px, 700, 2px tracking, uppercase)
+ */
+.ia-overline {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-sans);
+  font-size: var(--type-label);
+  font-weight: var(--weight-bold);
+  font-style: normal;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--type-on-dark-label);
+  line-height: 1;
+}
+.ia-overline::before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+}
+
+/* ── Display headings ─────────────────────────────────────────── */
+/*
+ * Usage: <h1 class="ia-display-2xl">Your story<br><em>starts here</em>.</h1>
+ *
+ * The <em> inside any ia-display-* class renders as italic + dimmed —
+ * this is the ImagineArt signature: one key word italicised per heading.
+ */
+.ia-display-2xl,
+.ia-display-xl,
+.ia-display-l,
+.ia-display-m,
+.ia-display-s {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-bold);
+  font-style: normal;
+  line-height: var(--leading-tight);
+  color: var(--type-on-dark);
+}
+
+/* em inside display headings → italic + dimmed (ImagineArt pattern) */
+.ia-display-2xl em,
+.ia-display-xl  em,
+.ia-display-l   em,
+.ia-display-m   em,
+.ia-display-s   em {
+  font-style: italic;
+  font-weight: var(--weight-bold);
+  color: var(--type-on-dark-em);
+}
+
+.ia-display-2xl { font-size: var(--type-display-2xl); letter-spacing: var(--tracking-2xl); }
+.ia-display-xl  { font-size: var(--type-display-xl);  letter-spacing: var(--tracking-xl);  }
+.ia-display-l   { font-size: var(--type-display-l);   letter-spacing: var(--tracking-l);   }
+.ia-display-m   { font-size: var(--type-display-m);   letter-spacing: var(--tracking-m);   line-height: var(--leading-snug); }
+.ia-display-s   { font-size: var(--type-display-s);   letter-spacing: var(--tracking-s);   line-height: var(--leading-normal); }
+
+/* ── Body text ────────────────────────────────────────────────── */
+.ia-body-xl { font-size: var(--type-body-xl); font-weight: var(--weight-regular); line-height: var(--leading-loose);   color: var(--type-on-dark-secondary); letter-spacing: var(--tracking-body); }
+.ia-body-l  { font-size: var(--type-body-l);  font-weight: var(--weight-regular); line-height: var(--leading-relaxed); color: var(--type-on-dark-secondary); letter-spacing: var(--tracking-body); }
+.ia-body-m  { font-size: var(--type-body-m);  font-weight: var(--weight-regular); line-height: var(--leading-loose);   color: var(--type-on-dark-secondary); letter-spacing: var(--tracking-body); }
+.ia-body-s  { font-size: var(--type-body-s);  font-weight: var(--weight-regular); line-height: var(--leading-relaxed); color: var(--type-on-dark-secondary); letter-spacing: var(--tracking-body); }
+
+/* ── Labels / UI text ─────────────────────────────────────────── */
+.ia-label-l { font-size: var(--type-body-xs); font-weight: var(--weight-medium);   letter-spacing: 0.2px;                  color: var(--type-on-dark-secondary); }
+.ia-label-m { font-size: var(--type-label);   font-weight: var(--weight-bold);     letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--type-on-dark-label); }
+.ia-label-s { font-size: var(--type-micro);   font-weight: var(--weight-bold);     letter-spacing: var(--tracking-micro); text-transform: uppercase; color: var(--type-on-dark-muted); }
+
+/* ── Stat / number display ────────────────────────────────────── */
+/*
+ * Large metric numbers (e.g. "360°", "<30s", "∞")
+ * Usage: <div class="ia-stat-number">360°</div>
+ */
+.ia-stat-number {
+  font-family: var(--font-sans);
+  font-size: clamp(44px, 4.5vw, 68px);
+  font-weight: var(--weight-bold);
+  font-style: italic;
+  letter-spacing: -2px;
+  line-height: 1;
+  color: var(--type-on-dark);
+}
+.ia-stat-label {
+  font-size: var(--type-body-xs);
+  font-weight: var(--weight-regular);
+  color: var(--type-on-dark-tertiary);
+  line-height: 1.55;
+}
+
+/* ── Inline utilities ─────────────────────────────────────────── */
+.ia-muted       { color: var(--type-on-dark-secondary); }
+.ia-dimmed      { color: var(--type-on-dark-tertiary);  }
+.ia-italic-dim  { font-style: italic; color: var(--type-on-dark-em); }  /* standalone dimmed italic */
+
+/* ─────────────────────────────────────────────────────────────────────────
+   5. LIGHT MODE OVERRIDE
+   Wrap any section with class="light-type" to flip all colours.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.light-type .ia-overline { color: var(--type-on-light-label); }
+.light-type .ia-overline::before { background: rgba(15, 15, 15, 0.15); }
+
+.light-type .ia-display-2xl,
+.light-type .ia-display-xl,
+.light-type .ia-display-l,
+.light-type .ia-display-m,
+.light-type .ia-display-s  { color: var(--type-on-light); }
+
+.light-type .ia-display-2xl em,
+.light-type .ia-display-xl  em,
+.light-type .ia-display-l   em,
+.light-type .ia-display-m   em,
+.light-type .ia-display-s   em { color: var(--type-on-light-em); }
+
+.light-type .ia-body-xl,
+.light-type .ia-body-l,
+.light-type .ia-body-m,
+.light-type .ia-body-s  { color: var(--type-on-light-secondary); }
+
+.light-type .ia-label-l   { color: var(--type-on-light-secondary); }
+.light-type .ia-label-m,
+.light-type .ia-label-s   { color: var(--type-on-light-label); }
+.light-type .ia-stat-number { color: var(--type-on-light); }
+.light-type .ia-stat-label  { color: var(--type-on-light-tertiary); }
+.light-type .ia-muted       { color: var(--type-on-light-secondary); }
+.light-type .ia-dimmed      { color: var(--type-on-light-tertiary); }
+.light-type .ia-italic-dim  { font-style: italic; color: var(--type-on-light-em); }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   6. COMPONENT PATTERNS
+   Higher-level compositions used across ImagineArt pages.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/*
+ * ia-section-header — standard section intro block
+ * Usage:
+ *   <div class="ia-section-header">
+ *     <span class="ia-overline">Capabilities</span>
+ *     <h2 class="ia-display-m">Six Shot Types.<br>One <em>Complete</em> Story.</h2>
+ *     <p class="ia-body-m">The full grammar of cinema...</p>
+ *   </div>
+ */
+.ia-section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.ia-section-header .ia-overline    { margin-bottom: 20px; }
+.ia-section-header .ia-display-m,
+.ia-section-header .ia-display-l   { margin-bottom: 20px; }
+.ia-section-header .ia-body-m,
+.ia-section-header .ia-body-l      { max-width: 480px; }
+
+/*
+ * ia-hero-badge — small labelled pill on hero sections
+ * Usage: <span class="ia-hero-badge">New · ImagineArt Film</span>
+ */
+.ia-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 100px;
+  font-size: var(--type-micro);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-micro);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(6px);
+}
+
+/*
+ * ia-card-label — tag sitting in the corner of image cards
+ */
+.ia-card-label {
+  position: absolute;
+  top: 14px; right: 14px;
+  height: 22px; padding: 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 100px;
+  font-size: 9px; font-weight: var(--weight-bold);
+  letter-spacing: 1.2px; text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  background: rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(6px);
+  z-index: 2;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   7. RESPONSIVE SCALE OVERRIDES
+   ───────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  :root {
+    --type-display-2xl : clamp(36px, 10vw, 52px);
+    --type-display-xl  : clamp(30px, 9vw,  44px);
+    --type-display-l   : clamp(26px, 8vw,  36px);
+    --type-display-m   : clamp(22px, 7vw,  30px);
+    --type-display-s   : clamp(18px, 6vw,  24px);
+    --tracking-2xl     : -1.6px;
+    --tracking-xl      : -1.4px;
+    --tracking-l       : -1.2px;
+    --tracking-m       : -1px;
+    --tracking-s       : -0.6px;
+  }
+}
+
+/*
+ * ═══════════════════════════════════════════════════════════════════════════
+ *  QUICK REFERENCE
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ *  HIERARCHY (dark bg, top to bottom)
+ *  ─────────────────────────────────────────────────────────────────────────
+ *  ia-overline        10px  700  2px  uppercase  rgba(255,255,255,0.35)  ── LABEL
+ *  ia-display-2xl     clamp(48,5.6vw,88px)  700  -2.8px  #fff
+ *  ia-display-xl      clamp(40,4.6vw,68px)  700  -2.4px  #fff
+ *  ia-display-l       clamp(34,3.8vw,56px)  700  -2px    #fff
+ *  ia-display-m       clamp(26,3vw,44px)    700  -1.8px  #fff
+ *  ia-display-s       clamp(20,2.4vw,34px)  700  -1.2px  #fff
+ *  ia-body-xl         18px  400  0.1px  rgba(255,255,255,0.42)
+ *  ia-body-l          16px  400  0.1px  rgba(255,255,255,0.42)
+ *  ia-body-m          15px  400  0.1px  rgba(255,255,255,0.42)
+ *  ia-body-s          14px  400  0.1px  rgba(255,255,255,0.42)
+ *  ia-label-l         13px  500  0.2px  rgba(255,255,255,0.42)
+ *  ia-label-m         10px  700  2px    uppercase  rgba(255,255,255,0.35)
+ *  ia-label-s         9.5px 700  1.5px  uppercase  rgba(255,255,255,0.18)
+ *  ia-stat-number     clamp(44,4.5vw,68px)  700  italic  -2px  #fff
+ *
+ *  EM PATTERN (the ImagineArt signature)
+ *  ─────────────────────────────────────────────────────────────────────────
+ *  Inside any ia-display-* heading, wrap the key/emotional word in <em>:
+ *    <h2 class="ia-display-m">You imagine it. We <em>film</em> it.</h2>
+ *  → "film" renders italic + rgba(255,255,255,0.30) on dark
+ *  → "film" renders italic + rgba(0,0,0,0.22) on light (.light-type parent)
+ *
+ *  LIGHT MODE
+ *  ─────────────────────────────────────────────────────────────────────────
+ *  Add class="light-type" to any container to flip the entire palette:
+ *    <section class="light-type">
+ *      <span class="ia-overline">Features</span>
+ *      <h2 class="ia-display-m">Create the <em>impossible</em>.</h2>
+ *    </section>
+ * ═══════════════════════════════════════════════════════════════════════════
+ */

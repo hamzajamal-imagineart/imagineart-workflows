@@ -1,0 +1,406 @@
+'use client';
+
+import Image from 'next/image';
+import Link, { type LinkProps } from 'next/link';
+import { type ComponentProps, type ReactNode, useState } from 'react';
+
+import {
+  DiscordOutlineIcon,
+  FacebookOutlineIcon,
+  ImagineLogoMonotone,
+  ImagineLogoTextMonotoneIcon,
+  InstagramIcon,
+  MobileIcon,
+  RedditOutlineIcon,
+  TrustPilotLogoIcon,
+  TryImagineAppStoreDarkIcon,
+  TryImagineAppStoreLightIcon,
+  TryImaginePlayStoreDarkIcon,
+  TryImaginePlayStoreLightIcon,
+  TwitterOutlineIcon,
+  YoutubeOutlineIcon,
+} from '@repo/icons';
+import { Button } from '@repo/ui/components/base/button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@repo/ui/components/base/tooltip';
+import { cn } from '@repo/ui/utils';
+
+/* -------------------------------------------------------------------------- */
+/*                                  Constants                                 */
+/* -------------------------------------------------------------------------- */
+
+const EXTERNAL_LINKS = {
+  IMAGINE_FACEBOOK: 'https://www.facebook.com/groups/imagineai',
+  IMAGINE_TWITTER: 'https://x.com/ImagineArt_X',
+  IMAGINE_DISCORD: 'https://discord.com/invite/z7kjUyvAbv',
+  IMAGINE_INSTAGRAM: 'https://www.instagram.com/imagineartofficial',
+  IMAGINE_YOUTUBE: 'https://www.youtube.com/@imagineartofficial',
+  IMAGINE_REDDIT: 'https://www.reddit.com/r/ImagineAiArt/',
+  IMAGINE_TRUSTPILOT: 'https://www.trustpilot.com/review/www.imagine.art',
+  IMAGINE_SOC2: 'https://trust.imagine.art',
+  ADJUST_IOS_URL: 'https://app.adjust.com/1a1xymg6',
+  ADJUST_ANDROID_URL: 'https://app.adjust.com/1rx90a0u',
+} as const;
+
+const FOOTER_SOCIALS = [
+  { label: 'Facebook', icon: FacebookOutlineIcon, href: EXTERNAL_LINKS.IMAGINE_FACEBOOK },
+  { label: 'Twitter', icon: TwitterOutlineIcon, href: EXTERNAL_LINKS.IMAGINE_TWITTER },
+  { label: 'Discord', icon: DiscordOutlineIcon, href: EXTERNAL_LINKS.IMAGINE_DISCORD },
+  { label: 'Instagram', icon: InstagramIcon, href: EXTERNAL_LINKS.IMAGINE_INSTAGRAM },
+  { label: 'Youtube', icon: YoutubeOutlineIcon, href: EXTERNAL_LINKS.IMAGINE_YOUTUBE },
+  { label: 'Reddit', icon: RedditOutlineIcon, href: EXTERNAL_LINKS.IMAGINE_REDDIT },
+];
+
+interface FooterLink {
+  label: string;
+  href: string;
+}
+interface FooterGroup {
+  heading: string;
+  links: FooterLink[];
+}
+interface FooterSchema {
+  group: string;
+  sections: FooterGroup[];
+}
+
+// In the original app this comes from a remote config. The default data is
+// baked in here so the component is self-contained.
+const DEFAULT_HOME_FOOTER: FooterSchema[] = [
+  {
+    group: 'Explore & Solutions',
+    sections: [
+      {
+        heading: 'Explore',
+        links: [
+          { label: 'Image', href: '/ai-image-generator' },
+          { label: 'Video', href: '/ai-video-generator' },
+          { label: 'Music', href: '/music-studio' },
+          { label: 'Voice', href: '/voice-studio' },
+          { label: 'Teams', href: '/teams-plan' },
+        ],
+      },
+    ],
+  },
+  {
+    group: 'Tools',
+    sections: [
+      {
+        heading: 'Tools',
+        links: [
+          { label: 'AI Image Generator', href: '/ai-image-generator' },
+          { label: 'AI Art Generator', href: '/ai-art-generator' },
+          { label: 'AI Video Generator', href: '/ai-video-generator' },
+          { label: 'AI Music Generator', href: '/music-studio' },
+          { label: 'AI Avatar Generator', href: '/avatars' },
+          { label: 'AI Shorts Generator', href: '/shorts' },
+          { label: 'AI Voice Generator', href: '/voice-studio' },
+        ],
+      },
+    ],
+  },
+  {
+    group: 'Contact Us',
+    sections: [
+      {
+        heading: 'Contact Us',
+        links: [
+          { label: 'Contact Sales', href: '/teams-plan/contact-us' },
+          {
+            label: 'Book a demo',
+            href: 'https://calendly.com/d/cr9s-6pt-mr3/one-on-one-demo-with-an-imagineart-expert',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    group: 'Community & Developers',
+    sections: [
+      {
+        heading: 'Community',
+        links: [
+          { label: 'Discord', href: EXTERNAL_LINKS.IMAGINE_DISCORD },
+          { label: 'Twitter', href: EXTERNAL_LINKS.IMAGINE_TWITTER },
+          { label: 'Instagram', href: EXTERNAL_LINKS.IMAGINE_INSTAGRAM },
+        ],
+      },
+    ],
+  },
+];
+
+const SOC2_IMAGE_SRC =
+  'https://your-cdn.example.com/imagine-one/soc2/soc2-grey.webp';
+
+/* -------------------------------------------------------------------------- */
+/*                                  SmartLink                                 */
+/* -------------------------------------------------------------------------- */
+
+interface SmartLinkProps extends Omit<ComponentProps<typeof Link>, 'href'> {
+  href: string;
+  forceAnchor?: boolean;
+}
+
+const SmartLink = ({
+  href,
+  children,
+  prefetch,
+  forceAnchor = false,
+  ...props
+}: SmartLinkProps) => {
+  const isExternal =
+    forceAnchor ||
+    href.startsWith('http://') ||
+    href.startsWith('https://') ||
+    href.startsWith('mailto:');
+
+  if (isExternal) {
+    return (
+      <a data-slot="anchor" href={href} {...props}>
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <Link
+      data-slot="link"
+      data-prefetch={prefetch}
+      href={href as LinkProps['href']}
+      {...props}
+    >
+      {children}
+    </Link>
+  );
+};
+
+/* -------------------------------------------------------------------------- */
+/*                            Soc2 / Trustpilot links                         */
+/* -------------------------------------------------------------------------- */
+
+interface Soc2ComplaintLinkProps {
+  imageClassName?: string;
+  wrapperClassName?: string;
+  imageSrc: string;
+  renderContent?: ReactNode;
+}
+
+const Soc2ComplaintLink = ({
+  imageClassName,
+  wrapperClassName,
+  imageSrc,
+  renderContent,
+}: Soc2ComplaintLinkProps) => (
+  <Link
+    href={EXTERNAL_LINKS.IMAGINE_SOC2}
+    target="_blank"
+    className={cn('flex items-center gap-2', wrapperClassName)}
+  >
+    <Image
+      src={imageSrc}
+      alt="SOC2 Compliant"
+      width={350}
+      height={350}
+      className={cn('mr-1 size-5', imageClassName)}
+    />
+    {renderContent ?? ''}
+  </Link>
+);
+
+const TrustpilotLink = ({ children }: { children: ReactNode }) => (
+  <Link href={EXTERNAL_LINKS.IMAGINE_TRUSTPILOT} target="_blank">
+    {children}
+  </Link>
+);
+
+/* -------------------------------------------------------------------------- */
+/*                            Mobile-app touchpoint                           */
+/* -------------------------------------------------------------------------- */
+
+interface MobileAppTouchpointProps {
+  onClick?: () => void;
+}
+
+const MobileAppTouchpoint = ({ onClick }: MobileAppTouchpointProps) => (
+  <Button variant="ghost" size="icon-md" onClick={onClick}>
+    <MobileIcon className="size-5" />
+  </Button>
+);
+
+/* -------------------------------------------------------------------------- */
+/*                              Try-Imagine block                             */
+/* -------------------------------------------------------------------------- */
+
+const TryImagineSection = () => (
+  <div>
+    <div>
+      <p className="text-label-md text-content-tertiary desktop-l:text-label-md desktop-l:text-content-tertiary font-medium">
+        Try Imagine Mobile
+      </p>
+    </div>
+    <div className="mt-3">
+      <SmartLink href={EXTERNAL_LINKS.ADJUST_IOS_URL}>
+        <TryImagineAppStoreLightIcon className="dark:hidden" />
+        <TryImagineAppStoreDarkIcon className="hidden dark:block" />
+      </SmartLink>
+    </div>
+    <div className="mt-1.5">
+      <SmartLink href={EXTERNAL_LINKS.ADJUST_ANDROID_URL}>
+        <TryImaginePlayStoreLightIcon className="dark:hidden" />
+        <TryImaginePlayStoreDarkIcon className="hidden dark:block" />
+      </SmartLink>
+    </div>
+  </div>
+);
+
+/* -------------------------------------------------------------------------- */
+/*                                 FooterLinks                                */
+/* -------------------------------------------------------------------------- */
+
+interface FooterLinksProps {
+  footerData: FooterSchema[];
+}
+
+const FooterLinks = ({ footerData }: FooterLinksProps) => (
+  <div className="tablet:grid-cols-4 laptop:grid-cols-5 desktop-sm:grid-cols-7 grid grid-cols-2 gap-8">
+    {footerData.map((footer) => (
+      <div key={footer.group} className="flex flex-col gap-8">
+        {footer.sections.map((item) => (
+          <div key={item.heading} className="flex flex-col gap-6">
+            <p className="text-label-md text-content-tertiary font-medium">
+              {item.heading}
+            </p>
+            <div className="flex flex-col gap-2">
+              {item.links.map((link) => (
+                <SmartLink
+                  key={link.href}
+                  href={link.href}
+                  className="text-label-md text-secondary hover:text-primary"
+                >
+                  {link.label}
+                </SmartLink>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    ))}
+
+    <div className="flex flex-col gap-4">
+      <p className="text-label-md text-content-tertiary font-medium">
+        Trust and Reviews
+      </p>
+      <Soc2ComplaintLink imageSrc={SOC2_IMAGE_SRC} imageClassName="size-8" />
+      <TrustpilotLink>
+        <span className="flex items-center gap-1">
+          <TrustPilotLogoIcon className="size-4 text-[#219653]" />
+          <span className="font-bold">Trustpilot</span>
+        </span>
+        <span className="mt-2 flex items-center gap-1">
+          {Array.from({ length: 5 }).map((_, index) => (
+            <span
+              key={index}
+              className="flex size-5 items-center justify-center bg-[#219653]"
+            >
+              <TrustPilotLogoIcon className="text-content-primary-inverse size-4" />
+            </span>
+          ))}
+        </span>
+      </TrustpilotLink>
+    </div>
+
+    <div className="desktop-l:hidden flex w-full">
+      <TryImagineSection />
+    </div>
+  </div>
+);
+
+/* -------------------------------------------------------------------------- */
+/*                                FooterSocials                               */
+/* -------------------------------------------------------------------------- */
+
+interface FooterSocialsProps {
+  onManageCookies?: () => void;
+  onOpenMobileAppDialog?: () => void;
+}
+
+const FooterSocials = ({
+  onManageCookies,
+  onOpenMobileAppDialog,
+}: FooterSocialsProps) => (
+  <div className="border-fill-secondary tablet:flex-row tablet:items-center tablet:justify-between flex w-full flex-col gap-4 border-t pt-6">
+    <div className="flex items-center">
+      <p className="text-body-xs">
+        © {new Date().getFullYear()}{' '}
+        <span className="font-semibold">Vyro Turkey</span>. All rights reserved.
+      </p>
+      <Button variant="link-primary" size="xs" onClick={onManageCookies}>
+        Manage Cookie Preferences
+      </Button>
+    </div>
+    <div className="flex items-center gap-2">
+      <MobileAppTouchpoint onClick={onOpenMobileAppDialog} />
+      {FOOTER_SOCIALS.map((social) => (
+        <Tooltip key={social.href}>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="icon-md" asChild>
+              <SmartLink href={social.href} target="_blank">
+                <social.icon />
+              </SmartLink>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Follow us on {social.label}</TooltipContent>
+        </Tooltip>
+      ))}
+    </div>
+  </div>
+);
+
+/* -------------------------------------------------------------------------- */
+/*                                FooterSection                               */
+/* -------------------------------------------------------------------------- */
+
+interface FooterSectionProps {
+  withBorder?: boolean;
+  /** Override the default footer link groups (originally driven by remote config). */
+  footerData?: FooterSchema[];
+  /** Wire this to your cookie-consent dialog. */
+  onManageCookies?: () => void;
+  /** Wire this to your "Get the mobile app" dialog. */
+  onOpenMobileAppDialog?: () => void;
+}
+
+export const FooterSection = ({
+  withBorder = true,
+  footerData = DEFAULT_HOME_FOOTER,
+  onManageCookies,
+  onOpenMobileAppDialog,
+}: FooterSectionProps) => {
+  return (
+    <footer className="tablet:pb-8 laptop:px-10 tablet:px-5 desktop-sm:px-15 mx-auto w-full max-w-480 px-4 pb-8">
+      <div
+        className={cn('tablet:gap-4 laptop:gap-12 flex flex-col', {
+          'border-fill-secondary tablet:pt-14 border-t pt-12': withBorder,
+        })}
+      >
+        <div className="tablet:flex-row tablet:items-stretch flex flex-col flex-wrap items-start justify-between gap-y-6">
+          <div className="flex flex-1 flex-col">
+            <ImagineLogoMonotone />
+            <div className="desktop-l:flex hidden w-full flex-1 items-center">
+              <TryImagineSection />
+            </div>
+          </div>
+          <FooterLinks footerData={footerData} />
+        </div>
+        <ImagineLogoTextMonotoneIcon className="h-72 w-full max-w-480" />
+        <FooterSocials
+          onManageCookies={onManageCookies}
+          onOpenMobileAppDialog={onOpenMobileAppDialog}
+        />
+      </div>
+    </footer>
+  );
+};
