@@ -196,6 +196,18 @@
         <a href="#sec-transform" class="nav-link">Templates</a>
         <a href="#sec-gallery" class="nav-link">Gallery</a>
         <a href="#sec-stats" class="nav-link">Stats</a>
+        ` : isMkt ? `
+        <a href="#sec-hiw" class="nav-link">How it Works</a>
+        <a href="#sec-ads" class="nav-link">Use Cases</a>
+        <a href="#sec-templates" class="nav-link">Templates</a>
+        <a href="#sec-showcase" class="nav-link">Showcase</a>
+        <a href="#sec-gallery" class="nav-link">Gallery</a>
+        ` : isEcom ? `
+        <a href="#sec-statement" class="nav-link">Overview</a>
+        <a href="#sec-showcase" class="nav-link">Showcase</a>
+        <a href="#sec-templates" class="nav-link">Templates</a>
+        <a href="#sec-gallery" class="nav-link">Gallery</a>
+        <a href="#sec-stats" class="nav-link">Stats</a>
         ` : `
         <a href="#" class="nav-link">Platform</a>
         <a href="#" class="nav-link">Pricing</a>
@@ -241,6 +253,18 @@
         <a href="#sec-styles" class="nav-mobile-link">How it Works</a>
         <a href="#sec-caps" class="nav-mobile-link">Capabilities</a>
         <a href="#sec-transform" class="nav-mobile-link">Templates</a>
+        <a href="#sec-gallery" class="nav-mobile-link">Gallery</a>
+        <a href="#sec-stats" class="nav-mobile-link">Stats</a>
+        ` : isMkt ? `
+        <a href="#sec-hiw" class="nav-mobile-link">How it Works</a>
+        <a href="#sec-ads" class="nav-mobile-link">Use Cases</a>
+        <a href="#sec-templates" class="nav-mobile-link">Templates</a>
+        <a href="#sec-showcase" class="nav-mobile-link">Showcase</a>
+        <a href="#sec-gallery" class="nav-mobile-link">Gallery</a>
+        ` : isEcom ? `
+        <a href="#sec-statement" class="nav-mobile-link">Overview</a>
+        <a href="#sec-showcase" class="nav-mobile-link">Showcase</a>
+        <a href="#sec-templates" class="nav-mobile-link">Templates</a>
         <a href="#sec-gallery" class="nav-mobile-link">Gallery</a>
         <a href="#sec-stats" class="nav-mobile-link">Stats</a>
         ` : `
