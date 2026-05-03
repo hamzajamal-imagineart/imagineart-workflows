@@ -192,7 +192,7 @@
       <nav class="nav-links">
         ${isMkt ? `
         <a href="#sec-hiw" class="nav-link">How it Works</a>
-        <a href="#sec-ads" class="nav-link">Use Cases</a>
+        <a href="#sec-caps" class="nav-link">Capabilities</a>
         <a href="#sec-templates" class="nav-link">Templates</a>
         <a href="#sec-showcase" class="nav-link">Showcase</a>
         <a href="#sec-gallery" class="nav-link">Gallery</a>
@@ -245,7 +245,7 @@
       <div class="nav-mobile-inner" id="nav-mobile-inner">
         ${isMkt ? `
         <a href="#sec-hiw" class="nav-mobile-link">How it Works</a>
-        <a href="#sec-ads" class="nav-mobile-link">Use Cases</a>
+        <a href="#sec-caps" class="nav-mobile-link">Capabilities</a>
         <a href="#sec-templates" class="nav-mobile-link">Templates</a>
         <a href="#sec-showcase" class="nav-mobile-link">Showcase</a>
         <a href="#sec-gallery" class="nav-mobile-link">Gallery</a>
